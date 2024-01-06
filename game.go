@@ -66,9 +66,7 @@ func (self *Game) LoadScene(scene types.Scene) {
 
 func (self *Game) Update() error {
 	if self.reload != 0 && IsKeyJustPressed(self.reload) {
-		println("Reload Triggered...")
 		if scene, ok := self.Scene.(types.Reloadable); ok {
-			println("Scene Reloading...")
 			if self.reloadTime != nil {
 				self.reloadTime.Start()
 			}

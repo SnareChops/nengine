@@ -27,11 +27,30 @@ func (self SheetSource) Image() *ebiten.Image {
 }
 
 type TileSheet struct {
+	Alias       string
 	SheetWidth  int
 	SheetHeight int
 	CellWidth   int
 	CellHeight  int
 	Images      []*ebiten.Image
+}
+
+// RowLen returns the number of cells in a row (left-to-right)
+func (self TileSheet) RowLen() int {
+	return self.SheetWidth / self.CellWidth
+}
+
+// ColLen returns the number of cells in a column (top-to-bottom)
+func (self TileSheet) ColLen() int {
+	return self.SheetHeight / self.CellHeight
+}
+
+func (self TileSheet) Sources() []SheetSource {
+	sources := []SheetSource{}
+	for i := range self.Images {
+		sources = append(sources, NewSheetSource(self.Alias, i))
+	}
+	return sources
 }
 
 var sheets = map[string]TileSheet{}
@@ -47,6 +66,7 @@ func GetSheet(alias string) TileSheet {
 	}
 	sw, sh, cw, ch, images := cache.PromoteSheet(alias)
 	sheets[alias] = TileSheet{
+		Alias:       alias,
 		SheetWidth:  sw,
 		SheetHeight: sh,
 		CellWidth:   cw,

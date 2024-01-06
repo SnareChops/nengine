@@ -3,6 +3,7 @@ package nengine
 import (
 	"image/color"
 
+	"github.com/SnareChops/nengine/assets"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -41,8 +42,32 @@ func (self *SpriteGrid) Init(gridWidth, gridHeight, cellWidth, cellHeight int) *
 	return self
 }
 
+func (self *SpriteGrid) InitFromTileSheet(sheet assets.TileSheet) *SpriteGrid {
+	self.Init(sheet.SheetWidth, sheet.SheetHeight, sheet.CellWidth, sheet.CellHeight)
+	for i, image := range sheet.Images {
+		self.SetContent(i, new(SimpleSprite).Init(image))
+	}
+	return self
+}
+
 func (self *SpriteGrid) Len() int {
 	return len(self.contents)
+}
+
+func (self *SpriteGrid) Resize(w, h int) {
+	wf := float64(w) / float64(self.Dx())
+	hf := float64(h) / float64(self.Dy())
+	scale := min(wf, hf)
+	self.cw = int(float64(self.cw) * scale)
+	self.ch = int(float64(self.ch) * scale)
+	self.RawBounds.Resize(w, h)
+	for _, content := range self.contents {
+		if content != nil {
+			content.ScaleTo(self.cw, self.ch)
+		}
+	}
+	self.image = ebiten.NewImage(self.Size())
+	self.render()
 }
 
 func (self *SpriteGrid) CellSize() (int, int) {
@@ -169,7 +194,6 @@ func (self *SpriteGrid) render() {
 }
 
 func (self *SpriteGrid) Image() *ebiten.Image {
-	println("here")
 	if self.image == nil {
 		panic("Image is nil")
 	}

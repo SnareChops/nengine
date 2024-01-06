@@ -1,6 +1,7 @@
 package nengine
 
 import (
+	"github.com/SnareChops/nengine/assets"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -18,6 +19,15 @@ type SpriteSourceGrid struct {
 func (self *SpriteSourceGrid) Init(gridWidth, gridHeight, cellWidth, cellHeight int) *SpriteSourceGrid {
 	self.SpriteGrid = new(SpriteGrid).Init(gridWidth, gridHeight, cellWidth, cellHeight)
 	self.sources = make([]SpriteSource, len(self.contents))
+	return self
+}
+
+func (self *SpriteSourceGrid) InitFromTileSheet(sheet assets.TileSheet) *SpriteSourceGrid {
+	self.SpriteGrid = new(SpriteGrid).Init(sheet.SheetWidth, sheet.SheetHeight, sheet.CellWidth, sheet.CellHeight)
+	self.sources = make([]SpriteSource, len(self.contents))
+	for i, source := range sheet.Sources() {
+		self.SetContent(i, source)
+	}
 	return self
 }
 

@@ -113,6 +113,14 @@ func (self *Raw) SetSize(w, h int) {
 	self.height = h
 }
 
+func (self *Raw) Resize(w, h int) {
+	ow, oh := self.Size()
+	self.width = w
+	self.height = h
+	self.offsetX = self.offsetX * (float64(w) / float64(ow))
+	self.offsetY = self.offsetY * (float64(h) / float64(oh))
+}
+
 // Dx returns the width of the bounds
 func (self *Raw) Dx() int {
 	return int(float64(self.width) * self.scaleX)
