@@ -178,6 +178,14 @@ func (self *Raw) Max() (x, y float64) {
 	return x + float64(w), y + float64(h)
 }
 
+func (self *Raw) MaxX() float64 {
+	return self.x - self.offsetX + float64(self.width)*self.scaleX
+}
+
+func (self *Raw) MaxY() float64 {
+	return self.y - self.offsetY + float64(self.height)*self.scaleY
+}
+
 // IsWithin checks if the provided x, y coordinate is within the bounds
 func (self *Raw) IsWithin(x, y float64) bool {
 	x1, y1 := self.RawPos()

@@ -79,6 +79,9 @@ func (self *SpriteGrid) Contents() []types.Sprite {
 }
 
 func (self *SpriteGrid) GetContent(index int) types.Sprite {
+	if index >= len(self.contents) {
+		return nil
+	}
 	return self.contents[index]
 }
 
@@ -194,8 +197,5 @@ func (self *SpriteGrid) render() {
 }
 
 func (self *SpriteGrid) Image() *ebiten.Image {
-	if self.image == nil {
-		panic("Image is nil")
-	}
 	return self.image
 }

@@ -211,6 +211,10 @@ func TestRawResize(t *testing.T) {
 	x, y = b.Max()
 	assert.Equal(t, 105., x)
 	assert.Equal(t, 110., y)
+	x = b.MaxX()
+	assert.Equal(t, 105., x)
+	y = b.MaxY()
+	assert.Equal(t, 110., y)
 
 	// Resize the bounds and verify all values are correct
 	b.Resize(20, 30)
@@ -236,5 +240,9 @@ func TestRawResize(t *testing.T) {
 	assert.Equal(t, 100., y)
 	x, y = b.Max()
 	assert.Equal(t, 110., x)
+	assert.Equal(t, 115., y)
+	x = b.MaxX()
+	assert.Equal(t, 110., x)
+	y = b.MaxY()
 	assert.Equal(t, 115., y)
 }
