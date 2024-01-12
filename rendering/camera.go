@@ -100,6 +100,12 @@ func (self *Camera) CameraImage(source *ebiten.Image) *ebiten.Image {
 	return self.image
 }
 
+func (self *Camera) CameraDraw(dest *ebiten.Image, source *ebiten.Image) {
+	options := &ebiten.DrawImageOptions{}
+	options.GeoM.Scale(self.zoom, self.zoom)
+	dest.DrawImage(source.SubImage(self.rect).(*ebiten.Image), options)
+}
+
 func (self *Camera) CursorWorldPosition() (float64, float64) {
 	return self.ScreenToWorldPos(ebiten.CursorPosition())
 }

@@ -33,6 +33,16 @@ func (self *Raw) Init(width, height int) *Raw {
 	return self
 }
 
+func (self *Raw) InitFromPoints(a types.Position, b types.Position) *Raw {
+	x1 := min(a.X(), b.X())
+	y1 := min(a.Y(), b.Y())
+	x2 := max(a.X(), b.X())
+	y2 := max(a.Y(), b.Y())
+	self.Init(int(x2-x1), int(y2-y1))
+	self.SetPos2(x1, y1)
+	return self
+}
+
 // RawPos returns the raw position of the top left corner of the bounds as (x, y float64)
 func (self *Raw) RawPos() (float64, float64) {
 	ox, oy := self.Offset()
