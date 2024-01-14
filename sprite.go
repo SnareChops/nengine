@@ -31,15 +31,19 @@ func (self *SimpleSprite) Image() *ebiten.Image {
 
 type SourceSprite struct {
 	*SimpleSprite
-	source SpriteSource
+	SpriteSource
 }
 
 func (self *SourceSprite) Init(source SpriteSource) *SourceSprite {
-	self.source = source
+	self.SpriteSource = source
 	self.SimpleSprite = new(SimpleSprite).Init(source.Image())
 	return self
 }
 
 func (self *SourceSprite) Reload() {
-	self.image = self.source.Image()
+	self.image = self.SpriteSource.Image()
+}
+
+func (self *SourceSprite) Image() *ebiten.Image {
+	return self.SimpleSprite.Image()
 }

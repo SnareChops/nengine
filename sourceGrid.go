@@ -2,6 +2,7 @@ package nengine
 
 import (
 	"github.com/SnareChops/nengine/assets"
+	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -45,10 +46,12 @@ func (self *SpriteSourceGrid) GetSourceAt(x, y int) SpriteSource {
 
 func (self *SpriteSourceGrid) SetContent(index int, source SpriteSource) {
 	self.sources[index] = source
-	if source != nil {
-		self.SpriteGrid.SetContent(index, new(SourceSprite).Init(source))
-	} else {
+	if source == nil {
 		self.SpriteGrid.SetContent(index, nil)
+	} else if sprite, ok := source.(types.Sprite); ok {
+		self.SpriteGrid.SetContent(index, sprite)
+	} else {
+		self.SpriteGrid.SetContent(index, new(SourceSprite).Init(source))
 	}
 }
 
