@@ -19,6 +19,7 @@ type Entity = types.Entity
 type Sprite = types.Sprite
 type RenderLayer = types.RenderLayer
 type SpriteRenderLayer = types.SpriteRenderLayer
+type Camera = types.Camera
 
 // Traits
 type Reloadable = types.Reloadable
@@ -70,7 +71,8 @@ type Navigation = navigation.Navigation
 // Rendering
 type Background = rendering.Background
 type ParallaxBackground = rendering.ParallaxBackground
-type Camera = rendering.Camera
+type BasicCamera = rendering.BasicCamera
+type BufferedCamera = rendering.BufferedCamera
 type Renderer = rendering.Renderer
 type Screen = rendering.Screen
 type World = rendering.World

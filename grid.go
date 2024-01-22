@@ -79,7 +79,7 @@ func (self *SpriteGrid) Contents() []types.Sprite {
 }
 
 func (self *SpriteGrid) GetContent(index int) types.Sprite {
-	if index >= len(self.contents) {
+	if index < 0 || index >= len(self.contents) {
 		return nil
 	}
 	return self.contents[index]

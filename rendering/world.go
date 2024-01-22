@@ -13,12 +13,12 @@ import (
 type World struct {
 	*bounds.Raw
 	order   int
-	camera  *Camera
+	camera  types.Camera
 	sprites []types.Sprite
 }
 
-func (self *World) Init(order int, camera *Camera) *World {
-	self.Raw = new(bounds.Raw).Init(camera.CameraWorldSize())
+func (self *World) Init(order int, camera types.Camera) *World {
+	self.Raw = new(bounds.Raw).Init(camera.WorldSize())
 	self.order = order
 	self.camera = camera
 	self.sprites = []types.Sprite{}

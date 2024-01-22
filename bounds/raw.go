@@ -188,6 +188,14 @@ func (self *Raw) Max() (x, y float64) {
 	return x + float64(w), y + float64(h)
 }
 
+func (self *Raw) MinX() float64 {
+	return self.x - self.offsetX
+}
+
+func (self *Raw) MinY() float64 {
+	return self.y - self.offsetY
+}
+
 func (self *Raw) MaxX() float64 {
 	return self.x - self.offsetX + float64(self.width)*self.scaleX
 }
@@ -233,12 +241,14 @@ func (self *Raw) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
 	if scalx != 1 && scaly != 1 {
 		self.options.GeoM.Scale(scalx, scaly)
 	}
-	// Translate
-	if camera == nil {
-		self.options.GeoM.Translate(self.RawPos())
+	// If camera is provided, scale and translate
+	if camera != nil {
+		self.options.GeoM.Scale(camera.Zoom(), camera.Zoom())
+		x, y := camera.WorldToScreenPos(self.RawPos())
+		self.options.GeoM.Translate(float64(x), float64(y))
 		return self.options
 	}
-	x, y := camera.WorldToScreenPos(self.RawPos())
-	self.options.GeoM.Translate(float64(x), float64(y))
+	// Translate
+	self.options.GeoM.Translate(self.RawPos())
 	return self.options
 }

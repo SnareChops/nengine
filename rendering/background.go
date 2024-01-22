@@ -2,6 +2,7 @@ package rendering
 
 import (
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -13,7 +14,7 @@ import (
 // or area into smaller pieces
 type Background struct {
 	*bounds.Raw
-	camera *Camera
+	camera types.Camera
 	order  int
 	pieces []backgroundPiece
 }
@@ -25,7 +26,7 @@ type backgroundPiece struct {
 	y       float64
 }
 
-func (self *Background) Init(order, w, h int, camera *Camera) *Background {
+func (self *Background) Init(order, w, h int, camera types.Camera) *Background {
 	self.order = order
 	self.camera = camera
 	self.Raw = new(bounds.Raw).Init(w, h)

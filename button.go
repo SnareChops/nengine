@@ -7,6 +7,7 @@ const (
 	ButtonStateClicked
 	ButtonStateJustClicked
 	ButtonStateJustHovered
+	ButtonStateDisabled
 )
 
 type Button struct {
@@ -27,9 +28,20 @@ func (self *Button) ButtonState() ButtonState {
 	return self.state
 }
 
+func (self *Button) Disable() {
+	self.state |= ButtonStateDisabled
+}
+
+func (self *Button) Enable() {
+	self.state &= ^ButtonStateDisabled
+}
+
 func (self *Button) Update(x, y int) {
 	prev := self.state
 	self.state = 0
+	if IsSet(prev, ButtonStateDisabled) {
+		self.state |= ButtonStateDisabled
+	}
 	if self.IsWithin(Floats(x, y)) {
 		self.state |= ButtonStateHovered
 		if !IsSet(prev, ButtonStateHovered) {
