@@ -15,7 +15,6 @@ type Game struct {
 	height    int
 	prev      int64
 	terminate bool
-	seed      int64
 	reload    ebiten.Key
 
 	update     *DebugTimer
@@ -23,7 +22,7 @@ type Game struct {
 	reloadTime *DebugTimer
 }
 
-func NewGame(width, height int, seed int64, debug bool, reload ebiten.Key) *Game {
+func NewGame(width, height int, debug bool, reload ebiten.Key) *Game {
 	game := &Game{
 		width:  width,
 		height: height,
@@ -37,24 +36,14 @@ func NewGame(width, height int, seed int64, debug bool, reload ebiten.Key) *Game
 		DebugStat("FPS", func() string {
 			return fmt.Sprintf("%0.2f", ebiten.ActualFPS())
 		})
-		DebugStat("Seed", func() string {
-			return fmt.Sprintf("%d", seed)
-		})
 		game.update = NewDebugTimer("Update")
 		game.draw = NewDebugTimer("Draw")
-		if game.seed == 0 {
-			game.seed = time.Now().UnixMicro()
-		}
 		if reload != 0 {
 			fmt.Printf("Setting reload to %d\n", reload)
 			game.reloadTime = NewDebugTimer("Reload")
 		}
 	}
 	return game
-}
-
-func (self *Game) Seed() int64 {
-	return self.seed
 }
 
 func (self *Game) LoadScene(scene types.Scene) {
