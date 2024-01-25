@@ -52,6 +52,9 @@ func addSheet(alias string, width, height int, image image.Image) {
 
 func PromoteSheet(alias string) (int, int, int, int, []*ebiten.Image) {
 	sheet := sheets[alias]
+	if sheet.image == nil {
+		panic("Sheet is not in cache: " + alias)
+	}
 	images := []*ebiten.Image{}
 	cols := sheet.image.Bounds().Dx() / sheet.cw
 	rows := sheet.image.Bounds().Dy() / sheet.ch

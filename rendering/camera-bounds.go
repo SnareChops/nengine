@@ -72,3 +72,9 @@ func (self *CameraBounds) MaxX() float64 {
 func (self *CameraBounds) MaxY() float64 {
 	return self.y - self.oy + float64(self.Dy())
 }
+
+func (self *CameraBounds) IsWithin(x, y float64) bool {
+	x1, y1 := self.Min()
+	x2, y2 := self.Max()
+	return x >= x1 && x <= x2 && y >= y1 && y <= y2
+}

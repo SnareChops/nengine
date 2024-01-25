@@ -2,6 +2,7 @@ package nengine
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/SnareChops/nengine/fonts"
@@ -10,16 +11,16 @@ import (
 )
 
 type Game struct {
-	Scene     types.Scene
-	width     int
-	height    int
-	prev      int64
-	terminate bool
-	reload    ebiten.Key
-
-	update     *DebugTimer
-	draw       *DebugTimer
-	reloadTime *DebugTimer
+	Scene        types.Scene
+	width        int
+	height       int
+	prev         int64
+	terminate    bool
+	reload       ebiten.Key
+	loadComplete chan types.Scene
+	update       *DebugTimer
+	draw         *DebugTimer
+	reloadTime   *DebugTimer
 }
 
 func NewGame(width, height int, debug bool, reload ebiten.Key) *Game {
@@ -47,8 +48,17 @@ func NewGame(width, height int, debug bool, reload ebiten.Key) *Game {
 }
 
 func (self *Game) LoadScene(scene types.Scene) {
-	self.Scene = scene
-	if initable, ok := scene.(types.Initable); ok {
+	if destroyable, ok := self.Scene.(types.Destroyable); ok {
+		destroyable.Destroy()
+	}
+	self.Scene = nil
+	if loadable, ok := scene.(types.Loadable); ok {
+		self.loadComplete = make(chan types.Scene)
+		self.Scene = loadable.Load(self.loadComplete, self)
+	} else {
+		self.Scene = scene
+	}
+	if initable, ok := self.Scene.(types.Initable); ok {
 		initable.Init(self)
 	}
 }
@@ -56,6 +66,7 @@ func (self *Game) LoadScene(scene types.Scene) {
 func (self *Game) Update() error {
 	if self.reload != 0 && IsKeyJustPressed(self.reload) {
 		if scene, ok := self.Scene.(types.Reloadable); ok {
+			log.Println("Scene Reloading...")
 			if self.reloadTime != nil {
 				self.reloadTime.Start()
 			}
@@ -77,6 +88,14 @@ func (self *Game) Update() error {
 	}
 	if self.terminate {
 		return ebiten.Termination
+	}
+	if self.loadComplete != nil {
+		select {
+		case scene := <-self.loadComplete:
+			self.Scene = scene
+			self.loadComplete = nil
+		default:
+		}
 	}
 	return nil
 }
