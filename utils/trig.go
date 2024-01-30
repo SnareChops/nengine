@@ -24,6 +24,12 @@ func PointAtAngleWithDistance(x, y, angle, dist float64) (float64, float64) {
 	return x + dist*math.Cos(angle), y + dist*math.Sin(angle)
 }
 
+func AngleBetween(a, b types.Position) float64 {
+	x1, y1 := a.Pos2()
+	x2, y2 := b.Pos2()
+	return AngleBetweenPoints(x1, y1, x2, y2)
+}
+
 // AngleBetweenPoints returns the angle from the first point to the second
 func AngleBetweenPoints(x1, y1, x2, y2 float64) float64 {
 	result := math.Atan2(y2-y1, x2-x1)

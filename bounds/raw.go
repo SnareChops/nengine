@@ -8,7 +8,7 @@ import (
 // Raw A Bounds instance that represents an absolutely
 // positioned bounds
 type Raw struct {
-	Position
+	*Position
 	width    int
 	height   int
 	offsetX  float64
@@ -23,6 +23,7 @@ type Raw struct {
 
 // Init sets the initial state of the RawBounds
 func (self *Raw) Init(width, height int) *Raw {
+	self.Position = new(Position)
 	self.width = width
 	self.height = height
 	self.anchorX = LEFT

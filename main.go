@@ -20,6 +20,9 @@ type Sprite = types.Sprite
 type RenderLayer = types.RenderLayer
 type SpriteRenderLayer = types.SpriteRenderLayer
 type Camera = types.Camera
+type Vector = types.Vector
+
+var NewVector = types.NewVector
 
 // Traits
 type Reloadable = types.Reloadable
@@ -29,6 +32,7 @@ type Drawable = types.Drawable
 type RawBounds = bounds.Raw
 type RelativeBounds = bounds.Relative
 type PhysicsBounds = bounds.Physics
+type VelocityBounds = bounds.VelocityBounds
 
 const (
 	TOP    = bounds.TOP
@@ -83,6 +87,7 @@ type ImageChunk = utils.ImageChunk
 var DistanceBetween = utils.DistanceBetween
 var DistanceBetweenPoints = utils.DistanceBetweenPoints
 var PointAtAngleWithDistance = utils.PointAtAngleWithDistance
+var AngleBetween = utils.AngleBetween
 var AngleBetweenPoints = utils.AngleBetweenPoints
 var MoveTowards = utils.MoveTowards
 var Lerp = utils.Lerp
