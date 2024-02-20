@@ -60,6 +60,11 @@ func (self *Position) Z() float64 {
 	return self.z
 }
 
+func (self *Position) GridAlign(h, v int) {
+	self.x = float64(int(self.x) / h * h)
+	self.y = float64(int(self.y) / v * v)
+}
+
 func (self *Position) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
 	if self.options == nil {
 		self.options = &ebiten.DrawImageOptions{}

@@ -1,5 +1,7 @@
 package nengine
 
+import "github.com/hajimehoshi/ebiten/v2"
+
 // Floats returns a pair of int as float64
 func Floats(a, b int) (float64, float64) {
 	return float64(a), float64(b)
@@ -37,4 +39,13 @@ type horizontalRelative interface {
 func PositionRight(object horizontalRelative, padding int) (float64, float64) {
 	x, y := object.Pos2()
 	return x + float64(object.Dx()+padding), y
+}
+
+func FitToNewImage(w, h int, image *ebiten.Image) *ebiten.Image {
+	out := ebiten.NewImage(w, h)
+	wf, hf := ScaleFactor(image.Bounds().Dx(), image.Bounds().Dy(), w, h)
+	options := &ebiten.DrawImageOptions{}
+	options.GeoM.Scale(wf, hf)
+	out.DrawImage(image, options)
+	return out
 }

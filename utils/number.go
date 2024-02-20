@@ -14,6 +14,11 @@ func Clamp[T Number](num, min, max T) T {
 	return num
 }
 
+// ScaleFactor returns the scale factor from one size to another
+func ScaleFactor[T Number](fromWidth, fromHeight, toWidth, toHeight T) (float64, float64) {
+	return float64(fromWidth) / float64(toWidth), float64(fromHeight) / float64(toHeight)
+}
+
 func LinearInterpolate[T ~float32 | ~float64](a, b, percent T) T {
 	return a + (b-a)*percent
 }

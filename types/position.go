@@ -6,6 +6,7 @@ type Position interface {
 	SetPos2(x, y float64)
 	Pos3() (x, y, z float64)
 	SetPos3(x, y, z float64)
+	GridAlign(h, v int)
 	X() float64
 	Y() float64
 	Z() float64

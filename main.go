@@ -94,6 +94,10 @@ var Lerp = utils.Lerp
 var ChunkImage = utils.ChunkImage
 var ChunkBounds = utils.ChunkBounds
 
+func ScaleFactor[T ~int | ~uint | ~float32 | ~float64](fromWidth, fromHeight, toWidth, toHeight T) (float64, float64) {
+	return utils.ScaleFactor(fromWidth, fromHeight, toWidth, toHeight)
+}
+
 func Clamp[T ~int | ~uint | ~float32 | ~float64](num, min, max T) T {
 	return utils.Clamp(num, min, max)
 }

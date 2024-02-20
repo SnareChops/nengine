@@ -47,3 +47,14 @@ func (self *SourceSprite) Reload() {
 func (self *SourceSprite) Image() *ebiten.Image {
 	return self.SimpleSprite.Image()
 }
+
+func DrawSpriteWithShader(dest *ebiten.Image, sprite Sprite, shader *ebiten.Shader, camera Camera, uniforms map[string]interface{}) {
+	o := sprite.DrawOptions(camera)
+	options := &ebiten.DrawRectShaderOptions{
+		GeoM:       o.GeoM,
+		ColorScale: o.ColorScale,
+		Uniforms:   uniforms,
+		Images:     [4]*ebiten.Image{sprite.Image()},
+	}
+	dest.DrawRectShader(sprite.Dx(), sprite.Dy(), shader, options)
+}

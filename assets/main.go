@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/SnareChops/nengine/assets/cache"
+	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -24,4 +25,15 @@ func AssetsInFolder(path string) []string {
 		return nil
 	})
 	return aliases
+}
+
+func ScaledImage(width, height int, image *ebiten.Image) *ebiten.Image {
+	if image.Bounds().Dx() == width && image.Bounds().Dy() == height {
+		return image
+	}
+	result := ebiten.NewImage(width, height)
+	options := &ebiten.DrawImageOptions{}
+	options.GeoM.Scale(utils.ScaleFactor(image.Bounds().Dx(), image.Bounds().Dy(), width, height))
+	result.DrawImage(image, options)
+	return result
 }
