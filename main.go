@@ -1,6 +1,7 @@
 package nengine
 
 import (
+	"github.com/SnareChops/nengine/animators"
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/emitters"
@@ -9,6 +10,12 @@ import (
 	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
 )
+
+// Animators
+type Animator = animators.Animator
+type FrameByFrameAnimator = animators.FrameByFrameAnimator
+type Animation = animators.Animation
+type AnimationFrame = animators.AnimationFrame
 
 // Interfaces
 type IGame = types.Game
@@ -42,9 +49,7 @@ const (
 	RIGHT  = bounds.RIGHT
 )
 
-func Point(x, y, z float64) Position {
-	return bounds.Point(x, y, z)
-}
+var Point = bounds.Point
 
 // Debug
 type DebugTimer = debug.DebugTimer
@@ -80,6 +85,8 @@ type BufferedCamera = rendering.BufferedCamera
 type Renderer = rendering.Renderer
 type Screen = rendering.Screen
 type World = rendering.World
+
+var DrawSprite = rendering.DrawSprite
 
 // Utils
 type ImageChunk = utils.ImageChunk

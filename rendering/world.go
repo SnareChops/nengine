@@ -60,9 +60,6 @@ func (self *World) Draw(screen *ebiten.Image) {
 		return int(ay - by)
 	})
 	for _, sprite := range self.sprites {
-		image := sprite.Image()
-		if image != nil {
-			screen.DrawImage(image, sprite.DrawOptions(self.camera))
-		}
+		DrawSprite(screen, sprite, self.camera)
 	}
 }

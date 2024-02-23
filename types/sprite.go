@@ -19,3 +19,8 @@ type ColorScaleSprite interface {
 	Sprite
 	Color() ebiten.ColorScale
 }
+
+type ShaderSprite interface {
+	Sprite
+	Shader() (*ebiten.Shader, map[string]any)
+}
