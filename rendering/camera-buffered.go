@@ -12,6 +12,7 @@ type BufferedCamera struct {
 
 func (self *BufferedCamera) Init(viewWidth, viewHeight, worldWidth, worldHeight int) *BufferedCamera {
 	self.BasicCamera = new(BasicCamera).Init(viewWidth, viewHeight, worldWidth, worldHeight)
+	self.image = ebiten.NewImage(viewWidth, viewHeight)
 	return self
 }
 

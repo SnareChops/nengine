@@ -79,20 +79,20 @@ func (self *Raw) SetAnchor(x, y int) {
 func (self *Raw) PosOf(h, v int) (x, y float64) {
 	switch h {
 	case LEFT:
-		x = self.x - self.offsetX
+		x = self.x - self.offsetX*self.scaleX
 	case CENTER:
-		x = (self.x - self.offsetX) + (float64(self.width) / 2)
+		x = (self.x - self.offsetX*self.scaleX) + (float64(self.width) / 2)
 	case RIGHT:
-		x = (self.x - self.offsetX) + float64(self.width)
+		x = (self.x - self.offsetX*self.scaleX) + float64(self.width)
 	}
 
 	switch v {
 	case TOP:
-		y = self.y - self.offsetY
+		y = self.y - self.offsetY*self.scaleY
 	case CENTER:
-		y = (self.y - self.offsetY) + (float64(self.height) / 2)
+		y = (self.y - self.offsetY*self.scaleY) + (float64(self.height) / 2)
 	case BOTTOM:
-		y = (self.y - self.offsetY) + float64(self.height)
+		y = (self.y - self.offsetY*self.scaleY) + float64(self.height)
 	}
 	return
 }
