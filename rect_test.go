@@ -32,4 +32,30 @@ func TestCombineRects(t *testing.T) {
 	assert.Equal(t, 2, h)
 	assert.Equal(t, 0., x)
 	assert.Equal(t, 0., y)
+
+}
+
+func TestCombineRectsExample(t *testing.T) {
+	rects := []nengine.Rect{
+		{0, 3520, 64, 3584},
+		{64, 3520, 128, 3584},
+		{128, 3520, 192, 3584},
+		{192, 3520, 256, 3584},
+		{256, 3520, 320, 3584},
+		{320, 3520, 384, 3584},
+		{0, 3584, 64, 3648},
+		{64, 3584, 128, 3648},
+		{128, 3584, 192, 3648},
+		{192, 3584, 256, 3648},
+		{256, 3584, 320, 3648},
+		{320, 3584, 384, 3648},
+	}
+
+	result := nengine.CombineRects(rects)
+
+	assert.Equal(t, 1, len(result))
+	assert.Equal(t, 0, result[0].MinX)
+	assert.Equal(t, 3520, result[0].MinY)
+	assert.Equal(t, 384, result[0].MaxX)
+	assert.Equal(t, 3648, result[0].MaxY)
 }

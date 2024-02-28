@@ -15,38 +15,35 @@ type Rect struct {
 
 func CombineRects(rects []Rect) []Rect {
 	// Combine Horizontally
-	for _, a := range rects {
-		for i, b := range rects {
-			// Skip a == b
-			if a == b {
-				continue
-			}
-
+	for a := 0; a < len(rects); a++ {
+		b := a + 1
+		for b < len(rects) {
 			// If a is the same height as b
 			// and a is at the same y value as b
 			// and b is touching the left side of a
-			if a.MinY == b.MinY && a.MaxY == b.MaxY && a.MaxX == b.MinX {
+			if rects[a].MinY == rects[b].MinY && rects[a].MaxY == rects[b].MaxY && rects[a].MaxX == rects[b].MinX {
 				// Combine b into a and delete b
-				a.MaxX = b.MaxX
-				rects = slices.Delete(rects, i, i+1)
+				rects[a].MaxX = rects[b].MaxX
+				rects = slices.Delete(rects, b, b+1)
+			} else {
+				b++
 			}
 		}
 	}
 
 	// Combine vertically
-	for _, a := range rects {
-		for i, b := range rects {
-			// Skip a == b
-			if a == b {
-				continue
-			}
+	for a := 0; a < len(rects); a++ {
+		b := a + 1
+		for b < len(rects) {
 			// If a is same width as b
 			// and a is at same x value as b
 			// and b is touching the bottom of a
-			if a.MinX == b.MinX && a.MaxX == b.MaxX && a.MaxY == b.MinY {
+			if rects[a].MinX == rects[b].MinX && rects[a].MaxX == rects[b].MaxX && rects[a].MaxY == rects[b].MinY {
 				// Combine b into a and delete b
-				a.MaxY = b.MaxY
-				rects = slices.Delete(rects, i, i+1)
+				rects[a].MaxY = rects[b].MaxY
+				rects = slices.Delete(rects, b, b+1)
+			} else {
+				b++
 			}
 		}
 	}

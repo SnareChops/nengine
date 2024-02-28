@@ -26,6 +26,10 @@ type Bounds interface {
 	Min() (x, y float64)
 	Mid() (x, y float64)
 	Max() (x, y float64)
+	MinX() float64
+	MinY() float64
+	MaxX() float64
+	MaxY() float64
 	IsWithin(x, y float64) bool
 	DoesCollide(Bounds) bool
 	DrawOptions(camera Camera) *ebiten.DrawImageOptions
