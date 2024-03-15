@@ -26,6 +26,10 @@ func (self *Input) InputCapture() {
 	self.captured = true
 }
 
+func (self *Input) InputUncapture() {
+	self.captured = false
+}
+
 func (self *Input) IsInputCaptured() bool {
 	return self.captured
 }

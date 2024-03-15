@@ -81,7 +81,9 @@ func (self *Game) Update() error {
 		self.update.Start()
 	}
 	now := time.Now().UnixMilli()
-	self.Scene.Update(int(now - self.prev))
+	if self.prev != 0 {
+		self.Scene.Update(int(now - self.prev))
+	}
 	self.prev = now
 	if self.update != nil {
 		self.update.End()

@@ -36,6 +36,10 @@ func (self *TextBox) Focus() {
 	self.focused = true
 }
 
+func (self *TextBox) IsFocused() bool {
+	return self.focused
+}
+
 func (self *TextBox) Update(x, y, delta int) {
 	if self.input.IsInputCaptured() {
 		self.focused = false
@@ -46,6 +50,7 @@ func (self *TextBox) Update(x, y, delta int) {
 		// Detect click outside of textbox to lose focus
 		if !self.IsWithin(Floats(x, y)) && IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			self.focused = false
+			self.input.InputUncapture()
 			return
 		}
 		// Handle backspace

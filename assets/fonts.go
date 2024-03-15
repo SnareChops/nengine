@@ -88,7 +88,7 @@ type Text struct {
 
 func NewText(kerning int, leading int, lines ...*Line) *Text {
 	return &Text{
-		Position: bounds.Point(0, 0, 0),
+		Position: bounds.Point(0, 0),
 		height:   -leading,
 		kerning:  kerning,
 		leading:  leading,

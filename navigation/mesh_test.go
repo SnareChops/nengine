@@ -27,8 +27,8 @@ func TestPathfind(t *testing.T) {
 	assert.Equal(t, 32.+64, x)
 	assert.Equal(t, 32., y)
 
-	start := bounds.Point(32, 224, 0)
-	end := bounds.Point(288, 160, 0)
+	start := bounds.Point(32, 224)
+	end := bounds.Point(288, 160)
 	path := mesh.Pathfind(start, end, true)
 	println("Path:")
 	for _, vec := range path {
@@ -46,8 +46,8 @@ func TestLargePathfind(t *testing.T) {
 	voffset := vspacing / 2
 	mesh := new(navigation.NavMesh).Init(height, width, hspacing, vspacing, hoffset, voffset, []types.Bounds{})
 
-	start := bounds.Point(32, 32, 0)
-	end := bounds.Point(8768, 3840, 0)
+	start := bounds.Point(32, 32)
+	end := bounds.Point(8768, 3840)
 
 	path := mesh.Pathfind(start, end, true)
 	for _, vec := range path {

@@ -76,6 +76,12 @@ func GetSheet(alias string) TileSheet {
 	return sheets[alias]
 }
 
+// GetSheetRange returns a slice of images within the range [start:end] from the sheet
+func GetSheetRange(alias string, start, end int) []*ebiten.Image {
+	sheet := GetSheet(alias)
+	return sheet.Images[start:end]
+}
+
 func ImageFromSheet(alias string, idx int) *ebiten.Image {
 	sheet := GetSheet(alias)
 	return sheet.Images[idx]

@@ -16,6 +16,7 @@ type Animator = animators.Animator
 type FrameByFrameAnimator = animators.FrameByFrameAnimator
 type Animation = animators.Animation
 type AnimationFrame = animators.AnimationFrame
+type SlideAnimator = animators.SlideAnimator
 
 // Interfaces
 type IGame = types.Game
@@ -87,6 +88,7 @@ type Screen = rendering.Screen
 type World = rendering.World
 
 var DrawSprite = rendering.DrawSprite
+var StrokeRect = rendering.StrokeRect
 
 // Utils
 type ImageChunk = utils.ImageChunk

@@ -157,7 +157,7 @@ func (self *NavMesh) Init(width, height, hspacing, vspacing, hoffset, voffset in
 		grid[i] = make([]*NavNode, yCount)
 		for j := range grid[i] {
 			grid[i][j] = &NavNode{
-				Position: bounds.Point(float64(i*hspacing+hoffset), float64(j*vspacing+voffset), 0),
+				Position: bounds.Point(float64(i*hspacing+hoffset), float64(j*vspacing+voffset)),
 				X:        i,
 				Y:        j,
 				G:        math.Inf(1),
@@ -177,7 +177,7 @@ func (self *NavMesh) InitSimple(width, height int, obstacles []types.Bounds) *Na
 		grid[i] = make([]*NavNode, height)
 		for j := range grid[i] {
 			grid[i][j] = &NavNode{
-				Position: bounds.Point(float64(i), float64(j), 0),
+				Position: bounds.Point(float64(i), float64(j)),
 				X:        i,
 				Y:        j,
 				G:        math.Inf(1),

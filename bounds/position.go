@@ -5,8 +5,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func Point(x, y, z float64) *Position {
-	return &Position{x, y, z, &ebiten.DrawImageOptions{}}
+func Point(x, y float64) *Position {
+	return &Position{x, y, 0, &ebiten.DrawImageOptions{}}
 }
 
 type Position struct {

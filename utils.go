@@ -1,6 +1,10 @@
 package nengine
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"image/color"
+
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 // Floats returns a pair of int as float64
 func Floats(a, b int) (float64, float64) {
@@ -48,4 +52,14 @@ func FitToNewImage(w, h int, image *ebiten.Image) *ebiten.Image {
 	options.GeoM.Scale(wf, hf)
 	out.DrawImage(image, options)
 	return out
+}
+
+func ColorToVec4(color color.Color) [4]float32 {
+	r, g, b, a := color.RGBA()
+	return [4]float32{
+		float32(r) / 0xffff,
+		float32(g) / 0xffff,
+		float32(b) / 0xffff,
+		float32(a) / 0xffff,
+	}
 }
