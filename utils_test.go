@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/SnareChops/nengine"
+	"github.com/SnareChops/nengine/bit"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,9 +25,9 @@ func TestInts(t *testing.T) {
 func TestIsSet(t *testing.T) {
 	mask := 0b1010
 	state := 0b1000
-	assert.True(t, nengine.IsSet(mask, state))
+	assert.True(t, bit.IsSet(mask, state))
 	state = 0b0100
-	assert.False(t, nengine.IsSet(mask, state))
+	assert.False(t, bit.IsSet(mask, state))
 }
 
 func TestScreenToRelativePosition(t *testing.T) {

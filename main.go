@@ -5,9 +5,11 @@ import (
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/emitters"
+	"github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/navigation"
 	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
+	"github.com/SnareChops/nengine/ui"
 	"github.com/SnareChops/nengine/utils"
 )
 
@@ -72,6 +74,9 @@ type ProjectileEmitter = emitters.Projectile
 type ParticleBase = emitters.ParticleBase
 type Particle = emitters.Particle
 
+// Input
+type Input = input.Input
+
 // Navigation
 type NavMesh = navigation.NavMesh
 type NavNode = navigation.NavNode
@@ -89,6 +94,25 @@ type World = rendering.World
 
 var DrawSprite = rendering.DrawSprite
 var StrokeRect = rendering.StrokeRect
+
+// UI
+type ButtonState = ui.ButtonState
+type Button = ui.Button
+type CheckboxState = ui.CheckboxState
+type Checkbox = ui.Checkbox
+type IntBox = ui.IntBox
+type TextBox = ui.TextBox
+
+const (
+	ButtonStateClicked       = ui.ButtonStateClicked
+	ButtonStateHovered       = ui.ButtonStateHovered
+	ButtonStateJustClicked   = ui.ButtonStateJustClicked
+	ButtonStateJustHovered   = ui.ButtonStateJustHovered
+	ButtonStateDisabled      = ui.ButtonStateDisabled
+	CheckboxStateChecked     = ui.CheckboxStateChecked
+	CheckboxStateJustChanged = ui.CheckboxStateJustChanged
+	CheckboxStateHovered     = ui.CheckboxStateHovered
+)
 
 // Utils
 type ImageChunk = utils.ImageChunk

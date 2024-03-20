@@ -16,10 +16,6 @@ func Ints(a, b float64) (int, int) {
 	return int(a), int(b)
 }
 
-func IsSet[T ~int](mask T, state T) bool {
-	return mask&state == state
-}
-
 func RelativePosition[T ~int | ~float64](x, y T, bounds Bounds) (T, T) {
 	bx, by := bounds.Min()
 	return x - T(bx), y - T(by)

@@ -1,6 +1,9 @@
-package nengine
+package input
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/SnareChops/nengine/types"
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 type Input struct {
 	captured bool
@@ -9,7 +12,7 @@ type Input struct {
 	cursorDeltaY  int
 	cursorPrevX   int
 	cursorPrevY   int
-	cursorContent Sprite
+	cursorContent types.Sprite
 
 	order int
 }
@@ -34,11 +37,11 @@ func (self *Input) IsInputCaptured() bool {
 	return self.captured
 }
 
-func (self *Input) CursorContent() Sprite {
+func (self *Input) CursorContent() types.Sprite {
 	return self.cursorContent
 }
 
-func (self *Input) SetCursorContent(content Sprite) {
+func (self *Input) SetCursorContent(content types.Sprite) {
 	self.cursorContent = content
 }
 
@@ -52,13 +55,13 @@ func (self *Input) CursorDelta() (int, int) {
 
 func (self *Input) Update() {
 	self.captured = false
-	x, y := CursorPosition()
+	x, y := ebiten.CursorPosition()
 	self.cursorDeltaX = x - self.cursorPrevX
 	self.cursorDeltaY = y - self.cursorPrevY
 	self.cursorPrevX = x
 	self.cursorPrevY = y
 	if self.cursorContent != nil {
-		self.cursorContent.SetPos2(Floats(x, y))
+		self.cursorContent.SetPos2(float64(x), float64(y))
 	}
 }
 

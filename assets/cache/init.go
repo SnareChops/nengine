@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/png"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -20,19 +21,21 @@ func load() {
 		if err != nil {
 			return err
 		}
-		if info.Mode().IsRegular() && strings.HasSuffix(info.Name(), ".png") {
-			file, err := os.Open(path)
-			if err != nil {
-				return err
-			}
-			image, err := png.Decode(file)
-			if err != nil {
-				return err
-			}
-			if is_sheet, alias, cellWidth, cellHeight := IsSheet(AliasFor(path)); is_sheet {
-				addSheet(alias, cellWidth, cellHeight, image)
-			} else {
-				addImage(AliasFor(path), image)
+		if info.Mode().IsRegular() {
+			if strings.HasSuffix(info.Name(), ".png") {
+				file, err := os.Open(path)
+				if err != nil {
+					return err
+				}
+				image, err := png.Decode(file)
+				if err != nil {
+					return err
+				}
+				if is_sheet, alias, cellWidth, cellHeight := IsSheet(AliasFor(path)); is_sheet {
+					addSheet(alias, cellWidth, cellHeight, image)
+				} else {
+					addImage(AliasFor(path), image)
+				}
 			}
 		}
 		return nil
@@ -51,4 +54,9 @@ func AliasFor(path string) string {
 	regex := regexp.MustCompile(`assets/(.*)\.png`)
 	matches := regex.FindStringSubmatch(path)
 	return matches[1]
+}
+
+func FontAliasFor(p string) string {
+	p = strings.ReplaceAll(p, "\\", "/")
+	return strings.TrimSuffix(path.Base(p), path.Ext(p))
 }
