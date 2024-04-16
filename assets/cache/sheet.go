@@ -50,6 +50,10 @@ func addSheet(alias string, width, height int, image image.Image) {
 	}
 }
 
+type SubImageable interface {
+	SubImage(r image.Rectangle) image.Image
+}
+
 func PromoteSheet(alias string) (int, int, int, int, []*ebiten.Image) {
 	sheet := sheets[alias]
 	if sheet.image == nil {
@@ -61,10 +65,8 @@ func PromoteSheet(alias string) (int, int, int, int, []*ebiten.Image) {
 	for row := 0; row < rows; row++ {
 		for col := 0; col < cols; col++ {
 			x, y := col*sheet.cw, row*sheet.ch
-			images = append(
-				images,
-				ebiten.NewImageFromImage(sheet.image.(*image.NRGBA).SubImage(image.Rect(x, y, x+sheet.cw, y+sheet.ch))),
-			)
+			img := ebiten.NewImageFromImage(sheet.image.(*image.NRGBA).SubImage(image.Rect(x, y, x+sheet.cw, y+sheet.ch)))
+			images = append(images, img)
 		}
 	}
 	delete(sheets, alias)

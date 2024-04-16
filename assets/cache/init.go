@@ -51,7 +51,7 @@ func ReloadCache() {
 
 func AliasFor(path string) string {
 	path = strings.ReplaceAll(path, "\\", "/")
-	regex := regexp.MustCompile(`assets/(.*)\.png`)
+	regex := regexp.MustCompile(`assets/(.*)\.[png]`)
 	matches := regex.FindStringSubmatch(path)
 	return matches[1]
 }

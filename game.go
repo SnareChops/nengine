@@ -53,12 +53,15 @@ func (self *Game) LoadScene(scene types.Scene) {
 	}
 	self.Scene = nil
 	if loadable, ok := scene.(types.Loadable); ok {
+		log.Println("Scene is loadable, loading...")
 		self.loadComplete = make(chan types.Scene)
 		self.Scene = loadable.Load(self.loadComplete, self)
 	} else {
+		log.Println("Scene not loadable")
 		self.Scene = scene
 	}
 	if initable, ok := self.Scene.(types.Initable); ok {
+		log.Println("Scene in initable, initializing...")
 		initable.Init(self)
 	}
 }
@@ -106,7 +109,9 @@ func (self *Game) Draw(screen *ebiten.Image) {
 	if self.draw != nil {
 		self.draw.Start()
 	}
-	self.Scene.Draw(screen)
+	if self.Scene != nil {
+		self.Scene.Draw(screen)
+	}
 	if self.draw != nil {
 		self.draw.End()
 	}

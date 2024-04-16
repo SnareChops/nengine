@@ -2,7 +2,9 @@ package nengine
 
 import (
 	"image/color"
+	"math"
 
+	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -57,5 +59,21 @@ func ColorToVec4(color color.Color) [4]float32 {
 		float32(g) / 0xffff,
 		float32(b) / 0xffff,
 		float32(a) / 0xffff,
+	}
+}
+
+func GridPointsAroundCell(x, y float64, gridWidth, gridHeight int) []types.Position {
+	gw, gh := Floats(gridWidth, gridHeight)
+	cx := math.Floor(x)/gw*gw + gw/2
+	cy := math.Floor(y)/gh*gh + gh/2
+	return []types.Position{
+		Point(cx-gw, cy-gh), // Above Left
+		Point(cx, cy-gh),    // Above
+		Point(cx+gw, cy-gh), // Above Right
+		Point(cx+gw, cy),    // Right
+		Point(cx+gw, cy+gh), // Below Right
+		Point(cx, cy+gh),    // Below
+		Point(cx-gw, cy+gh), // Below Left
+		Point(cx-gw, cy),    // Left
 	}
 }

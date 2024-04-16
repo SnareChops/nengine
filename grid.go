@@ -187,7 +187,7 @@ func (self *SpriteGrid) render() {
 	}
 	if self.lineColor != nil {
 		for _, line := range self.lines {
-			DrawLine(self.image, line, self.lineWidth, *self.lineColor, false)
+			DrawLine(self.image, line, self.lineWidth, *self.lineColor, false, nil)
 		}
 	}
 	if self.selected >= 0 {

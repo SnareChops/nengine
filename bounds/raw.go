@@ -178,7 +178,7 @@ func (self *Raw) Min() (x, y float64) {
 func (self *Raw) Mid() (x, y float64) {
 	x, y = self.RawPos()
 	w, h := self.Size()
-	return x + float64(w)/2, y + float64(h)/2
+	return x + float64(w-1)/2, y + float64(h-1)/2
 }
 
 // Max returns the maximum coordinates of the bounds (x, y float64)
@@ -186,7 +186,7 @@ func (self *Raw) Mid() (x, y float64) {
 func (self *Raw) Max() (x, y float64) {
 	x, y = self.RawPos()
 	w, h := self.Size()
-	return x + float64(w), y + float64(h)
+	return x + float64(w-1)*self.scaleX, y + float64(h-1)*self.scaleY
 }
 
 func (self *Raw) MinX() float64 {
@@ -198,11 +198,11 @@ func (self *Raw) MinY() float64 {
 }
 
 func (self *Raw) MaxX() float64 {
-	return self.x - self.offsetX + float64(self.width)*self.scaleX
+	return self.x - self.offsetX + float64(self.width-1)*self.scaleX
 }
 
 func (self *Raw) MaxY() float64 {
-	return self.y - self.offsetY + float64(self.height)*self.scaleY
+	return self.y - self.offsetY + float64(self.height-1)*self.scaleY
 }
 
 // IsWithin checks if the provided x, y coordinate is within the bounds
@@ -223,6 +223,7 @@ func (self *Raw) DoesCollide(other types.Bounds) bool {
 
 	x2m, y2m := other.Min()
 	x2M, y2M := other.Max()
+
 	return !(x2M < x1m || x2m > x1M || y2M < y1m || y2m > y1M)
 }
 

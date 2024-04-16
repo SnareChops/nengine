@@ -12,7 +12,6 @@ import (
 // NavMesh represents a navigation grid for pathfinding
 type NavMesh struct {
 	grid      [][]*NavNode
-	obstacles []types.Bounds
 	navGroups int
 	group     int
 	active    int
@@ -44,7 +43,7 @@ func (self *NavMesh) Update(delta int) {
 
 // Pathfind uses the NavMesh to find a path from the start to end Vector
 // Optionally allowing diagonal movement between the nodes
-func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool) NavPath {
+func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, obstacles []types.Bounds) NavPath {
 	// Find closest nodes to start and end positions
 	var startNode *NavNode
 	var startDist float64 = math.MaxFloat64
@@ -63,7 +62,7 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool) Na
 		}
 	}
 	// Calculate path
-	path := self.AStar(startNode, endNode, allowDiagonals)
+	path := self.AStar(startNode, endNode, allowDiagonals, obstacles)
 	// Append ending vector to path
 	path = append(path, end)
 	return path
@@ -73,7 +72,7 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool) Na
 // Optionally allowing diagonal movement between nodes
 // Note: This is exposed, but is really only intended to be used internally
 // Prefer using the Pathfind() method instead
-func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool) NavPath {
+func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []types.Bounds) NavPath {
 	defer self.reset()
 	openSet := priorityQueue{}
 	closedSet := make(map[*NavNode]bool)
@@ -100,7 +99,7 @@ func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool) NavPath {
 				continue
 			}
 			var gtg = true
-			for _, ob := range self.obstacles {
+			for _, ob := range obstacles {
 				if ob.IsWithin(neighbor.Pos2()) {
 					gtg = false
 				}
@@ -139,7 +138,7 @@ func (self *NavMesh) reset() {
 	}
 }
 
-func (self *NavMesh) Init(width, height, hspacing, vspacing, hoffset, voffset int, obstacles []types.Bounds) *NavMesh {
+func (self *NavMesh) Init(width, height, hspacing, vspacing, hoffset, voffset int) *NavMesh {
 	var xCount int
 	if hspacing == 0 && hoffset == 0 {
 		xCount = width
@@ -167,11 +166,10 @@ func (self *NavMesh) Init(width, height, hspacing, vspacing, hoffset, voffset in
 	}
 	self.navGroups = 10
 	self.grid = grid
-	self.obstacles = obstacles
 	return self
 }
 
-func (self *NavMesh) InitSimple(width, height int, obstacles []types.Bounds) *NavMesh {
+func (self *NavMesh) InitSimple(width, height int) *NavMesh {
 	grid := make([][]*NavNode, width)
 	for i := range grid {
 		grid[i] = make([]*NavNode, height)
@@ -187,6 +185,5 @@ func (self *NavMesh) InitSimple(width, height int, obstacles []types.Bounds) *Na
 	}
 	self.navGroups = 10
 	self.grid = grid
-	self.obstacles = obstacles
 	return self
 }

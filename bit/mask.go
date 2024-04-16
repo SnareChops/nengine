@@ -1,13 +1,13 @@
 package bit
 
-func IsSet[T ~int](mask T, state T) bool {
+func IsSet[T ~int | ~byte](mask T, state T) bool {
 	return mask&state == state
 }
 
-func BitmaskAdd[T ~int](mask T, flag T) T {
+func BitmaskAdd[T ~int | ~byte](mask T, flag T) T {
 	return mask | flag
 }
 
-func BitmaskRemove[T ~int](mask T, flag T) T {
+func BitmaskRemove[T ~int | ~byte](mask T, flag T) T {
 	return mask &^ flag
 }
