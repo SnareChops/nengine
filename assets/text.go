@@ -2,6 +2,7 @@ package assets
 
 import (
 	"image/color"
+	"strings"
 
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/types"
@@ -12,21 +13,32 @@ import (
 
 type VectorText struct {
 	*bounds.Raw
-	Value  string
-	Face   font.Face
-	Color  color.Color
-	Ascent int
+	font.Metrics
+	Lines []string
+	Face  font.Face
+	Color color.Color
 }
 
 func (self *VectorText) Init(value string, face font.Face, color color.Color) *VectorText {
-	self.Value = value
+	self.Lines = strings.Split(value, "\n")
 	self.Face = face
 	self.Color = color
-	self.Ascent = face.Metrics().Ascent.Ceil()
-	w := font.MeasureString(face, value).Ceil()
-	h := self.Ascent + face.Metrics().Descent.Ceil()
-	self.Raw = new(bounds.Raw).Init(w, h)
+	self.Metrics = face.Metrics()
+	self.Raw = new(bounds.Raw).Init(0, 0)
+	self.resize()
 	return self
+}
+
+func (self *VectorText) resize() {
+	height := self.Ascent.Ceil() + self.Descent.Ceil()
+	max := 0
+	for _, line := range self.Lines {
+		w := font.MeasureString(self.Face, line).Ceil()
+		if w > max {
+			max = w
+		}
+	}
+	self.Raw.Resize(max, height*len(self.Lines))
 }
 
 func DrawVectorText(screen *ebiten.Image, text *VectorText, camera types.Camera) {
@@ -34,6 +46,33 @@ func DrawVectorText(screen *ebiten.Image, text *VectorText, camera types.Camera)
 	if camera != nil {
 		x, y = camera.WorldToScreenPos(text.Pos2())
 	}
-	y += text.Ascent
-	ebitentext.Draw(screen, text.Value, text.Face, x, y, text.Color)
+	y += text.Ascent.Ceil()
+	height := text.Descent.Ceil() + text.Ascent.Ceil()
+	for i, line := range text.Lines {
+		ebitentext.Draw(screen, line, text.Face, x, y+i*height, text.Color)
+	}
+}
+
+func VectorTextWrap(width int, text *VectorText) {
+	var curr string
+	var wrapped []string
+	for _, line := range text.Lines {
+		words := strings.Split(line, " ")
+		for i := 0; i < len(words); i++ {
+			if i == 0 {
+				curr = words[i]
+			} else {
+				curr += " " + words[i]
+			}
+			if font.MeasureString(text.Face, curr).Ceil() > width {
+				wrapped = append(wrapped, strings.Join(words[:i], " "))
+				words = words[i:]
+				curr = ""
+				i = -1
+			}
+		}
+		wrapped = append(wrapped, strings.Join(words, " "))
+	}
+	text.Lines = wrapped
+	text.resize()
 }

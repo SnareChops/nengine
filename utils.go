@@ -8,13 +8,13 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-// Floats returns a pair of int as float64
-func Floats(a, b int) (float64, float64) {
+// Floats returns a pair of numbers as float64
+func Floats[T ~int | ~float32 | ~float64 | ~uint](a, b T) (float64, float64) {
 	return float64(a), float64(b)
 }
 
-// Ints returns a pair of float64 as int
-func Ints(a, b float64) (int, int) {
+// Ints returns a pair of numbers as int
+func Ints[T ~int | ~float32 | ~float64 | ~uint](a, b T) (int, int) {
 	return int(a), int(b)
 }
 
