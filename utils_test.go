@@ -1,6 +1,7 @@
 package nengine_test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/SnareChops/nengine"
@@ -46,4 +47,62 @@ func TestRelativePosition(t *testing.T) {
 	rx, ry := nengine.RelativePosition(12, 13, bounds)
 	assert.Equal(t, 7., rx)
 	assert.Equal(t, 3., ry)
+}
+
+func TestGridPointsAroundBounds(t *testing.T) {
+	bounds := new(nengine.RawBounds).Init(40, 20)
+	bounds.SetPos2(30, 30)
+	result := nengine.GridPointsAroundBounds(bounds, 10, 10)
+	for _, p := range result {
+		log.Println(p.Pos2())
+	}
+	assert.Equal(t, 16, len(result))
+	// corner
+	assert.Equal(t, 25., result[0].X())
+	assert.Equal(t, 25., result[0].Y())
+	//
+	assert.Equal(t, 35., result[1].X())
+	assert.Equal(t, 25., result[1].Y())
+	//
+	assert.Equal(t, 45., result[2].X())
+	assert.Equal(t, 25., result[2].Y())
+	//
+	assert.Equal(t, 55., result[3].X())
+	assert.Equal(t, 25., result[3].Y())
+	//
+	assert.Equal(t, 65., result[4].X())
+	assert.Equal(t, 25., result[4].Y())
+	// corner
+	assert.Equal(t, 75., result[5].X())
+	assert.Equal(t, 25., result[5].Y())
+	//
+	assert.Equal(t, 75., result[6].X())
+	assert.Equal(t, 35., result[6].Y())
+	//
+	assert.Equal(t, 75., result[7].X())
+	assert.Equal(t, 45., result[7].Y())
+	// corner
+	assert.Equal(t, 75., result[8].X())
+	assert.Equal(t, 55., result[8].Y())
+	//
+	assert.Equal(t, 65., result[9].X())
+	assert.Equal(t, 55., result[9].Y())
+	//
+	assert.Equal(t, 55., result[10].X())
+	assert.Equal(t, 55., result[10].Y())
+	//
+	assert.Equal(t, 45., result[11].X())
+	assert.Equal(t, 55., result[11].Y())
+	//
+	assert.Equal(t, 35., result[12].X())
+	assert.Equal(t, 55., result[12].Y())
+	// corner
+	assert.Equal(t, 25., result[13].X())
+	assert.Equal(t, 55., result[13].Y())
+	//
+	assert.Equal(t, 25., result[14].X())
+	assert.Equal(t, 45., result[14].Y())
+	//
+	assert.Equal(t, 25., result[15].X())
+	assert.Equal(t, 35., result[15].Y())
 }

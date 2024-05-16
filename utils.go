@@ -77,3 +77,47 @@ func GridPointsAroundCell(x, y float64, gridWidth, gridHeight int) []types.Posit
 		Point(cx-gw, cy),    // Left
 	}
 }
+
+func GridPointsAroundBounds(bounds Bounds, gridWidth, gridHeight int) []types.Position {
+	gw, gh := Floats(gridWidth, gridHeight)
+	x, y := bounds.Min()
+
+	// snap top left of bounds to grid
+	pos := Point(x, y)
+	pos.GridAlign(gridWidth, gridHeight)
+	// then add half grid width and height to get center
+	pos.SetPos2(pos.X()+gw/2, pos.Y()+gh/2)
+	// Check if this point is inside the bounds
+	if bounds.IsWithin(pos.Pos2()) {
+		// If so, subtract full grid cell
+		pos.SetPos2(pos.X()-gw, pos.Y()-gh)
+	}
+	points := []types.Position{pos}
+	timesWidth := bounds.Dx() / gridWidth
+	timesHeight := bounds.Dy() / gridHeight
+	// Walk around bounds at grid cell intervals creating points
+	for range timesWidth {
+		last := points[len(points)-1]
+		pos := Point(last.X()+gw, last.Y())
+		points = append(points, pos)
+	}
+	points = append(points, Point(points[len(points)-1].X()+gw, points[len(points)-1].Y()))
+	for range timesHeight {
+		last := points[len(points)-1]
+		pos := Point(last.X(), last.Y()+gh)
+		points = append(points, pos)
+	}
+	points = append(points, Point(points[len(points)-1].X(), points[len(points)-1].Y()+gh))
+	for range timesWidth {
+		last := points[len(points)-1]
+		pos := Point(last.X()-gw, last.Y())
+		points = append(points, pos)
+	}
+	points = append(points, Point(points[len(points)-1].X()-gw, points[len(points)-1].Y()))
+	for range timesHeight {
+		last := points[len(points)-1]
+		pos := Point(last.X(), last.Y()-gh)
+		points = append(points, pos)
+	}
+	return points
+}
