@@ -29,6 +29,23 @@ func (self *SimpleSprite) Image() *ebiten.Image {
 	return self.image
 }
 
+type SimpleShaderSprite struct {
+	*SimpleSprite
+	shader   *ebiten.Shader
+	uniforms map[string]any
+}
+
+func (self *SimpleShaderSprite) Init(image *ebiten.Image, shader *ebiten.Shader, uniforms map[string]any) *SimpleShaderSprite {
+	self.SimpleSprite = new(SimpleSprite).Init(image)
+	self.shader = shader
+	self.uniforms = uniforms
+	return self
+}
+
+func (self *SimpleShaderSprite) Shader() (*ebiten.Shader, map[string]any) {
+	return self.shader, self.uniforms
+}
+
 type SourceSprite struct {
 	*SimpleSprite
 	SpriteSource

@@ -55,6 +55,7 @@ func LoadImage(path string) *ebiten.Image {
 		images[path], err = LoadJPEG(path)
 	case ".png":
 		images[path], err = LoadPNG(path)
+
 	default:
 		panic(fmt.Sprintf("failed to load image for extension '%s': %s", ext, path))
 	}
