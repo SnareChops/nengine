@@ -60,3 +60,14 @@ func ChunkImage(img *ebiten.Image, size int) []*ImageChunk {
 
 	return newImages
 }
+
+func ScaledImage(width, height int, image *ebiten.Image) *ebiten.Image {
+	if image.Bounds().Dx() == width && image.Bounds().Dy() == height {
+		return image
+	}
+	result := ebiten.NewImage(width, height)
+	options := &ebiten.DrawImageOptions{}
+	options.GeoM.Scale(ScaleFactor(image.Bounds().Dx(), image.Bounds().Dy(), width, height))
+	result.DrawImage(image, options)
+	return result
+}

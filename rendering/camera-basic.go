@@ -26,10 +26,10 @@ func (self *BasicCamera) Init(viewWidth, viewHeight, worldWidth, worldHeight int
 func (self *BasicCamera) SetPos(x, y float64) {
 	self.CameraBounds.SetPos(x, y)
 	if ax := self.MinX(); ax < 0 {
-		self.CameraBounds.SetPos(x+(0-ax), self.Y())
+		self.CameraBounds.SetPos(x-ax, self.Y())
 	}
 	if ay := self.MinY(); ay < 0 {
-		self.CameraBounds.SetPos(self.X(), y+(0-ay))
+		self.CameraBounds.SetPos(self.X(), y-ay)
 	}
 	ww, wh := float64(self.ww), float64(self.wh)
 	if ax := self.MaxX(); ax > ww {

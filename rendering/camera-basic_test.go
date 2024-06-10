@@ -194,8 +194,8 @@ func TestNewCameraWorldToScreenPosWithZoom(t *testing.T) {
 
 	c.SetZoom(2)
 	x, y = c.WorldToScreenPos(2, 2)
-	assert.Equal(t, 4, x)
-	assert.Equal(t, 4, y)
+	assert.Equal(t, -1, x)
+	assert.Equal(t, -1, y)
 
 	c.SetZoom(.5)
 	x, y = c.WorldToScreenPos(2, 2)
@@ -212,8 +212,8 @@ func TestCameraWorldToScreenPosWithZoomAndPos(t *testing.T) {
 
 	c.SetZoom(2)
 	x, y = c.WorldToScreenPos(2, 2)
-	assert.Equal(t, -2, x)
-	assert.Equal(t, -2, y)
+	assert.Equal(t, -1, x)
+	assert.Equal(t, -1, y)
 
 	c.SetZoom(.5)
 	x, y = c.WorldToScreenPos(2, 2)
@@ -232,10 +232,10 @@ func TestCameraViewConsistentRectSize(t *testing.T) {
 	c = new(rendering.BasicCamera).Init(200, 100, 2000, 1000)
 	c.SetZoom(2)
 	result = c.View()
-	assert.Equal(t, 0, result.Min.X)
-	assert.Equal(t, 0, result.Min.Y)
-	assert.Equal(t, 200, result.Max.X)
-	assert.Equal(t, 100, result.Max.Y)
+	assert.Equal(t, 50, result.Min.X)
+	assert.Equal(t, 25, result.Min.Y)
+	assert.Equal(t, 150, result.Max.X)
+	assert.Equal(t, 75, result.Max.Y)
 }
 
 func TestCameraScreenToWorldPosWithZoom(t *testing.T) {
@@ -243,15 +243,15 @@ func TestCameraScreenToWorldPosWithZoom(t *testing.T) {
 	c.SetZoom(.5)
 
 	x, y := c.ScreenToWorldPos(20, 10)
-	assert.Equal(t, 40., x)
-	assert.Equal(t, 20., y)
+	assert.Equal(t, -60., x)
+	assert.Equal(t, -30., y)
 
 	c = new(rendering.BasicCamera).Init(200, 100, 2000, 1000)
 	c.SetZoom(2)
 
 	x, y = c.ScreenToWorldPos(20, 10)
-	assert.Equal(t, 10., x)
-	assert.Equal(t, 5., y)
+	assert.Equal(t, 60., x)
+	assert.Equal(t, 30., y)
 }
 
 func TestCameraFollow(t *testing.T) {
@@ -262,16 +262,18 @@ func TestCameraFollow(t *testing.T) {
 	camera.SetPos(796, 786)
 
 	x, y := camera.Pos()
-	assert.Equal(t, 796, x)
-	assert.Equal(t, 786, y)
-	camera.Update(10)
+	assert.Equal(t, 960., x)
+	assert.Equal(t, 786., y)
 
-	x, y = camera.Pos()
-	assert.Equal(t, 796, x)
-	assert.Equal(t, 786, y)
+	bounds.SetPos2(800, 900)
 	camera.Update(10)
-
 	x, y = camera.Pos()
-	assert.Equal(t, 796, x)
-	assert.Equal(t, 786, y)
+	assert.Equal(t, 960., x)
+	assert.Equal(t, 900., y)
+
+	bounds.SetPos2(1000, 900)
+	camera.Update(10)
+	x, y = camera.Pos()
+	assert.Equal(t, 1000., x)
+	assert.Equal(t, 900., y)
 }

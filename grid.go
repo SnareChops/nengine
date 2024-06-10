@@ -3,7 +3,7 @@ package nengine
 import (
 	"image/color"
 
-	"github.com/SnareChops/nengine/assets"
+	"github.com/SnareChops/nengine/loaders"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -42,9 +42,9 @@ func (self *SpriteGrid) Init(gridWidth, gridHeight, cellWidth, cellHeight int) *
 	return self
 }
 
-func (self *SpriteGrid) InitFromTileSheet(sheet assets.TileSheet) *SpriteGrid {
-	self.Init(sheet.SheetWidth, sheet.SheetHeight, sheet.CellWidth, sheet.CellHeight)
-	for i, image := range sheet.Images {
+func (self *SpriteGrid) InitFromTileSheet(sheet loaders.Sheet) *SpriteGrid {
+	self.Init(sheet.Width, sheet.Height, sheet.CellWidth, sheet.CellHeight)
+	for i, image := range sheet.Cells {
 		self.SetContent(i, new(SimpleSprite).Init(image))
 	}
 	return self

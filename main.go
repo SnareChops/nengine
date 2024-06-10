@@ -5,7 +5,9 @@ import (
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/emitters"
+	"github.com/SnareChops/nengine/fonts"
 	"github.com/SnareChops/nengine/input"
+	"github.com/SnareChops/nengine/loaders"
 	"github.com/SnareChops/nengine/navigation"
 	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
@@ -21,7 +23,7 @@ type AnimationFrame = animators.AnimationFrame
 type SlideAnimator = animators.SlideAnimator
 
 // Interfaces
-type IGame = types.Game
+type Game = types.Game
 type Scene = types.Scene
 type Position = types.Position
 type Bounds = types.Bounds
@@ -74,8 +76,41 @@ type ProjectileEmitter = emitters.Projectile
 type ParticleBase = emitters.ParticleBase
 type Particle = emitters.Particle
 
+// Fonts
+type Text = fonts.Text
+
+var NewText = fonts.NewText
+var LoadFont = fonts.LoadFont
+var LoadTTF = fonts.LoadTTF
+var LoadOTF = fonts.LoadOTF
+var Font = fonts.Font
+var GetStringWidth = fonts.GetStringWidth
+var GetStringHeight = fonts.GetStringHeight
+var GetStringSize = fonts.GetStringSize
+var DrawText = fonts.DrawText
+
 // Input
 type Input = input.Input
+
+// Loaders
+type Sheet = loaders.Sheet
+type Anim = loaders.Anim
+
+var PreloadImage = loaders.PreloadImage
+var PreloadSheet = loaders.PreloadSheet
+var PreloadAnim = loaders.PreloadAnim
+var PreloadImageAseprite = loaders.PreloadImageAseprite
+var PreloadSheetAseprite = loaders.PreloadSheetAseprite
+var PreloadAnimAseprite = loaders.PreloadAnimAseprite
+var PreloadImagePng = loaders.PreloadImagePng
+var PreloadSheetPng = loaders.PreloadSheetPng
+var PreloadImageJpeg = loaders.PreloadImageJpeg
+var PreloadSheetJpeg = loaders.PreloadSheetJpeg
+var GetImage = loaders.GetImage
+var GetSheet = loaders.GetSheet
+var GetSheetCell = loaders.GetSheetCell
+var GetSheetRange = loaders.GetSheetRange
+var GetAnim = loaders.GetAnim
 
 // Navigation
 type NavMesh = navigation.NavMesh

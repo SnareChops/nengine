@@ -142,14 +142,14 @@ func (self *Raw) Dy() int {
 	return int(float64(self.height) * self.scaleY)
 }
 
-// SetRotation sets the rotation of the bounds around the center
-func (self *Raw) SetRotation(theta float64) {
-	self.rotation = theta
-}
-
 // Rotation return the rotation of the bounds
 func (self *Raw) Rotation() float64 {
 	return self.rotation
+}
+
+// SetRotation sets the rotation of the bounds around the center
+func (self *Raw) SetRotation(theta float64) {
+	self.rotation = theta
 }
 
 // Scale returns the scale of the bounds as (x, y float64)
@@ -186,7 +186,7 @@ func (self *Raw) Mid() (x, y float64) {
 func (self *Raw) Max() (x, y float64) {
 	x, y = self.RawPos()
 	w, h := self.Size()
-	return x + float64(w-1)*self.scaleX, y + float64(h-1)*self.scaleY
+	return x + float64(w-1), y + float64(h-1)
 }
 
 func (self *Raw) MinX() float64 {
@@ -211,9 +211,8 @@ func (self *Raw) IsWithin(x, y float64) bool {
 	if self.width == 1 && self.height == 1 {
 		return x == x1 && y == y1
 	}
-	w, h := self.Size()
-	x2, y2 := x1+float64(w), y1+float64(h)
-	return x > x1 && x < x2 && y > y1 && y < y2
+	x2, y2 := self.Max()
+	return x >= x1 && x <= x2 && y >= y1 && y <= y2
 }
 
 // DoesCollide checks if the two bounds collide with each other

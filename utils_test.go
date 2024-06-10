@@ -1,7 +1,6 @@
 package nengine_test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/SnareChops/nengine"
@@ -32,12 +31,11 @@ func TestIsSet(t *testing.T) {
 }
 
 func TestScreenToRelativePosition(t *testing.T) {
-	x, y := 10.0, 20.0
 	bounds := new(nengine.RawBounds).Init(10, 20)
 	bounds.SetPos2(5, 10)
-	rx, ry := nengine.RelativePosition(x, y, bounds)
+	rx, ry := nengine.RelativePosition(10.0, 20.0, bounds)
 	assert.Equal(t, 5.0, rx)
-	assert.Equal(t, 5.0, ry)
+	assert.Equal(t, 10.0, ry)
 }
 
 func TestRelativePosition(t *testing.T) {
@@ -45,17 +43,15 @@ func TestRelativePosition(t *testing.T) {
 	bounds.SetPos2(5, 10)
 
 	rx, ry := nengine.RelativePosition(12, 13, bounds)
-	assert.Equal(t, 7., rx)
-	assert.Equal(t, 3., ry)
+	assert.Equal(t, 7, rx)
+	assert.Equal(t, 3, ry)
 }
 
 func TestGridPointsAroundBounds(t *testing.T) {
 	bounds := new(nengine.RawBounds).Init(40, 20)
 	bounds.SetPos2(30, 30)
 	result := nengine.GridPointsAroundBounds(bounds, 10, 10)
-	for _, p := range result {
-		log.Println(p.Pos2())
-	}
+
 	assert.Equal(t, 16, len(result))
 	// corner
 	assert.Equal(t, 25., result[0].X())

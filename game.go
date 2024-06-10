@@ -5,12 +5,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/SnareChops/nengine/fonts"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type Game struct {
+type BasicGame struct {
 	Scene        types.Scene
 	width        int
 	height       int
@@ -23,14 +22,15 @@ type Game struct {
 	reloadTime   *DebugTimer
 }
 
-func NewGame(width, height int, debug bool, reload ebiten.Key) *Game {
-	game := &Game{
+func NewGame(width, height int, debug bool, reload ebiten.Key) *BasicGame {
+	game := &BasicGame{
 		width:  width,
 		height: height,
 		reload: reload,
 	}
 	if debug {
-		EnableDebug(fonts.Arial12)
+		// TODO: Re-enable debug mode once default font is sorted
+		// EnableDebug(fonts.Arial12)
 		DebugStat("TPS", func() string {
 			return fmt.Sprintf("%0.2f", ebiten.ActualTPS())
 		})
@@ -47,7 +47,7 @@ func NewGame(width, height int, debug bool, reload ebiten.Key) *Game {
 	return game
 }
 
-func (self *Game) LoadScene(scene types.Scene) {
+func (self *BasicGame) LoadScene(scene types.Scene) {
 	if destroyable, ok := self.Scene.(types.Destroyable); ok {
 		destroyable.Destroy()
 	}
@@ -66,7 +66,7 @@ func (self *Game) LoadScene(scene types.Scene) {
 	}
 }
 
-func (self *Game) Update() error {
+func (self *BasicGame) Update() error {
 	if self.reload != 0 && IsKeyJustPressed(self.reload) {
 		if scene, ok := self.Scene.(types.Reloadable); ok {
 			log.Println("Scene Reloading...")
@@ -105,7 +105,7 @@ func (self *Game) Update() error {
 	return nil
 }
 
-func (self *Game) Draw(screen *ebiten.Image) {
+func (self *BasicGame) Draw(screen *ebiten.Image) {
 	if self.draw != nil {
 		self.draw.Start()
 	}
@@ -117,10 +117,10 @@ func (self *Game) Draw(screen *ebiten.Image) {
 	}
 }
 
-func (self *Game) Layout(w, h int) (int, int) {
+func (self *BasicGame) Layout(w, h int) (int, int) {
 	return self.width, self.height
 }
 
-func (self *Game) Terminate() {
+func (self *BasicGame) Terminate() {
 	self.terminate = true
 }

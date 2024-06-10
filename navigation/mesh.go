@@ -102,6 +102,7 @@ func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []
 			for _, ob := range obstacles {
 				if ob.IsWithin(neighbor.Pos2()) {
 					gtg = false
+					break
 				}
 			}
 			if !gtg {
