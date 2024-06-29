@@ -29,7 +29,7 @@ func TestPathfind(t *testing.T) {
 
 	start := bounds.Point(32, 224)
 	end := bounds.Point(288, 160)
-	path := mesh.Pathfind(start, end, true, []types.Bounds{collider})
+	path := mesh.Pathfind(start, end, true, []types.Collidable{collider})
 	println("Path:")
 	for _, vec := range path {
 		x, y := vec.Pos2()
@@ -49,10 +49,21 @@ func TestLargePathfind(t *testing.T) {
 	start := bounds.Point(32, 32)
 	end := bounds.Point(8768, 3840)
 
-	path := mesh.Pathfind(start, end, true, []types.Bounds{})
+	path := mesh.Pathfind(start, end, true, []types.Collidable{})
 	for _, vec := range path {
 		x, y := vec.Pos2()
 		fmt.Printf("%.2f, %.2f\n", x, y)
 	}
+}
 
+func TestNoPathFound(t *testing.T) {
+	// Test the A* algorithm
+	collider := new(bounds.Raw).Init(64, 320)
+	collider.SetPos2(128, 0)
+	mesh := new(navigation.NavMesh).Init(320, 320, 64, 64, 32, 32)
+
+	start := bounds.Point(64, 64)
+	end := bounds.Point(256, 256)
+	path := mesh.Pathfind(start, end, true, []types.Collidable{collider})
+	assert.Equal(t, 0, len(path))
 }

@@ -1,3 +1,5 @@
+github.com/SnareChops/aseprite-loader v0.0.0-20240615023426-866563cbedbc h1:skJhLg1eWpUKxPg/N+QdXTcCZo0zZrwz7b6OeupygyM=
+github.com/SnareChops/aseprite-loader v0.0.0-20240615023426-866563cbedbc/go.mod h1:b9Sn3MCjR9iIo+fgG81HJu6u/6dLaZo2APfzIfew6KQ=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/ebitengine/gomobile v0.0.0-20240518074828-e86332849895 h1:48bCqKTuD7Z0UovDfvpCn7wZ0GUZ+yosIteNDthn3FU=
@@ -32,3 +34,5 @@ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+hawx.me/code/img v0.0.0-20150501151119-6cd0f2a93fda h1:8NlhBbP/m40/IDUr0gA5W/GgdraedgHRBmuE53DVigw=
+hawx.me/code/img v0.0.0-20150501151119-6cd0f2a93fda/go.mod h1:O+YrtCKu596QHeIJkMxnddl1Ho3s8mO0IJEAOiLuLJo=

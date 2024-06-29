@@ -8,6 +8,7 @@ import (
 // Includes useful utilities for working with the bounds
 type Bounds interface {
 	Position
+	Collidable
 	PosOf(h, v int) (x, y float64)
 	RawPos() (x, y float64)
 	Anchor() (h, v int)
@@ -23,14 +24,19 @@ type Bounds interface {
 	Scale() (x, y float64)
 	SetScale(x, y float64)
 	ScaleTo(w, h int)
-	Min() (x, y float64)
 	Mid() (x, y float64)
-	Max() (x, y float64)
 	MinX() float64
 	MinY() float64
 	MaxX() float64
 	MaxY() float64
-	IsWithin(x, y float64) bool
-	DoesCollide(Bounds) bool
 	DrawOptions(camera Camera) *ebiten.DrawImageOptions
+}
+
+type Collidable interface {
+	X() float64
+	Y() float64
+	Min() (x, y float64)
+	Max() (x, y float64)
+	IsWithin(x, y float64) bool
+	DoesCollide(Collidable) bool
 }

@@ -51,6 +51,14 @@ func MoveTowards(x1, y1, x2, y2, speed float64, delta int) (float64, float64) {
 	return PointAtAngleWithDistance(x1, y1, angle, length)
 }
 
+// MoveAway returns a new (x, y float64) position given the starting position
+// and travelling directly opposite the angle towards the target
+func MoveAway(x1, y1, x2, y2, speed float64, delta int) (float64, float64) {
+	length := speed / float64(delta)
+	angle := AngleBetweenPoints(x1, y1, x2, y2)
+	return PointAtAngleWithDistance(x1, y1, angle+math.Pi, length)
+}
+
 // Lerp returns the point on a line between the two provided
 // endpoints at the given percentage
 func Lerp(x1, y1, x2, y2, percent float64) (float64, float64) {

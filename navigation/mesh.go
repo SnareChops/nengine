@@ -43,7 +43,7 @@ func (self *NavMesh) Update(delta int) {
 
 // Pathfind uses the NavMesh to find a path from the start to end Vector
 // Optionally allowing diagonal movement between the nodes
-func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, obstacles []types.Bounds) NavPath {
+func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, obstacles []types.Collidable) NavPath {
 	// Find closest nodes to start and end positions
 	var startNode *NavNode
 	var startDist float64 = math.MaxFloat64
@@ -64,15 +64,18 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, ob
 	// Calculate path
 	path := self.AStar(startNode, endNode, allowDiagonals, obstacles)
 	// Append ending vector to path
-	path = append(path, end)
-	return path
+	if len(path) > 0 {
+		path = append(path, end)
+		return path[1:]
+	}
+	return []types.Position{}
 }
 
 // AStar runs the A* algoritm on the NavMesh and returns a path between the provided nodes
 // Optionally allowing diagonal movement between nodes
 // Note: This is exposed, but is really only intended to be used internally
 // Prefer using the Pathfind() method instead
-func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []types.Bounds) NavPath {
+func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []types.Collidable) NavPath {
 	defer self.reset()
 	openSet := priorityQueue{}
 	closedSet := make(map[*NavNode]bool)

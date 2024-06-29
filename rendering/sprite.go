@@ -5,7 +5,14 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func DrawSprite(dest *ebiten.Image, sprite types.Sprite, camera types.Camera) {
+type DrawableSprite interface {
+	Dx() int
+	Dy() int
+	DrawOptions(types.Camera) *ebiten.DrawImageOptions
+	Image() *ebiten.Image
+}
+
+func DrawSprite(dest *ebiten.Image, sprite DrawableSprite, camera types.Camera) {
 	image := sprite.Image()
 	if image != nil {
 		if shader, uniforms, ok := shouldUseShader(sprite); ok {
@@ -20,7 +27,7 @@ func DrawSprite(dest *ebiten.Image, sprite types.Sprite, camera types.Camera) {
 	}
 }
 
-func shouldUseShader(sprite types.Sprite) (*ebiten.Shader, map[string]any, bool) {
+func shouldUseShader(sprite DrawableSprite) (*ebiten.Shader, map[string]any, bool) {
 	if s, ok := sprite.(types.ShaderSprite); ok {
 		if shader, uniforms := s.Shader(); shader != nil {
 			return shader, uniforms, true

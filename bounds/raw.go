@@ -216,7 +216,7 @@ func (self *Raw) IsWithin(x, y float64) bool {
 }
 
 // DoesCollide checks if the two bounds collide with each other
-func (self *Raw) DoesCollide(other types.Bounds) bool {
+func (self *Raw) DoesCollide(other types.Collidable) bool {
 	x1m, y1m := self.Min()
 	x1M, y1M := self.Max()
 

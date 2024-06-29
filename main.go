@@ -21,6 +21,8 @@ type FrameByFrameAnimator = animators.FrameByFrameAnimator
 type Animation = animators.Animation
 type AnimationFrame = animators.AnimationFrame
 type SlideAnimator = animators.SlideAnimator
+type SimpleAnimator = animators.SimpleAnimator
+type SimpleFrame = animators.SimpleFrame
 
 // Interfaces
 type Game = types.Game
@@ -33,6 +35,7 @@ type RenderLayer = types.RenderLayer
 type SpriteRenderLayer = types.SpriteRenderLayer
 type Camera = types.Camera
 type Vector = types.Vector
+type Collidable = types.Collidable
 
 var NewVector = types.NewVector
 
@@ -45,6 +48,7 @@ type RawBounds = bounds.Raw
 type RelativeBounds = bounds.Relative
 type PhysicsBounds = bounds.Physics
 type VelocityBounds = bounds.VelocityBounds
+type ProjectileBounds = bounds.Projectile
 
 const (
 	TOP    = bounds.TOP
@@ -158,6 +162,7 @@ var PointAtAngleWithDistance = utils.PointAtAngleWithDistance
 var AngleBetween = utils.AngleBetween
 var AngleBetweenPoints = utils.AngleBetweenPoints
 var MoveTowards = utils.MoveTowards
+var MoveAway = utils.MoveAway
 var Lerp = utils.Lerp
 var ChunkImage = utils.ChunkImage
 var ChunkBounds = utils.ChunkBounds
