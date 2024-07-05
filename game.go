@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -29,8 +30,7 @@ func NewGame(width, height int, debug bool, reload ebiten.Key) *BasicGame {
 		reload: reload,
 	}
 	if debug {
-		// TODO: Re-enable debug mode once default font is sorted
-		// EnableDebug(fonts.Arial12)
+		EnableDebug()
 		DebugStat("TPS", func() string {
 			return fmt.Sprintf("%0.2f", ebiten.ActualTPS())
 		})
@@ -102,6 +102,7 @@ func (self *BasicGame) Update() error {
 		default:
 		}
 	}
+	debug.DebugUpdate()
 	return nil
 }
 
@@ -115,6 +116,7 @@ func (self *BasicGame) Draw(screen *ebiten.Image) {
 	if self.draw != nil {
 		self.draw.End()
 	}
+	DebugDraw(screen)
 }
 
 func (self *BasicGame) Layout(w, h int) (int, int) {

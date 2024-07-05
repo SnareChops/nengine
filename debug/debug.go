@@ -7,12 +7,10 @@ import (
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text"
-	"golang.org/x/image/font"
 )
 
 var (
 	debugEnabled bool
-	debugFont    font.Face
 	debugStats   []stat = []stat{}
 	debugPaths   map[unsafe.Pointer]path
 )
@@ -22,9 +20,8 @@ type stat struct {
 	value func() string
 }
 
-func EnableDebug(face font.Face) {
+func EnableDebug() {
 	debugEnabled = true
-	debugFont = face
 }
 
 func DebugEnabled() bool {
@@ -32,9 +29,9 @@ func DebugEnabled() bool {
 }
 
 func DebugStat(label string, value func() string) {
-	for _, stat := range debugStats {
-		if stat.label == label {
-			stat.value = value
+	for i := range debugStats {
+		if debugStats[i].label == label {
+			debugStats[i].value = value
 			return
 		}
 	}
@@ -53,6 +50,15 @@ func DebugPath(ptr unsafe.Pointer, points []types.Position, color color.Color) {
 
 func Paths() map[unsafe.Pointer]path {
 	return debugPaths
+}
+
+func DebugUpdate() {
+	if !debugEnabled {
+		return
+	}
+	for _, timer := range FrameTimers {
+		timer.EndFrame()
+	}
 }
 
 // Draw the debug information to the provided image (usually the screen)

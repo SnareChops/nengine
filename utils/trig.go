@@ -6,6 +6,15 @@ import (
 	"github.com/SnareChops/nengine/types"
 )
 
+func DirectionVector(from, to types.Position) (float64, float64) {
+	x1, y1 := from.Pos2()
+	x2, y2 := to.Pos2()
+	dx := x2 - x1
+	dy := y2 - y1
+	dist := math.Sqrt(dx*dx + dy*dy)
+	return dx / dist, dy / dist
+}
+
 // DistanceBetween returns the distance between two given vectors
 func DistanceBetween(start, end types.Position) float64 {
 	x1, y1 := start.Pos2()
@@ -15,7 +24,9 @@ func DistanceBetween(start, end types.Position) float64 {
 
 // DistanceBetweenPoints returns the distance between two given sets of points
 func DistanceBetweenPoints(x1, y1, x2, y2 float64) float64 {
-	return math.Sqrt(math.Pow(x2-x1, 2) + math.Pow(y2-y1, 2))
+	dx := x2 - x1
+	dy := y2 - y1
+	return math.Sqrt(dx*dx + dy*dy)
 }
 
 // PointAtAngleWithDistance returns a new (x, y float64) given the starting position

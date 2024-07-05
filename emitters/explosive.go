@@ -37,11 +37,11 @@ func (self *Explosive) Init(particles []Particle) *Explosive {
 	self.particles = particles
 	self.active = make([]Particle, len(self.particles))
 	self.debugTimer = debug.NewDebugTimer("ExplosiveEmitter")
-	self.particleUpdateTimer = debug.NewFrameTimer("Particle Update")
-	self.particleReleaseTimer = debug.NewFrameTimer("Particle Release")
-	self.particleRemoveTimer = debug.NewFrameTimer("Particle Remove")
-	self.removeTimer = debug.NewFrameTimer("Remove")
-	self.despawnTimer = debug.NewFrameTimer("Despawn")
+	self.particleUpdateTimer = debug.NewFrameTimer("Particle Update", false)
+	self.particleReleaseTimer = debug.NewFrameTimer("Particle Release", false)
+	self.particleRemoveTimer = debug.NewFrameTimer("Particle Remove", false)
+	self.removeTimer = debug.NewFrameTimer("Remove", false)
+	self.despawnTimer = debug.NewFrameTimer("Despawn", false)
 	debug.DebugStat("Active Particles", func() string {
 		count := 0
 		for i := range self.active {

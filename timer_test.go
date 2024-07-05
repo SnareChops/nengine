@@ -1,7 +1,6 @@
 package nengine_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/SnareChops/nengine"
@@ -110,7 +109,6 @@ func TestTimerStagePercent(t *testing.T) {
 	timer.AddStage(10)
 	timer.Start(false)
 
-	fmt.Printf("%#v\n", timer)
 	assert.Equal(t, 0., timer.StagePercent())
 
 	timer.Update(5)

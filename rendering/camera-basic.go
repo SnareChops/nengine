@@ -3,6 +3,7 @@ package rendering
 import (
 	"image"
 
+	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -12,6 +13,7 @@ type BasicCamera struct {
 	ww, wh int
 	zoom   float64
 	target types.Bounds
+	timer  *debug.DebugTimer
 }
 
 func (self *BasicCamera) Init(viewWidth, viewHeight, worldWidth, worldHeight int) *BasicCamera {
@@ -20,6 +22,7 @@ func (self *BasicCamera) Init(viewWidth, viewHeight, worldWidth, worldHeight int
 	self.wh = worldHeight
 	self.CameraBounds = new(CameraBounds).Init(viewWidth, viewHeight)
 	self.SetPos(0, 0)
+	self.timer = debug.NewDebugTimer("Camera Update")
 	return self
 }
 
@@ -85,7 +88,9 @@ func (self *BasicCamera) ScreenToWorldPos(screenX, screenY int) (float64, float6
 }
 
 func (self *BasicCamera) Update(delta int) {
+	self.timer.Start()
 	if self.target != nil {
 		self.SetPos(self.target.Pos2())
 	}
+	self.timer.End()
 }

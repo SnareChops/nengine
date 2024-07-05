@@ -2,13 +2,19 @@ package debug
 
 import "time"
 
+var FrameTimers = []*FrameTimer{}
+
 type FrameTimer struct {
 	*DebugTimer
 	accumulator int64
 }
 
-func NewFrameTimer(name string) *FrameTimer {
-	return &FrameTimer{DebugTimer: NewDebugTimer(name)}
+func NewFrameTimer(name string, auto bool) *FrameTimer {
+	timer := &FrameTimer{DebugTimer: NewDebugTimer(name)}
+	if auto == true {
+		FrameTimers = append(FrameTimers, timer)
+	}
+	return timer
 }
 
 func (self *FrameTimer) End() {

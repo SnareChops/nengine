@@ -156,6 +156,7 @@ const (
 // Utils
 type ImageChunk = utils.ImageChunk
 
+var DirectionVector = utils.DirectionVector
 var DistanceBetween = utils.DistanceBetween
 var DistanceBetweenPoints = utils.DistanceBetweenPoints
 var PointAtAngleWithDistance = utils.PointAtAngleWithDistance
