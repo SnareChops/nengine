@@ -14,7 +14,7 @@ func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool) []*NavNo
 
 	for _, d := range directions {
 		nx, ny := x+d[0], y+d[1]
-		if nx >= 0 && ny >= 0 && nx < len(grid) && ny < len(grid[0]) {
+		if nx >= 0 && ny >= 0 && nx < len(grid) && ny < len(grid[0]) && grid[nx][ny] != nil {
 			neighbors = append(neighbors, grid[nx][ny])
 		}
 	}
@@ -23,5 +23,7 @@ func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool) []*NavNo
 }
 
 func heuristic(nodeA, nodeB *NavNode) float64 {
-	return math.Sqrt(math.Pow(float64(nodeB.X-nodeA.X), 2) + math.Pow(float64(nodeB.Y-nodeA.Y), 2))
+	dx := float64(nodeB.X - nodeA.X)
+	dy := float64(nodeB.Y - nodeA.Y)
+	return math.Sqrt(dx*dx + dy*dy)
 }

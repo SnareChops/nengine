@@ -78,7 +78,8 @@ func (self *Projectile) IsWithin(x, y float64) bool {
 	if self.w == 1 && self.h == 1 {
 		return x == x1 && y == y1
 	}
-	x2, y2 := x1+float64(self.w-1), y1+float64(self.h-1)
+	x2 := x1 + float64(self.w-1)
+	y2 := y1 + float64(self.h-1)
 	return x >= x1 && x <= x2 && y >= y1 && y <= y2
 }
 

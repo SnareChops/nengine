@@ -1,34 +1,26 @@
 package emitters
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
 	"github.com/SnareChops/nengine/bounds"
-	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/types"
 )
 
 type Explosive struct {
 	types.Bounds
-	random               *rand.Rand
-	particles            []Particle
-	active               []Particle
-	minVelocity          float64
-	maxVelocity          float64
-	minAngle             float64
-	maxAngle             float64
-	minLife              int
-	maxLife              int
-	density              int // How many particles to emit per 10ms
-	duration             int // How long to emit for
-	debugTimer           *debug.DebugTimer
-	particleUpdateTimer  *debug.FrameTimer
-	particleReleaseTimer *debug.FrameTimer
-	particleRemoveTimer  *debug.FrameTimer
-	removeTimer          *debug.FrameTimer
-	despawnTimer         *debug.FrameTimer
+	random      *rand.Rand
+	particles   []Particle
+	active      []Particle
+	minVelocity float64
+	maxVelocity float64
+	minAngle    float64
+	maxAngle    float64
+	minLife     int
+	maxLife     int
+	density     int // How many particles to emit per 10ms
+	duration    int // How long to emit for
 }
 
 func (self *Explosive) Init(particles []Particle) *Explosive {
@@ -36,21 +28,6 @@ func (self *Explosive) Init(particles []Particle) *Explosive {
 	self.random = rand.New(rand.NewSource(time.Now().UnixMilli()))
 	self.particles = particles
 	self.active = make([]Particle, len(self.particles))
-	self.debugTimer = debug.NewDebugTimer("ExplosiveEmitter")
-	self.particleUpdateTimer = debug.NewFrameTimer("Particle Update", false)
-	self.particleReleaseTimer = debug.NewFrameTimer("Particle Release", false)
-	self.particleRemoveTimer = debug.NewFrameTimer("Particle Remove", false)
-	self.removeTimer = debug.NewFrameTimer("Remove", false)
-	self.despawnTimer = debug.NewFrameTimer("Despawn", false)
-	debug.DebugStat("Active Particles", func() string {
-		count := 0
-		for i := range self.active {
-			if self.active[i] != nil {
-				count++
-			}
-		}
-		return fmt.Sprint(count)
-	})
 	return self
 }
 
@@ -86,21 +63,16 @@ func (self *Explosive) StartEmitter(duration int) {
 }
 
 func (self *Explosive) Remove(particle Particle) {
-	self.removeTimer.Start()
 	for i, p := range self.active {
 		if p == particle {
-			self.despawnTimer.Start()
 			particle.Despawn()
-			self.despawnTimer.End()
 			self.active[i] = nil
 			return
 		}
 	}
-	self.removeTimer.End()
 }
 
 func (self *Explosive) Update(delta int) {
-	self.debugTimer.Start()
 	self.duration -= delta
 	if self.duration <= 0 {
 		self.duration = 0
@@ -110,17 +82,12 @@ func (self *Explosive) Update(delta int) {
 
 	for _, particle := range self.particles {
 		if particle.Duration() > 0 {
-			self.particleUpdateTimer.Start()
 			particle.Update(delta)
 			if particle.Duration() <= 0 {
-				self.particleRemoveTimer.Start()
 				self.Remove(particle)
-				self.particleRemoveTimer.End()
 			}
-			self.particleUpdateTimer.End()
 		} else {
 			if desired > 0 && self.duration > 0 {
-				self.particleReleaseTimer.Start()
 				particle.SetPos2(self.Pos2())
 				particle.SetDuration(self.random.Intn(self.maxLife-self.minLife) + self.minLife)
 				particle.SetVelocity(
@@ -135,14 +102,7 @@ func (self *Explosive) Update(delta int) {
 					}
 				}
 				desired -= 1
-				self.particleReleaseTimer.End()
 			}
 		}
 	}
-	self.debugTimer.End()
-	self.particleUpdateTimer.EndFrame()
-	self.particleReleaseTimer.EndFrame()
-	self.particleRemoveTimer.EndFrame()
-	self.removeTimer.EndFrame()
-	self.despawnTimer.EndFrame()
 }

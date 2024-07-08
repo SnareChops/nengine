@@ -6,7 +6,6 @@ import (
 
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/navigation"
-	"github.com/SnareChops/nengine/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,7 +43,7 @@ func TestLargePathfind(t *testing.T) {
 	start := bounds.Point(32, 32)
 	end := bounds.Point(8768, 3840)
 
-	path := mesh.Pathfind(start, end, true, []types.Collidable{})
+	path := mesh.Pathfind(start, end, true)
 	for _, vec := range path {
 		x, y := vec.Pos2()
 		fmt.Printf("%.2f, %.2f\n", x, y)
@@ -56,10 +55,11 @@ func TestNoPathFound(t *testing.T) {
 	collider := new(bounds.Raw).Init(64, 320)
 	collider.SetPos2(128, 0)
 	mesh := new(navigation.NavMesh).Init(320, 320, 64, 64, 32, 32)
+	mesh.DisableNodes(collider)
 
 	start := bounds.Point(64, 64)
 	end := bounds.Point(256, 256)
-	path := mesh.Pathfind(start, end, true, []types.Collidable{collider})
+	path := mesh.Pathfind(start, end, true)
 	assert.Equal(t, 0, len(path))
 }
 

@@ -11,7 +11,6 @@ import (
 )
 
 var pathfindTimer = debug.NewFrameTimer("Pathfind", true)
-var astarTimer = debug.NewFrameTimer("A*", true)
 
 // NavMesh represents a navigation grid for pathfinding
 type NavMesh struct {
@@ -42,6 +41,32 @@ func (self *NavMesh) ActiveNavGroup() int {
 	return self.active
 }
 
+func (self *NavMesh) DisableNodes(collider types.Collidable) {
+	for x := range self.grid {
+		for y := range self.grid[x] {
+			if self.grid[x][y] != nil && collider.IsWithin(float64(x*self.hspacing+self.hoffset), float64(y*self.vspacing+self.voffset)) {
+				self.grid[x][y] = nil
+			}
+		}
+	}
+}
+
+func (self *NavMesh) EnableNodes(collider types.Collidable) {
+	for x := range self.grid {
+		for y := range self.grid[x] {
+			if self.grid[x][y] == nil && collider.IsWithin(float64(x*self.hspacing+self.hoffset), float64(y*self.vspacing+self.voffset)) {
+				self.grid[x][y] = &NavNode{
+					Position: bounds.Point(float64(x*self.hspacing+self.hoffset), float64(y*self.vspacing+self.voffset)),
+					X:        x,
+					Y:        y,
+					G:        math.Inf(1),
+					index:    -1,
+				}
+			}
+		}
+	}
+}
+
 func (self *NavMesh) Update(delta int) {
 	self.active += 1
 	if self.active >= self.navGroups {
@@ -56,6 +81,9 @@ func (self *NavMesh) ClosestNode(pos types.Position) *NavNode {
 	var closest *NavNode
 	for i := range 2 {
 		for j := range 2 {
+			if self.grid[i+x][j+y] == nil {
+				continue
+			}
 			dist := utils.DistanceBetween(pos, self.grid[i+x][j+y].Position)
 			if dist < min {
 				min = dist
@@ -114,14 +142,14 @@ func (self *NavMesh) ClosestNode(pos types.Position) *NavNode {
 
 // Pathfind uses the NavMesh to find a path from the start to end Vector
 // Optionally allowing diagonal movement between the nodes
-func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, obstacles []types.Collidable) NavPath {
+func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool) NavPath {
 	pathfindTimer.Start()
 	defer pathfindTimer.End()
 	// Find closest nodes to start and end positions
 	startNode := self.ClosestNode(start)
 	endNode := self.ClosestNode(end)
 	// Calculate path
-	path := self.AStar(startNode, endNode, allowDiagonals, obstacles)
+	path := self.AStar(startNode, endNode, allowDiagonals)
 	// Append ending vector to path
 	if len(path) > 0 {
 		path = append(path, end)
@@ -134,9 +162,7 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, ob
 // Optionally allowing diagonal movement between nodes
 // Note: This is exposed, but is really only intended to be used internally
 // Prefer using the Pathfind() method instead
-func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []types.Collidable) NavPath {
-	astarTimer.Start()
-	defer astarTimer.End()
+func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool) NavPath {
 	defer self.reset()
 	openSet := priorityQueue{}
 	closedSet := make(map[*NavNode]bool)
@@ -162,16 +188,6 @@ func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []
 			if _, ok := closedSet[neighbor]; ok {
 				continue
 			}
-			var gtg = true
-			for _, ob := range obstacles {
-				if ob.IsWithin(neighbor.Pos2()) {
-					gtg = false
-					break
-				}
-			}
-			if !gtg {
-				continue
-			}
 
 			tentativeGScore := current.G + heuristic(current, neighbor)
 			if tentativeGScore < neighbor.G {
@@ -193,6 +209,9 @@ func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, obstacles []
 func (self *NavMesh) reset() {
 	for i := range self.grid {
 		for j := range self.grid[i] {
+			if self.grid[i][j] == nil {
+				continue
+			}
 			node := self.grid[i][j]
 			node.parent = nil
 			node.F = 0
