@@ -3,6 +3,7 @@ package ui
 import (
 	"github.com/SnareChops/nengine/bit"
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -53,7 +54,7 @@ func (self *Button) Update(x, y int) bool {
 	if bit.IsSet(prev, ButtonStateDisabled) {
 		self.state |= ButtonStateDisabled
 	}
-	if self.IsWithin(float64(x), float64(y)) {
+	if utils.IsWithin(self, x, y) {
 		self.state |= ButtonStateHovered
 		if !bit.IsSet(prev, ButtonStateHovered) {
 			self.state |= ButtonStateJustHovered

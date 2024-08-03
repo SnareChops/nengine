@@ -47,8 +47,8 @@ func TestRelativePosition(t *testing.T) {
 	assert.Equal(t, 3, ry)
 }
 
-func TestGridPointsAroundBounds(t *testing.T) {
-	bounds := new(nengine.RawBounds).Init(40, 20)
+func TestGridPointsAroundBox(t *testing.T) {
+	bounds := nengine.NewBox(40, 20)
 	bounds.SetPos2(30, 30)
 	result := nengine.GridPointsAroundBounds(bounds, 10, 10)
 

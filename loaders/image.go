@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/SnareChops/aseprite-loader/lib"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -41,6 +42,7 @@ func (self Sheet) Sources() []SheetSource {
 
 type Anim struct {
 	Duration    int
+	Tags        []lib.Tag
 	FrameWidth  int
 	FrameHeight int
 	Frames      []*ebiten.Image

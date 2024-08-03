@@ -1,4 +1,4 @@
-package animators
+package types
 
 import "github.com/hajimehoshi/ebiten/v2"
 

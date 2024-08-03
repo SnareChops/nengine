@@ -16,15 +16,19 @@ import (
 )
 
 // Animators
-type Animator = animators.Animator
 type FrameByFrameAnimator = animators.FrameByFrameAnimator
 type Animation = animators.Animation
 type AnimationFrame = animators.AnimationFrame
 type SlideAnimator = animators.SlideAnimator
 type SimpleAnimator = animators.SimpleAnimator
 type SimpleFrame = animators.SimpleFrame
+type GeneralAnimator = animators.GeneralAnimator
+type GeneralFrame = animators.GeneralFrame
+
+var NewGeneralFrame = animators.NewGeneralFrame
 
 // Interfaces
+type Animator = types.Animator
 type Game = types.Game
 type Scene = types.Scene
 type Position = types.Position
@@ -35,7 +39,7 @@ type RenderLayer = types.RenderLayer
 type SpriteRenderLayer = types.SpriteRenderLayer
 type Camera = types.Camera
 type Vector = types.Vector
-type Collidable = types.Collidable
+type Box = types.Box
 
 var NewVector = types.NewVector
 
@@ -59,6 +63,7 @@ const (
 )
 
 var Point = bounds.Point
+var NewBox = bounds.NewBox
 
 // Debug
 type DebugTimer = debug.DebugTimer
@@ -167,6 +172,12 @@ var MoveAway = utils.MoveAway
 var Lerp = utils.Lerp
 var ChunkImage = utils.ChunkImage
 var ChunkBounds = utils.ChunkBounds
+var DoesCollide = utils.DoesCollide
+var IsPosWithin = utils.IsPosWithin
+
+func IsWithin[T ~int | ~float64](box Box, x, y T) bool {
+	return utils.IsWithin(box, x, y)
+}
 
 func ScaleFactor[T ~int | ~uint | ~float32 | ~float64](fromWidth, fromHeight, toWidth, toHeight T) (float64, float64) {
 	return utils.ScaleFactor(fromWidth, fromHeight, toWidth, toHeight)

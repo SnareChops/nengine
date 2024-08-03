@@ -17,7 +17,7 @@ type Camera interface {
 	CursorWorldPosition() (float64, float64)
 	WorldToScreenPos(x, y float64) (int, int)
 	ScreenToWorldPos(screenX, screenY int) (float64, float64)
-	Follow(target Bounds)
+	Follow(target Position)
 	Update(delta int)
 }
 

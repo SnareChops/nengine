@@ -3,8 +3,10 @@ package nengine
 import (
 	"image/color"
 	"math"
+	"slices"
 
 	"github.com/SnareChops/nengine/types"
+	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -78,9 +80,9 @@ func GridPointsAroundCell(x, y float64, gridWidth, gridHeight int) []types.Posit
 	}
 }
 
-func GridPointsAroundBounds(bounds Bounds, gridWidth, gridHeight int) []types.Position {
+func GridPointsAroundBounds(box Box, gridWidth, gridHeight int) []types.Position {
 	gw, gh := Floats(gridWidth, gridHeight)
-	x, y := bounds.Min()
+	x, y := box.Min()
 
 	// snap top left of bounds to grid
 	pos := Point(x, y)
@@ -88,13 +90,13 @@ func GridPointsAroundBounds(bounds Bounds, gridWidth, gridHeight int) []types.Po
 	// then add half grid width and height to get center
 	pos.SetPos2(pos.X()+gw/2, pos.Y()+gh/2)
 	// Check if this point is inside the bounds
-	if bounds.IsWithin(pos.Pos2()) {
+	if utils.IsPosWithin(box, pos) {
 		// If so, subtract full grid cell
 		pos.SetPos2(pos.X()-gw, pos.Y()-gh)
 	}
 	points := []types.Position{pos}
-	timesWidth := bounds.Dx() / gridWidth
-	timesHeight := bounds.Dy() / gridHeight
+	timesWidth := box.Dx() / gridWidth
+	timesHeight := box.Dy() / gridHeight
 	// Walk around bounds at grid cell intervals creating points
 	for range timesWidth {
 		last := points[len(points)-1]
@@ -120,4 +122,15 @@ func GridPointsAroundBounds(bounds Bounds, gridWidth, gridHeight int) []types.Po
 		points = append(points, pos)
 	}
 	return points
+}
+
+func ClosestPointAroundBounds(bounds Bounds, origin types.Position, gridWidth, gridHeight int) types.Position {
+	points := GridPointsAroundBounds(bounds, gridWidth, gridHeight)
+	if len(points) == 0 {
+		return nil
+	}
+	slices.SortFunc(points, func(a, b types.Position) int {
+		return int(DistanceBetween(origin, a) - DistanceBetween(origin, b))
+	})
+	return points[0]
 }

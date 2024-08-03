@@ -6,6 +6,7 @@ import (
 	"github.com/SnareChops/nengine/bounds"
 	_input "github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/types"
+	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
@@ -42,7 +43,7 @@ func (self *IntBox) Update(x, y, delta int) {
 	if self.focused {
 		self.input.InputCapture()
 		// Detect click outside of textbox to lose focus
-		if !self.IsWithin(float64(x), float64(y)) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		if !utils.IsWithin(self, x, y) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			self.focused = false
 			return
 		}
@@ -75,7 +76,7 @@ func (self *IntBox) Update(x, y, delta int) {
 		}
 	} else {
 		// Detect click on textbox to set focus
-		if self.IsWithin(float64(x), float64(y)) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		if utils.IsWithin(self, x, y) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			self.input.InputCapture()
 			self.focused = true
 		}

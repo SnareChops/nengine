@@ -12,7 +12,7 @@ type BasicCamera struct {
 	*CameraBounds
 	ww, wh int
 	zoom   float64
-	target types.Bounds
+	target types.Position
 	timer  *debug.DebugTimer
 }
 
@@ -52,7 +52,7 @@ func (self *BasicCamera) SetZoom(zoom float64) {
 	self.Resize(int(float64(self.Dx())/zoom), int(float64(self.Dy())/zoom))
 }
 
-func (self *BasicCamera) Follow(target types.Bounds) {
+func (self *BasicCamera) Follow(target types.Position) {
 	self.target = target
 }
 

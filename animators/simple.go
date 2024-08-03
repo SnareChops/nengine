@@ -40,9 +40,8 @@ func (self *SimpleAnimator) Update(delta int) {
 	if !self.active {
 		return
 	}
-	var rem int
-	for delta -= rem; delta > 0; delta -= rem {
-		rem = self.update(delta)
+	for delta > 0 {
+		delta = self.update(delta)
 	}
 }
 

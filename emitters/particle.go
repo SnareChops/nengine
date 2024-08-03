@@ -2,10 +2,11 @@ package emitters
 
 import (
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/types"
 )
 
 type Particle interface {
-	bounds.PhysicsBounds
+	types.PhysicsBounds
 	Update(delta int)
 	Duration() int
 	SetDuration(ms int)
@@ -14,7 +15,7 @@ type Particle interface {
 }
 
 type ParticleBase struct {
-	bounds.PhysicsBounds
+	types.PhysicsBounds
 	duration int
 }
 

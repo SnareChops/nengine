@@ -9,4 +9,5 @@ type NavNode struct {
 	F, G, H float64
 	parent  *NavNode
 	index   int
+	mask    int
 }

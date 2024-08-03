@@ -3,6 +3,7 @@ package ui
 import (
 	"github.com/SnareChops/nengine/bit"
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
@@ -40,7 +41,7 @@ func (self *Checkbox) SetChecked(checked bool) {
 func (self *Checkbox) Update(x, y int) bool {
 	prev := self.state
 	self.state = bit.BitmaskRemove(self.state, CheckboxStateHovered|CheckboxStateJustChanged)
-	if self.IsWithin(float64(x), float64(y)) {
+	if utils.IsWithin(self, x, y) {
 		self.state = bit.BitmaskAdd(self.state, CheckboxStateHovered)
 		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			self.state = bit.BitmaskAdd(self.state, CheckboxStateJustChanged)

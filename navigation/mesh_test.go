@@ -2,6 +2,7 @@ package navigation_test
 
 import (
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/SnareChops/nengine/bounds"
@@ -55,19 +56,71 @@ func TestNoPathFound(t *testing.T) {
 	collider := new(bounds.Raw).Init(64, 320)
 	collider.SetPos2(128, 0)
 	mesh := new(navigation.NavMesh).Init(320, 320, 64, 64, 32, 32)
-	mesh.DisableNodes(collider)
+	mesh.MaskNodesWithin(collider, 1)
 
 	start := bounds.Point(64, 64)
 	end := bounds.Point(256, 256)
+	path := mesh.Pathfind(start, end, true, 0)
+	assert.Equal(t, 0, len(path))
+}
+
+func TestPathfindWithNodeMasks(t *testing.T) {
+	MASK_1 := 1 << 1
+	MASK_2 := 1 << 2
+	MASK_3 := 1 << 3
+	collider := bounds.NewBox(64, 320)
+	collider.SetPos2(128, 0)
+	mesh := new(navigation.NavMesh).Init(320, 320, 64, 64, 32, 32)
+	mesh.MaskNodesWithin(collider, MASK_1|MASK_2|MASK_3)
+
+	start := bounds.Point(64, 64)
+	end := bounds.Point(256, 256)
+
+	// No path
 	path := mesh.Pathfind(start, end, true)
 	assert.Equal(t, 0, len(path))
+
+	// Path matching MASK_1
+	path = mesh.Pathfind(start, end, true, MASK_1)
+	assert.Equal(t, 4, len(path))
+
+	// Path matching MASK_2|MASK_3
+	path = mesh.Pathfind(start, end, true, MASK_2|MASK_3)
+	assert.Equal(t, 4, len(path))
 }
 
 func TestClosestNodes(t *testing.T) {
 	mesh := new(navigation.NavMesh).Init(640, 640, 64, 64, 32, 32)
 	pos := bounds.Point(220, 365)
 
-	node := mesh.ClosestNode(pos)
+	node := mesh.ClosestNode(pos, 0)
 	assert.Equal(t, 3, node.X)
 	assert.Equal(t, 5, node.Y)
+}
+
+func TestClosestNodesWithMask(t *testing.T) {
+	mesh := new(navigation.NavMesh).Init(640, 640, 64, 64, 32, 32)
+	pos := bounds.Point(220, 365)
+
+	node := mesh.ClosestNode(pos, 1)
+	assert.Equal(t, 3, node.X)
+	assert.Equal(t, 5, node.Y)
+
+	mesh.MaskNodesWithin(new(bounds.Raw).Init(640, 640), 1)
+	node = mesh.ClosestNode(pos, 1)
+	assert.Equal(t, 3, node.X)
+	assert.Equal(t, 5, node.Y)
+}
+
+func TestClosestExpandingSearch(t *testing.T) {
+	mesh := new(navigation.NavMesh).Init(640, 640, 64, 64, 32, 32)
+	pos := bounds.Point(220, 365)
+
+	b := new(bounds.Raw).Init(65, 65)
+	b.SetPos2(float64((220/64)*64), float64((365/64)*64))
+	mesh.MaskNodesWithin(b, 1)
+	node := mesh.ClosestNode(pos, 0)
+	log.Println(node.Position)
+	assert.Equal(t, 3, node.X)
+	assert.Equal(t, 6, node.Y)
 }

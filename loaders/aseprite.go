@@ -12,7 +12,7 @@ func PreloadImageAseprite(alias, path string) {
 	if _, ok := flat[alias]; ok {
 		return
 	}
-	frames, err := lib.LoadFrames(path)
+	frames, _, err := lib.LoadFrames(path)
 	if err != nil {
 		panic(fmt.Errorf("PreloadImageAseprite: %s\n%s", path, err))
 	}
@@ -26,7 +26,7 @@ func PreloadSheetAseprite(alias, path string) {
 	if _, ok := sheets[alias]; ok {
 		return
 	}
-	frames, err := lib.LoadFrames(path)
+	frames, _, err := lib.LoadFrames(path)
 	if err != nil {
 		panic(fmt.Errorf("PreloadSheetAseprite: %s\n%s", path, err))
 	}
@@ -52,7 +52,7 @@ func PreloadAnimAseprite(alias, path string) {
 	if _, ok := anims[alias]; ok {
 		return
 	}
-	frames, err := lib.LoadFrames(path)
+	frames, tags, err := lib.LoadFrames(path)
 	if err != nil {
 		panic(fmt.Errorf("PreloadAnimAseprite: %s\n%s", path, err))
 	}
@@ -62,6 +62,7 @@ func PreloadAnimAseprite(alias, path string) {
 	}
 	anims[alias] = Anim{
 		Duration:    frames[0].Duration,
+		Tags:        tags,
 		FrameWidth:  frames[0].GridWidth,
 		FrameHeight: frames[0].GridHeight,
 		Frames:      cells,

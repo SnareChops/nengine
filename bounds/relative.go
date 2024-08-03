@@ -9,32 +9,42 @@ import (
 // The position of this Bounds is added the "parent" Bounds to produce
 // the final coordinates
 type Relative struct {
-	types.Bounds
-	Parent  types.Bounds
+	types.Box
+	Parent  types.Box
 	options *ebiten.DrawImageOptions
 }
 
 // Init the state of the RelativeBounds
-func (self *Relative) Init(parent types.Bounds, width, height int) *Relative {
+func (self *Relative) Init(parent types.Box, width, height int) *Relative {
 	self.Parent = parent
-	self.Bounds = new(Raw).Init(width, height)
+	self.Box = NewBox(width, height)
 	self.options = &ebiten.DrawImageOptions{}
 	return self
 }
 
-// RawPos returns the raw position of the top left corner of the bounds as (x, y float64)
-func (self *Relative) RawPos() (float64, float64) {
+// Min returns the raw position of the top left corner of the bounds as (x, y float64)
+func (self *Relative) Min() (float64, float64) {
 	px, py := self.Parent.Pos2()
-	x, y := self.Bounds.Pos2()
-	ox, oy := self.Bounds.Offset()
-	return px + x - ox, py + y - oy
+	x, y := self.Box.Min()
+	return px + x, py + y
+}
+
+func (self *Relative) Mid() (float64, float64) {
+	px, py := self.Parent.Pos2()
+	x, y := self.Box.Mid()
+	return px + x, py + y
+}
+
+func (self *Relative) Max() (float64, float64) {
+	px, py := self.Parent.Pos2()
+	x, y := self.Box.Max()
+	return px + x, py + y
 }
 
 func (self *Relative) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
 	self.options.GeoM.Reset()
 	rotation := self.Rotation()
 	offx, offy := self.Offset()
-	scalx, scaly := self.Scale()
 
 	// Rotate around anchor
 	if rotation != 0 {
@@ -42,16 +52,12 @@ func (self *Relative) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions 
 		self.options.GeoM.Rotate(rotation)
 		self.options.GeoM.Translate(offx, offy)
 	}
-	// Scale
-	if scalx != 1 && scaly != 1 {
-		self.options.GeoM.Scale(scalx, scaly)
-	}
 	// Translate
 	if camera == nil {
-		self.options.GeoM.Translate(self.RawPos())
+		self.options.GeoM.Translate(self.Min())
 		return self.options
 	}
-	x, y := camera.WorldToScreenPos(self.RawPos())
+	x, y := camera.WorldToScreenPos(self.Min())
 	self.options.GeoM.Translate(float64(x), float64(y))
 	return self.options
 }

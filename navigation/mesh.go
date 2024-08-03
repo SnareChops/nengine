@@ -41,27 +41,24 @@ func (self *NavMesh) ActiveNavGroup() int {
 	return self.active
 }
 
-func (self *NavMesh) DisableNodes(collider types.Collidable) {
-	for x := range self.grid {
-		for y := range self.grid[x] {
-			if self.grid[x][y] != nil && collider.IsWithin(float64(x*self.hspacing+self.hoffset), float64(y*self.vspacing+self.voffset)) {
-				self.grid[x][y] = nil
-			}
-		}
-	}
+// MaskNode Sets the mask on the node at the provided index position
+func (self *NavMesh) MaskNode(i, j, mask int) {
+	self.grid[i][j].mask = mask
 }
 
-func (self *NavMesh) EnableNodes(collider types.Collidable) {
+// MaskNodeAt Sets the mask on the node at the provided world position
+func (self *NavMesh) MaskNodeAt(x, y float64, mask int) {
+	i := int(x*float64(self.hspacing) + float64(self.hoffset))
+	j := int(y*float64(self.vspacing) + float64(self.voffset))
+	self.grid[i][j].mask = mask
+}
+
+// MaskNodesWithin Sets the mask on the nodes that collide with the provided Box
+func (self *NavMesh) MaskNodesWithin(box types.Box, mask int) {
 	for x := range self.grid {
 		for y := range self.grid[x] {
-			if self.grid[x][y] == nil && collider.IsWithin(float64(x*self.hspacing+self.hoffset), float64(y*self.vspacing+self.voffset)) {
-				self.grid[x][y] = &NavNode{
-					Position: bounds.Point(float64(x*self.hspacing+self.hoffset), float64(y*self.vspacing+self.voffset)),
-					X:        x,
-					Y:        y,
-					G:        math.Inf(1),
-					index:    -1,
-				}
+			if self.grid[x][y] != nil && utils.IsWithin(box, x*self.hspacing+self.hoffset, y*self.vspacing+self.voffset) {
+				self.grid[x][y].mask = mask
 			}
 		}
 	}
@@ -74,82 +71,44 @@ func (self *NavMesh) Update(delta int) {
 	}
 }
 
-func (self *NavMesh) ClosestNode(pos types.Position) *NavNode {
+func (self *NavMesh) ClosestNode(pos types.Position, masks ...int) *NavNode {
 	x := int(pos.X()-float64(self.hoffset)) / self.hspacing
 	y := int(pos.Y()-float64(self.voffset)) / self.vspacing
 	min := math.Inf(1)
 	var closest *NavNode
-	for i := range 2 {
-		for j := range 2 {
-			if self.grid[i+x][j+y] == nil {
-				continue
-			}
-			dist := utils.DistanceBetween(pos, self.grid[i+x][j+y].Position)
-			if dist < min {
-				min = dist
-				closest = self.grid[i+x][j+y]
+	var iteration int = 1
+	for {
+		for i := range 2 * iteration {
+			for j := range 2 * iteration {
+				if !matchesMasks(self.grid[i+x][j+y], masks) {
+					continue
+				}
+				gridPos := self.grid[i+x][j+y].Position
+				dist := utils.DistanceBetweenPoints(pos.X()-float64(self.hspacing*(iteration-1)), pos.Y()-float64(self.vspacing*(iteration-1)), gridPos.X(), gridPos.Y())
+				if dist < min {
+					min = dist
+					closest = self.grid[i+x][j+y]
+				}
 			}
 		}
+		if closest != nil {
+			break
+		}
+		iteration += 1
 	}
 	return closest
 }
 
-// func (self *NavMesh) Raycast(from, towards types.Position) (*NavNode, *NavNode) {
-// 	dx, dy := utils.DirectionVector(from, towards)
-// 	gx := int((from.X() - float64(self.hoffset)) / float64(self.hspacing))
-// 	gy := int((from.Y() - float64(self.voffset)) / float64(self.vspacing))
-
-// 	stepX, stepY := 1, 1
-// 	if dx < 0 {
-// 		stepX = -1
-// 	}
-// 	if dy < 0 {
-// 		stepY = -1
-// 	}
-
-// 	tMaxX := ((float64(gx)+.5*float64(stepX))*float64(self.hspacing) + float64(self.hoffset) - from.X()) / dx
-// 	tMaxY := ((float64(gy)+.5*float64(stepY))*float64(self.vspacing) + float64(self.voffset) - from.Y()) / dy
-
-// 	tdx := math.Abs(float64(self.hspacing) / dx)
-// 	tdy := math.Abs(float64(self.vspacing) / dy)
-
-// 	for {
-// 		if tMaxX < tMaxY {
-// 			tMaxX += tdx
-// 			gx += stepX
-// 		} else {
-// 			tMaxY += tdy
-// 			gy += stepY
-// 		}
-// 		if gx < 0 || gy < 0 {
-// 			break
-// 		}
-
-// 		collisionX := gx*self.hspacing + self.hoffset
-// 		collisionY := gy*self.vspacing + self.voffset
-
-// 		if stepX == 1 {
-// 			collisionX += self.hspacing
-// 		}
-// 		if stepY == 1 {
-// 			collisionY += self.vspacing
-// 		}
-// 		return self.grid[(collisionX-self.hoffset)/self.hspacing][(collisionY-self.voffset)/self.vspacing],
-// 			self.grid[(collisionX-self.hspacing-self.hoffset)/self.hspacing][(collisionY-self.vspacing-self.voffset)/self.vspacing]
-// 	}
-// 	return nil, nil
-// }
-
 // Pathfind uses the NavMesh to find a path from the start to end Vector
 // Optionally allowing diagonal movement between the nodes
-func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool) NavPath {
+func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, masks ...int) NavPath {
 	pathfindTimer.Start()
 	defer pathfindTimer.End()
 	// Find closest nodes to start and end positions
-	startNode := self.ClosestNode(start)
-	endNode := self.ClosestNode(end)
+	startNode := self.ClosestNode(start, masks...)
+	endNode := self.ClosestNode(end, masks...)
 	// Calculate path
-	path := self.AStar(startNode, endNode, allowDiagonals)
+	path := self.AStar(startNode, endNode, allowDiagonals, masks...)
 	// Append ending vector to path
 	if len(path) > 0 {
 		path = append(path, end)
@@ -162,7 +121,7 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool) Na
 // Optionally allowing diagonal movement between nodes
 // Note: This is exposed, but is really only intended to be used internally
 // Prefer using the Pathfind() method instead
-func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool) NavPath {
+func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, masks ...int) NavPath {
 	defer self.reset()
 	openSet := priorityQueue{}
 	closedSet := make(map[*NavNode]bool)
@@ -184,7 +143,7 @@ func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool) NavPath {
 		}
 
 		closedSet[current] = true
-		for _, neighbor := range getNeighbors(current, self.grid, allowDiagonal) {
+		for _, neighbor := range getNeighbors(current, self.grid, allowDiagonal, masks) {
 			if _, ok := closedSet[neighbor]; ok {
 				continue
 			}
@@ -209,9 +168,6 @@ func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool) NavPath {
 func (self *NavMesh) reset() {
 	for i := range self.grid {
 		for j := range self.grid[i] {
-			if self.grid[i][j] == nil {
-				continue
-			}
 			node := self.grid[i][j]
 			node.parent = nil
 			node.F = 0

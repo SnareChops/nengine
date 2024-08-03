@@ -63,7 +63,7 @@ func (self *SpriteGrid) Resize(w, h int) {
 	self.RawBounds.Resize(w, h)
 	for _, content := range self.contents {
 		if content != nil {
-			content.ScaleTo(self.cw, self.ch)
+			content.Resize(self.cw, self.ch)
 		}
 	}
 	self.image = ebiten.NewImage(self.Size())
@@ -91,7 +91,7 @@ func (self *SpriteGrid) SetContent(index int, content types.Sprite) {
 		x, y := Floats(self.IndexPos(index))
 		content.SetAnchor(LEFT, TOP)
 		content.SetPos2(x, y)
-		content.ScaleTo(self.cw, self.ch)
+		content.Resize(self.cw, self.ch)
 	}
 	self.render()
 }
@@ -103,7 +103,7 @@ func (self *SpriteGrid) SetAllContent(contents []types.Sprite) {
 			x, y := Floats(self.IndexPos(i))
 			content.SetAnchor(LEFT, TOP)
 			content.SetPos2(x, y)
-			content.ScaleTo(self.cw, self.ch)
+			content.Resize(self.cw, self.ch)
 		}
 	}
 	self.render()

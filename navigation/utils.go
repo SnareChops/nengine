@@ -1,8 +1,30 @@
 package navigation
 
-import "math"
+import (
+	"math"
 
-func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool) []*NavNode {
+	"github.com/SnareChops/nengine/bit"
+)
+
+func matchesMasks(node *NavNode, masks []int) bool {
+	// Nodes with no mask are ALWAYS walkable
+	if node.mask == 0 {
+		return true
+	}
+	// If no masks, only allow non-masked nodes
+	if len(masks) == 0 && node.mask == 0 {
+		return true
+	}
+	// If any mask matches, the node is walkable
+	for _, mask := range masks {
+		if bit.IsSet(node.mask, mask) {
+			return true
+		}
+	}
+	return false
+}
+
+func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool, masks []int) []*NavNode {
 	var neighbors []*NavNode
 	x, y := int(node.X), int(node.Y)
 	var directions [][2]int
@@ -14,7 +36,7 @@ func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool) []*NavNo
 
 	for _, d := range directions {
 		nx, ny := x+d[0], y+d[1]
-		if nx >= 0 && ny >= 0 && nx < len(grid) && ny < len(grid[0]) && grid[nx][ny] != nil {
+		if nx >= 0 && ny >= 0 && nx < len(grid) && ny < len(grid[0]) && matchesMasks(grid[nx][ny], masks) {
 			neighbors = append(neighbors, grid[nx][ny])
 		}
 	}
