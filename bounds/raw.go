@@ -41,8 +41,11 @@ func (self *Raw) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
 		self.options.GeoM.Translate(offx, offy)
 	}
 	x, y := self.Min()
-	if x < 0 {
+	if self.fx < 0 {
 		x += float64(self.Dx())
+	}
+	if self.fy < 0 {
+		y += float64(self.Dy())
 	}
 	// If camera is provided, scale and translate
 	if camera != nil {
