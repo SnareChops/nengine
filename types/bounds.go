@@ -14,6 +14,7 @@ type Box interface {
 	SetAnchor(h, v int)
 	Rotation() float64
 	SetRotation(float64)
+	Flip(h, v bool)
 	Dx() int
 	Dy() int
 	Min() (float64, float64)

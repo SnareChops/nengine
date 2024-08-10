@@ -109,14 +109,14 @@ func GetImage(alias string) *ebiten.Image {
 	if image, ok := flat[alias]; ok {
 		return image
 	}
-	panic("GetImage: " + alias + " not found in cache")
+	panic("GetImage: " + alias + " not found in cache. Did you forget to Preload?")
 }
 
 func GetSheet(alias string) Sheet {
 	if sheet, ok := sheets[alias]; ok {
 		return sheet
 	}
-	panic("GetSheet: " + alias + " not found in cache")
+	panic("GetSheet: " + alias + " not found in cache. Did you forget to Preload?")
 }
 
 func GetSheetCell(alias string, index int) *ebiten.Image {
@@ -139,5 +139,5 @@ func GetAnim(alias string) Anim {
 	if anim, ok := anims[alias]; ok {
 		return anim
 	}
-	panic("GetAnim: " + alias + " not found in cache")
+	panic("GetAnim: " + alias + " not found in cache. Did you forget to Preload?")
 }

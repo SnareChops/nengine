@@ -40,14 +40,18 @@ func (self *Raw) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
 		self.options.GeoM.Rotate(rotation)
 		self.options.GeoM.Translate(offx, offy)
 	}
+	x, y := self.Min()
+	if x < 0 {
+		x += float64(self.Dx())
+	}
 	// If camera is provided, scale and translate
 	if camera != nil {
 		self.options.GeoM.Scale(camera.Zoom(), camera.Zoom())
-		x, y := camera.WorldToScreenPos(self.Min())
+		x, y := camera.WorldToScreenPos(x, y)
 		self.options.GeoM.Translate(float64(x), float64(y))
 		return self.options
 	}
 	// Translate
-	self.options.GeoM.Translate(self.Min())
+	self.options.GeoM.Translate(x, y)
 	return self.options
 }

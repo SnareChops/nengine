@@ -4,6 +4,7 @@ type Box struct {
 	*Position
 	w, h     int
 	ox, oy   float64
+	fx, fy   float64
 	rotation float64
 }
 
@@ -40,6 +41,17 @@ func (self *Box) Rotation() float64 {
 
 func (self *Box) SetRotation(theta float64) {
 	self.rotation = theta
+}
+
+func (self *Box) Flip(h, v bool) {
+	self.fx = 1
+	if h {
+		self.fx = -1
+	}
+	self.fy = 1
+	if v {
+		self.fy = -1
+	}
 }
 
 // SetAnchor sets the anchor point of the bounds to base it's position off
