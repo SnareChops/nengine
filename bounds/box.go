@@ -9,7 +9,7 @@ type Box struct {
 }
 
 func NewBox(w, h int) *Box {
-	return &Box{Position: new(Position), w: w, h: h}
+	return &Box{Position: new(Position), w: w, h: h, fx: 1, fy: 1}
 }
 
 func (self *Box) Size() (int, int) {
