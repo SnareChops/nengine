@@ -17,3 +17,14 @@ func TestRelativeBoundsAnchor(t *testing.T) {
 	assert.Equal(t, -4., x)
 	assert.Equal(t, -4., y)
 }
+
+func TestRelativeBoundsPosition(t *testing.T) {
+	parent := new(bounds.Raw).Init(10, 10)
+	parent.SetPos2(5, 5)
+	result := new(bounds.Relative).Init(parent, 8, 8)
+	result.SetPos2(2, 3)
+
+	x, y := result.Min()
+	assert.Equal(t, 7., x)
+	assert.Equal(t, 8., y)
+}
