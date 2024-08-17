@@ -53,6 +53,10 @@ func (self *Input) CursorDelta() (int, int) {
 	return self.cursorDeltaX, self.cursorDeltaY
 }
 
+func (self *Input) IsAnyMouseButtonPressed() bool {
+	return ebiten.IsMouseButtonPressed(ebiten.MouseButton0) || ebiten.IsMouseButtonPressed(ebiten.MouseButton1) || ebiten.IsMouseButtonPressed(ebiten.MouseButton2)
+}
+
 func (self *Input) Update() {
 	self.captured = false
 	x, y := ebiten.CursorPosition()
