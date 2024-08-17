@@ -12,6 +12,10 @@ type Line struct {
 	x1, y1, x2, y2 float32
 }
 
+func (self Line) Points() (Position, Position) {
+	return Point(float64(self.x1), float64(self.y1)), Point(float64(self.x2), float64(self.y2))
+}
+
 func NewLine[T ~int | ~float64](x1, y1, x2, y2 T) Line {
 	return Line{
 		x1: float32(x1),

@@ -117,6 +117,25 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, ma
 	return []types.Position{}
 }
 
+func (self *NavMesh) ExactPath(start, end types.Position, allowDiagonals bool, masks ...int) NavPath {
+	// Find closest nodes to start and end positions
+	startNode := self.ClosestNode(start, masks...)
+	endNode := self.ClosestNode(end, masks...)
+	// Calculate path
+	path := self.AStar(startNode, endNode, allowDiagonals, masks...)
+	// Append ending vector to path
+	if len(path) > 0 {
+		if path[0].X() != start.X() || path[0].Y() != start.Y() {
+			path = append(NavPath{start}, path...)
+		}
+		if path[len(path)-1].X() != end.X() || path[len(path)-1].Y() != end.Y() {
+			path = append(path, end)
+		}
+		return path
+	}
+	return NavPath{}
+}
+
 // AStar runs the A* algoritm on the NavMesh and returns a path between the provided nodes
 // Optionally allowing diagonal movement between nodes
 // Note: This is exposed, but is really only intended to be used internally

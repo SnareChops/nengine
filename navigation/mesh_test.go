@@ -5,6 +5,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/SnareChops/nengine"
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/navigation"
 	"github.com/stretchr/testify/assert"
@@ -87,6 +88,26 @@ func TestPathfindWithNodeMasks(t *testing.T) {
 	// Path matching MASK_2|MASK_3
 	path = mesh.Pathfind(start, end, true, MASK_2|MASK_3)
 	assert.Equal(t, 4, len(path))
+}
+
+func TestPathfindBetweenMaskedAreas(t *testing.T) {
+	MASK_1 := 1 << 1
+	box1 := bounds.NewBox(64, 64)
+	box2 := bounds.NewBox(64, 64)
+	box1.SetPos2(128, 64)
+	box2.SetPos2(256, 192)
+
+	mesh := new(navigation.NavMesh).Init(1000, 1000, 64, 64, 32, 32)
+	mesh.MaskNodesWithin(box1, MASK_1)
+	mesh.MaskNodesWithin(box2, MASK_1)
+
+	path := mesh.ExactPath(nengine.Point(box1.Mid()), nengine.Point(box2.Mid()), true, MASK_1)
+
+	assert.Equal(t, 3, len(path))
+	assert.Equal(t, box1.MidX(), path[0].X())
+	assert.Equal(t, box1.MidY(), path[0].Y())
+	assert.Equal(t, box2.MidX(), path[2].X())
+	assert.Equal(t, box2.MidY(), path[2].Y())
 }
 
 func TestClosestNodes(t *testing.T) {
