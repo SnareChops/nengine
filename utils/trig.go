@@ -19,6 +19,7 @@ func DirectionVector(from, to types.Position) (float64, float64) {
 func DistanceBetween(start, end types.Position) float64 {
 	x1, y1 := start.Pos2()
 	x2, y2 := end.Pos2()
+
 	return DistanceBetweenPoints(x1, y1, x2, y2)
 }
 
@@ -27,6 +28,14 @@ func DistanceBetweenPoints(x1, y1, x2, y2 float64) float64 {
 	dx := x2 - x1
 	dy := y2 - y1
 	return math.Sqrt(dx*dx + dy*dy)
+}
+
+func DistanceToBounds(pos types.Position, box types.Box) float64 {
+	mx, my := box.Min()
+	Mx, My := box.Max()
+	px := math.Max(mx, math.Min(pos.X(), Mx))
+	py := math.Max(my, math.Min(pos.Y(), My))
+	return DistanceBetweenPoints(pos.X(), pos.Y(), px, py)
 }
 
 // PointAtAngleWithDistance returns a new (x, y float64) given the starting position

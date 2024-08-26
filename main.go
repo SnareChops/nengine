@@ -164,6 +164,7 @@ type ImageChunk = utils.ImageChunk
 var DirectionVector = utils.DirectionVector
 var DistanceBetween = utils.DistanceBetween
 var DistanceBetweenPoints = utils.DistanceBetweenPoints
+var DistanceToBounds = utils.DistanceToBounds
 var PointAtAngleWithDistance = utils.PointAtAngleWithDistance
 var AngleBetween = utils.AngleBetween
 var AngleBetweenPoints = utils.AngleBetweenPoints

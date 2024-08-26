@@ -16,8 +16,12 @@ type Position struct {
 	options *ebiten.DrawImageOptions
 }
 
-func (self *Position) Pos() types.Vector {
+func (self *Position) Vec() types.Vector {
 	return types.Vector{self.x, self.y}
+}
+
+func (self *Position) Pos() types.Position {
+	return self
 }
 
 func (self *Position) SetPos(pos types.Vector) {
