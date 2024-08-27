@@ -28,6 +28,11 @@ func NewText(value string, face font.Face, color color.Color) *Text {
 	return t
 }
 
+func (self *Text) SetValue(value string) {
+	self.Lines = strings.Split(value, "\n")
+	self.resize()
+}
+
 func (self *Text) Wrap(width int) {
 	var curr string
 	var wrapped []string

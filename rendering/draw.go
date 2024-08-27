@@ -1,4 +1,4 @@
-package nengine
+package rendering
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"

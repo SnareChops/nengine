@@ -3,6 +3,7 @@ package nengine
 import (
 	"github.com/SnareChops/nengine/animators"
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/console"
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/emitters"
 	"github.com/SnareChops/nengine/fonts"
@@ -13,6 +14,7 @@ import (
 	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/ui"
 	"github.com/SnareChops/nengine/utils"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // Animators
@@ -64,6 +66,11 @@ const (
 
 var Point = bounds.Point
 var NewBox = bounds.NewBox
+
+type Console = console.Console
+type CommandFunc = console.CommandFunc
+
+var RegisterCommand = console.Register
 
 // Debug
 type DebugTimer = debug.DebugTimer
@@ -138,6 +145,11 @@ type World = rendering.World
 
 var DrawSprite = rendering.DrawSprite
 var StrokeRect = rendering.StrokeRect
+var GridDraw = rendering.GridDraw
+
+func DrawAt[T ~int | float32 | float64](dest, src *ebiten.Image, x, y T) {
+	rendering.DrawAt(dest, src, x, y)
+}
 
 // UI
 type ButtonState = ui.ButtonState
