@@ -15,11 +15,17 @@ type UpdateableSprite interface {
 	Update(delta int)
 }
 
+//  ScaledSprite represents a sprite that has should be scaled when drawing
+type ScaledSprite interface {
+	Scale() (float64, float64)
+}
+
 type ColorScaleSprite interface {
 	Sprite
 	Color() ebiten.ColorScale
 }
 
+// ShaderSprite represents a sprite that should use a shader when drawing
 type ShaderSprite interface {
 	Sprite
 	Shader() (*ebiten.Shader, map[string]any)

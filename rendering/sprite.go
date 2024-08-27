@@ -15,14 +15,18 @@ type DrawableSprite interface {
 func DrawSprite(dest *ebiten.Image, sprite DrawableSprite, camera types.Camera) {
 	image := sprite.Image()
 	if image != nil {
+		options := sprite.DrawOptions(camera)
+		if scaled, ok := sprite.(types.ScaledSprite); ok {
+			options.GeoM.Scale(scaled.Scale())
+		}
 		if shader, uniforms, ok := shouldUseShader(sprite); ok {
-			options := &ebiten.DrawRectShaderOptions{}
-			options.GeoM = sprite.DrawOptions(camera).GeoM
-			options.Uniforms = uniforms
-			options.Images = [4]*ebiten.Image{image}
-			dest.DrawRectShader(sprite.Dx(), sprite.Dy(), shader, options)
+			op := &ebiten.DrawRectShaderOptions{}
+			op.GeoM = options.GeoM
+			op.Uniforms = uniforms
+			op.Images = [4]*ebiten.Image{image}
+			dest.DrawRectShader(sprite.Dx(), sprite.Dy(), shader, op)
 		} else {
-			dest.DrawImage(image, sprite.DrawOptions(camera))
+			dest.DrawImage(image, options)
 		}
 	}
 }
