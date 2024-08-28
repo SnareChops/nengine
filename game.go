@@ -5,7 +5,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/SnareChops/nengine/console"
 	"github.com/SnareChops/nengine/debug"
+	"github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -23,26 +25,18 @@ type BasicGame struct {
 	reloadTime   *DebugTimer
 }
 
-func NewGame(width, height int, debug bool, reload ebiten.Key) *BasicGame {
+func NewGame(width, height int, consoleKey ebiten.Key, reload ebiten.Key) *BasicGame {
 	game := &BasicGame{
 		width:  width,
 		height: height,
 		reload: reload,
 	}
-	if debug {
-		EnableDebug()
-		DebugStat("TPS", func() string {
-			return fmt.Sprintf("%0.2f", ebiten.ActualTPS())
-		})
-		DebugStat("FPS", func() string {
-			return fmt.Sprintf("%0.2f", ebiten.ActualFPS())
-		})
-		game.update = NewDebugTimer("Update")
-		game.draw = NewDebugTimer("Draw")
-		if reload != 0 {
-			fmt.Printf("Setting reload to %d\n", reload)
-			game.reloadTime = NewDebugTimer("Reload")
-		}
+	console.Init(consoleKey)
+	game.update = NewDebugTimer("Update")
+	game.draw = NewDebugTimer("Draw")
+	if reload != 0 {
+		fmt.Printf("Setting reload to %d\n", reload)
+		game.reloadTime = NewDebugTimer("Reload")
 	}
 	return game
 }
@@ -64,11 +58,16 @@ func (self *BasicGame) LoadScene(scene types.Scene) {
 		log.Println("Scene in initable, initializing...")
 		initable.Init(self)
 	}
+	input.Reset()
 }
 
 func (self *BasicGame) Update() error {
+	// Update the input state
+	input.Update()
+	// If reload triggered: Send reload signal to scene
 	if self.reload != 0 && IsKeyJustPressed(self.reload) {
 		if scene, ok := self.Scene.(types.Reloadable); ok {
+			input.InputCapture()
 			log.Println("Scene Reloading...")
 			if self.reloadTime != nil {
 				self.reloadTime.Start()
@@ -79,21 +78,24 @@ func (self *BasicGame) Update() error {
 			}
 		}
 	}
-
-	if self.update != nil {
-		self.update.Start()
-	}
+	// Calculate time between frames
 	now := time.Now().UnixMilli()
+	delta := int(now - self.prev)
+
+	self.update.Start()
+	// Update console state
+	console.Update(delta)
+	// If not a delta of 0: update scene
 	if self.prev != 0 {
-		self.Scene.Update(int(now - self.prev))
+		self.Scene.Update(delta)
 	}
 	self.prev = now
-	if self.update != nil {
-		self.update.End()
-	}
+	self.update.End()
+	// If termination requested: Send terminate signal to ebiten
 	if self.terminate {
 		return ebiten.Termination
 	}
+	// If async loading: check if async load has completed
 	if self.loadComplete != nil {
 		select {
 		case scene := <-self.loadComplete:
@@ -102,21 +104,23 @@ func (self *BasicGame) Update() error {
 		default:
 		}
 	}
-	debug.DebugUpdate()
+	// Update debug state
+	debug.Update()
 	return nil
 }
 
 func (self *BasicGame) Draw(screen *ebiten.Image) {
-	if self.draw != nil {
-		self.draw.Start()
-	}
+	self.draw.Start()
 	if self.Scene != nil {
 		self.Scene.Draw(screen)
 	}
-	if self.draw != nil {
-		self.draw.End()
-	}
-	DebugDraw(screen)
+	// Draw input layer
+	input.Draw(screen)
+	// Draw console layer
+	console.Draw(screen)
+	// Draw debug info
+	self.draw.End()
+	debug.Draw(screen)
 }
 
 func (self *BasicGame) Layout(w, h int) (int, int) {

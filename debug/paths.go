@@ -17,9 +17,6 @@ type path struct {
 var paths map[unsafe.Pointer]path
 
 func AddPath(ptr unsafe.Pointer, points []types.Position, color color.Color) {
-	if !debugEnabled {
-		return
-	}
 	if _, ok := paths[ptr]; ok {
 		return
 	}
@@ -27,16 +24,10 @@ func AddPath(ptr unsafe.Pointer, points []types.Position, color color.Color) {
 }
 
 func RemovePath(ptr unsafe.Pointer) {
-	if !debugEnabled {
-		return
-	}
 	delete(paths, ptr)
 }
 
 func DrawPaths(screen *ebiten.Image, camera types.Camera) {
-	if !debugEnabled {
-		return
-	}
 	for _, path := range paths {
 		for i, j := 0, 1; j < len(path.points); i, j = i+1, j+1 {
 			x1, y1 := camera.WorldToScreenPos(path.points[i].Pos2())

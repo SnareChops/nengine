@@ -5,72 +5,65 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type Input struct {
-	captured bool
-
+type input struct {
+	captured      bool
 	cursorDeltaX  int
 	cursorDeltaY  int
 	cursorPrevX   int
 	cursorPrevY   int
 	cursorContent types.Sprite
-
-	order int
 }
 
-func (self *Input) SetOrder(order int) {
-	self.order = order
+var state = &input{}
+
+func InputCapture() {
+	state.captured = true
 }
 
-func (self *Input) Order() int {
-	return self.order
+func InputUncapture() {
+	state.captured = false
 }
 
-func (self *Input) InputCapture() {
-	self.captured = true
+func IsInputCaptured() bool {
+	return state.captured
 }
 
-func (self *Input) InputUncapture() {
-	self.captured = false
+func CursorContent() types.Sprite {
+	return state.cursorContent
 }
 
-func (self *Input) IsInputCaptured() bool {
-	return self.captured
-}
-
-func (self *Input) CursorContent() types.Sprite {
-	return self.cursorContent
-}
-
-func (self *Input) SetCursorContent(content types.Sprite) {
-	self.cursorContent = content
+func SetCursorContent(content types.Sprite) {
+	state.cursorContent = content
 }
 
 // CursorDelta returns the difference in screen
 // cursor position from the previous frame
-// Note: Update() must be called for this to function
-// correctly
-func (self *Input) CursorDelta() (int, int) {
-	return self.cursorDeltaX, self.cursorDeltaY
+func CursorDelta() (int, int) {
+	return state.cursorDeltaX, state.cursorDeltaY
 }
 
-func (self *Input) IsAnyMouseButtonPressed() bool {
+func IsAnyMouseButtonPressed() bool {
 	return ebiten.IsMouseButtonPressed(ebiten.MouseButton0) || ebiten.IsMouseButtonPressed(ebiten.MouseButton1) || ebiten.IsMouseButtonPressed(ebiten.MouseButton2)
 }
 
-func (self *Input) Update() {
-	self.captured = false
+func Reset() {
+	state = &input{}
+}
+
+func Update() {
+	state.captured = false
 	x, y := ebiten.CursorPosition()
-	self.cursorDeltaX = x - self.cursorPrevX
-	self.cursorDeltaY = y - self.cursorPrevY
-	self.cursorPrevX = x
-	self.cursorPrevY = y
-	if self.cursorContent != nil {
-		self.cursorContent.SetPos2(float64(x), float64(y))
+	state.cursorDeltaX = x - state.cursorPrevX
+	state.cursorDeltaY = y - state.cursorPrevY
+	state.cursorPrevX = x
+	state.cursorPrevY = y
+	if state.cursorContent != nil {
+		state.cursorContent.SetPos2(float64(x), float64(y))
 	}
 }
 
-func (self *Input) Draw(screen *ebiten.Image) {
-	if self.cursorContent != nil {
-		screen.DrawImage(self.cursorContent.Image(), self.cursorContent.DrawOptions(nil))
+func Draw(screen *ebiten.Image) {
+	if state.cursorContent != nil {
+		screen.DrawImage(state.cursorContent.Image(), state.cursorContent.DrawOptions(nil))
 	}
 }

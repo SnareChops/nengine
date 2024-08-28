@@ -67,10 +67,13 @@ const (
 var Point = bounds.Point
 var NewBox = bounds.NewBox
 
-type Console = console.Console
-type CommandFunc = console.CommandFunc
+type ConsoleFunc = console.ConsoleFunc
+type ConsoleResult = console.ConsoleResult
 
-var RegisterCommand = console.Register
+var ConsoleResultNormal = console.ConsoleResultNormal
+var ConsoleResultWarn = console.ConsoleResultWarn
+var ConsoleResultError = console.ConsoleResultError
+var ConsoleRegister = console.ConsoleRegister
 
 // Debug
 type DebugTimer = debug.DebugTimer
@@ -78,11 +81,8 @@ type FrameTimer = debug.FrameTimer
 
 var NewDebugTimer = debug.NewDebugTimer
 var NewFrameTimer = debug.NewFrameTimer
-var EnableDebug = debug.EnableDebug
-var DebugEnabled = debug.DebugEnabled
 var DebugStat = debug.DebugStat
 var DebugPath = debug.DebugPath
-var DebugDraw = debug.DebugDraw
 
 // Emitters
 type ParticleEmitter = emitters.Emitter
@@ -106,7 +106,14 @@ var GetStringSize = fonts.GetStringSize
 var DrawText = fonts.DrawText
 
 // Input
-type Input = input.Input
+var InputCapture = input.InputCapture
+var InputUncapture = input.InputUncapture
+var IsInputCaptured = input.IsInputCaptured
+var CursorContent = input.CursorContent
+var SetCursorContent = input.SetCursorContent
+var CursorDelta = input.CursorDelta
+var IsAnyMouseButtonPressed = input.IsAnyMouseButtonPressed
+var KeyToUpper = input.KeyToUpper
 
 // Loaders
 type Sheet = loaders.Sheet

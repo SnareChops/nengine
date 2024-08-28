@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/SnareChops/nengine/bounds"
-	_input "github.com/SnareChops/nengine/input"
+	"github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -13,7 +13,6 @@ import (
 
 type IntBox struct {
 	*bounds.Raw
-	input     *_input.Input
 	keys      []ebiten.Key
 	content   int
 	cooldown  int
@@ -22,7 +21,6 @@ type IntBox struct {
 }
 
 func (self *IntBox) Init(w, h int, input types.Input) *IntBox {
-	self.input = input.(*_input.Input)
 	self.Raw = new(bounds.Raw).Init(w, h)
 	return self
 }
@@ -36,12 +34,12 @@ func (self *IntBox) SetContent(content int) {
 }
 
 func (self *IntBox) Update(x, y, delta int) {
-	if self.input.IsInputCaptured() {
+	if input.IsInputCaptured() {
 		self.focused = false
 		return
 	}
 	if self.focused {
-		self.input.InputCapture()
+		input.InputCapture()
 		// Detect click outside of textbox to lose focus
 		if !utils.IsWithin(self, x, y) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			self.focused = false
@@ -77,7 +75,7 @@ func (self *IntBox) Update(x, y, delta int) {
 	} else {
 		// Detect click on textbox to set focus
 		if utils.IsWithin(self, x, y) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-			self.input.InputCapture()
+			input.InputCapture()
 			self.focused = true
 		}
 	}

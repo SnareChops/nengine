@@ -1,8 +1,24 @@
 package debug
 
-import "time"
+import (
+	"time"
+)
 
 var FrameTimers = []*FrameTimer{}
+
+func enableFrameTimers() {
+	for _, timer := range FrameTimers {
+		timer.enabled = true
+		DebugStat(timer.name, timer.Value)
+	}
+}
+
+func disableFrameTimers() {
+	for _, timer := range FrameTimers {
+		timer.enabled = false
+		RemoveStat(timer.name)
+	}
+}
 
 type FrameTimer struct {
 	*DebugTimer
@@ -18,15 +34,19 @@ func NewFrameTimer(name string, auto bool) *FrameTimer {
 }
 
 func (self *FrameTimer) End() {
-	delta := int64(time.Since(self.start))
-	self.accumulator += delta
+	if self.enabled {
+		delta := int64(time.Since(self.start))
+		self.accumulator += delta
+	}
 }
 
 func (self *FrameTimer) EndFrame() {
-	self.buffer[self.pointer] = self.accumulator
-	self.pointer = (self.pointer + 1) % len(self.buffer)
-	if self.accumulator > self.peak {
-		self.peak = self.accumulator
+	if self.enabled {
+		self.buffer[self.pointer] = self.accumulator
+		self.pointer = (self.pointer + 1) % len(self.buffer)
+		if self.accumulator > self.peak {
+			self.peak = self.accumulator
+		}
+		self.accumulator = 0
 	}
-	self.accumulator = 0
 }

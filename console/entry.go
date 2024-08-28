@@ -22,11 +22,11 @@ type Entry struct {
 	image     *ebiten.Image
 }
 
-func (self *Entry) Init(w, h int) *Entry {
+func (self *Entry) Init(w, h int, color color.Color) *Entry {
 	self.Raw = new(bounds.Raw).Init(w, h)
-	self.text = fonts.NewText(self.value, fontFace, color.White)
+	self.text = fonts.NewText(self.value, fontFace, color)
 	self.cursor = ebiten.NewImage(3, 20)
-	self.cursor.Fill(color.White)
+	self.cursor.Fill(color)
 	self.image = ebiten.NewImage(self.Size())
 	self.render()
 	return self

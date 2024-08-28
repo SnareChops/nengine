@@ -2,20 +2,29 @@ package console
 
 import "strings"
 
-type CommandFunc = func(args []string) string
+type ConsoleResult byte
 
-var registered = map[string]CommandFunc{}
+const (
+	ConsoleResultNormal ConsoleResult = iota
+	ConsoleResultInfo
+	ConsoleResultWarn
+	ConsoleResultError
+)
 
-func Register(name string, fn CommandFunc) {
+type ConsoleFunc = func(args []string) (ConsoleResult, string)
+
+var registered = map[string]ConsoleFunc{}
+
+func ConsoleRegister(name string, fn ConsoleFunc) {
 	registered[name] = fn
 }
 
-func RunCommand(value string) string {
+func RunCommand(value string) (ConsoleResult, string) {
 	split := strings.Split(value, " ")
 	name := split[0]
 	args := split[1:]
 	if fn, ok := registered[name]; ok {
 		return fn(args)
 	}
-	return "Command " + name + " not registered"
+	return ConsoleResultError, "Command " + name + " not registered"
 }

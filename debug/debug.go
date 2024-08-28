@@ -10,33 +10,8 @@ import (
 )
 
 var (
-	debugEnabled bool
-	debugStats   []stat = []stat{}
-	debugPaths   map[unsafe.Pointer]path
+	debugPaths map[unsafe.Pointer]path
 )
-
-type stat struct {
-	label string
-	value func() string
-}
-
-func EnableDebug() {
-	debugEnabled = true
-}
-
-func DebugEnabled() bool {
-	return debugEnabled
-}
-
-func DebugStat(label string, value func() string) {
-	for i := range debugStats {
-		if debugStats[i].label == label {
-			debugStats[i].value = value
-			return
-		}
-	}
-	debugStats = append(debugStats, stat{label, value})
-}
 
 func DebugPath(ptr unsafe.Pointer, points []types.Position, color color.Color) {
 	for key := range debugPaths {
@@ -52,22 +27,16 @@ func Paths() map[unsafe.Pointer]path {
 	return debugPaths
 }
 
-func DebugUpdate() {
-	if !debugEnabled {
-		return
-	}
+func Update() {
 	for _, timer := range FrameTimers {
 		timer.EndFrame()
 	}
 }
 
 // Draw the debug information to the provided image (usually the screen)
-func DebugDraw(screen *ebiten.Image) {
-	if !debugEnabled {
-		return
-	}
+func Draw(screen *ebiten.Image) {
 	s := ""
-	for _, stat := range debugStats {
+	for _, stat := range stats {
 		if stat.value != nil {
 			s += stat.label + ": " + stat.value() + "\n"
 		}
