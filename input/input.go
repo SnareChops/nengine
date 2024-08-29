@@ -36,6 +36,14 @@ func SetCursorContent(content types.Sprite) {
 	state.cursorContent = content
 }
 
+func HideCursor() {
+	ebiten.SetCursorMode(ebiten.CursorModeHidden)
+}
+
+func ShowCursor() {
+	ebiten.SetCursorMode(ebiten.CursorModeVisible)
+}
+
 // CursorDelta returns the difference in screen
 // cursor position from the previous frame
 func CursorDelta() (int, int) {
