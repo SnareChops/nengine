@@ -59,9 +59,6 @@ func (self *Screen) Draw(screen *ebiten.Image) {
 	})
 
 	for _, sprite := range self.sprites {
-		image := sprite.Image()
-		if image != nil {
-			screen.DrawImage(image, sprite.DrawOptions(nil))
-		}
+		DrawSprite(screen, sprite, nil)
 	}
 }

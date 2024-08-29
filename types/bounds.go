@@ -30,7 +30,7 @@ type Box interface {
 // Includes useful utilities for working with the bounds
 type Bounds interface {
 	Box
-	DrawOptions(camera Camera) *ebiten.DrawImageOptions
+	DrawOptions(sx, sy float64, camera Camera) *ebiten.DrawImageOptions
 }
 
 type PhysicsBounds interface {

@@ -41,11 +41,11 @@ func (self *Relative) Max() (float64, float64) {
 	return px + x, py + y
 }
 
-func (self *Relative) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
+func (self *Relative) DrawOptions(sx, sy float64, camera types.Camera) *ebiten.DrawImageOptions {
 	self.options.GeoM.Reset()
 	rotation := self.Rotation()
 	offx, offy := self.Offset()
-
+	self.options.GeoM.Scale(sx, sy)
 	// Rotate around anchor
 	if rotation != 0 {
 		self.options.GeoM.Translate(-offx, -offy)

@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/SnareChops/nengine/loaders"
+	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -182,7 +183,7 @@ func (self *SpriteGrid) render() {
 	self.image.Clear()
 	for _, content := range self.contents {
 		if content != nil {
-			self.image.DrawImage(content.Image(), content.DrawOptions(nil))
+			rendering.DrawSprite(self.image, content, nil)
 		}
 	}
 	if self.lineColor != nil {

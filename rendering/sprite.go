@@ -8,17 +8,18 @@ import (
 type DrawableSprite interface {
 	Dx() int
 	Dy() int
-	DrawOptions(types.Camera) *ebiten.DrawImageOptions
+	DrawOptions(sx, sy float64, camera types.Camera) *ebiten.DrawImageOptions
 	Image() *ebiten.Image
 }
 
 func DrawSprite(dest *ebiten.Image, sprite DrawableSprite, camera types.Camera) {
 	image := sprite.Image()
 	if image != nil {
-		options := sprite.DrawOptions(camera)
+		var sx, sy float64 = 1, 1
 		if scaled, ok := sprite.(types.ScaledSprite); ok {
-			options.GeoM.Scale(scaled.Scale())
+			sx, sy = scaled.Scale()
 		}
+		options := sprite.DrawOptions(sx, sy, camera)
 		if shader, uniforms, ok := shouldUseShader(sprite); ok {
 			op := &ebiten.DrawRectShaderOptions{}
 			op.GeoM = options.GeoM

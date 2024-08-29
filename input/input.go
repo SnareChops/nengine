@@ -1,6 +1,7 @@
 package input
 
 import (
+	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -72,6 +73,6 @@ func Update() {
 
 func Draw(screen *ebiten.Image) {
 	if state.cursorContent != nil {
-		screen.DrawImage(state.cursorContent.Image(), state.cursorContent.DrawOptions(nil))
+		rendering.DrawSprite(screen, state.cursorContent, nil)
 	}
 }

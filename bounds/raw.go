@@ -29,7 +29,7 @@ func (self *Raw) InitFromPoints(a types.Position, b types.Position) *Raw {
 	return self
 }
 
-func (self *Raw) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
+func (self *Raw) DrawOptions(sx, sy float64, camera types.Camera) *ebiten.DrawImageOptions {
 	self.options.GeoM.Reset()
 	rotation := self.Rotation()
 	offx, offy := self.Offset()
@@ -49,13 +49,13 @@ func (self *Raw) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
 	}
 	// If camera is provided, scale and translate
 	if camera != nil {
-		self.options.GeoM.Scale(self.fx*camera.Zoom(), self.fy*camera.Zoom())
+		self.options.GeoM.Scale(sx*self.fx*camera.Zoom(), sy*self.fy*camera.Zoom())
 		x, y := camera.WorldToScreenPos(x, y)
 		self.options.GeoM.Translate(float64(x), float64(y))
 		return self.options
 	}
 	// Translate
-	self.options.GeoM.Scale(self.fx, self.fy)
+	self.options.GeoM.Scale(sx*self.fx, sy*self.fy)
 	self.options.GeoM.Translate(x, y)
 	return self.options
 }
