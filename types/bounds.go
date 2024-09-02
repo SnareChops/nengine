@@ -20,6 +20,8 @@ type Box interface {
 	Min() (float64, float64)
 	Mid() (float64, float64)
 	Max() (float64, float64)
+	MinX() float64
+	MinY() float64
 	MidX() float64
 	MidY() float64
 	MaxX() float64

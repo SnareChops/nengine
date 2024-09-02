@@ -62,6 +62,7 @@ func (self *BasicGame) LoadScene(scene types.Scene) {
 }
 
 func (self *BasicGame) Update() error {
+
 	// Update the input state
 	input.Update()
 	// If reload triggered: Send reload signal to scene

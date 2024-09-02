@@ -39,8 +39,8 @@ func (self *Box) Rotation() float64 {
 	return self.rotation
 }
 
-func (self *Box) SetRotation(theta float64) {
-	self.rotation = theta
+func (self *Box) SetRotation(radians float64) {
+	self.rotation = radians
 }
 
 func (self *Box) Flip(h, v bool) {
@@ -100,6 +100,14 @@ func (self *Box) Max() (x, y float64) {
 	x = self.x - self.ox + float64(self.w) - 1
 	y = self.y - self.oy + float64(self.h) - 1
 	return
+}
+
+func (self *Box) MinX() float64 {
+	return self.x - self.ox
+}
+
+func (self *Box) MinY() float64 {
+	return self.y - self.oy
 }
 
 func (self *Box) MidX() float64 {
