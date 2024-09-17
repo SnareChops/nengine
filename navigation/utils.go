@@ -6,7 +6,7 @@ import (
 	"github.com/SnareChops/nengine/bit"
 )
 
-func matchesMasks(node *NavNode, masks []int) bool {
+func matchesMasks(node *NavNode, masks []uint64) bool {
 	// Nodes with no mask are ALWAYS walkable
 	if node.mask == 0 {
 		return true
@@ -24,7 +24,7 @@ func matchesMasks(node *NavNode, masks []int) bool {
 	return false
 }
 
-func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool, masks []int) []*NavNode {
+func getNeighbors(node *NavNode, grid [][]*NavNode, allowDiagonal bool, masks []uint64) []*NavNode {
 	var neighbors []*NavNode
 	x, y := int(node.X), int(node.Y)
 	var directions [][2]int

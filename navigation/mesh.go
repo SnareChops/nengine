@@ -42,19 +42,19 @@ func (self *NavMesh) ActiveNavGroup() int {
 }
 
 // MaskNode Sets the mask on the node at the provided index position
-func (self *NavMesh) MaskNode(i, j, mask int) {
+func (self *NavMesh) MaskNode(i, j, mask uint64) {
 	self.grid[i][j].mask = mask
 }
 
 // MaskNodeAt Sets the mask on the node at the provided world position
-func (self *NavMesh) MaskNodeAt(x, y float64, mask int) {
+func (self *NavMesh) MaskNodeAt(x, y float64, mask uint64) {
 	i := int(x*float64(self.hspacing) + float64(self.hoffset))
 	j := int(y*float64(self.vspacing) + float64(self.voffset))
 	self.grid[i][j].mask = mask
 }
 
 // MaskNodesWithin Sets the mask on the nodes that collide with the provided Box
-func (self *NavMesh) MaskNodesWithin(box types.Box, mask int) {
+func (self *NavMesh) MaskNodesWithin(box types.Box, mask uint64) {
 	for x := range self.grid {
 		for y := range self.grid[x] {
 			if self.grid[x][y] != nil && utils.IsWithin(box, x*self.hspacing+self.hoffset, y*self.vspacing+self.voffset) {
@@ -71,7 +71,7 @@ func (self *NavMesh) Update(delta int) {
 	}
 }
 
-func (self *NavMesh) ClosestNode(pos types.Position, masks ...int) *NavNode {
+func (self *NavMesh) ClosestNode(pos types.Position, masks ...uint64) *NavNode {
 	x := int(pos.X()-float64(self.hoffset)) / self.hspacing
 	y := int(pos.Y()-float64(self.voffset)) / self.vspacing
 	min := math.Inf(1)
@@ -101,7 +101,7 @@ func (self *NavMesh) ClosestNode(pos types.Position, masks ...int) *NavNode {
 
 // Pathfind uses the NavMesh to find a path from the start to end Vector
 // Optionally allowing diagonal movement between the nodes
-func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, masks ...int) NavPath {
+func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, masks ...uint64) NavPath {
 	pathfindTimer.Start()
 	defer pathfindTimer.End()
 	// Find closest nodes to start and end positions
@@ -117,7 +117,7 @@ func (self *NavMesh) Pathfind(start, end types.Position, allowDiagonals bool, ma
 	return []types.Position{}
 }
 
-func (self *NavMesh) ExactPath(start, end types.Position, allowDiagonals bool, masks ...int) NavPath {
+func (self *NavMesh) ExactPath(start, end types.Position, allowDiagonals bool, masks ...uint64) NavPath {
 	// Find closest nodes to start and end positions
 	startNode := self.ClosestNode(start, masks...)
 	endNode := self.ClosestNode(end, masks...)
@@ -140,7 +140,7 @@ func (self *NavMesh) ExactPath(start, end types.Position, allowDiagonals bool, m
 // Optionally allowing diagonal movement between nodes
 // Note: This is exposed, but is really only intended to be used internally
 // Prefer using the Pathfind() method instead
-func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, masks ...int) NavPath {
+func (self *NavMesh) AStar(start, end *NavNode, allowDiagonal bool, masks ...uint64) NavPath {
 	defer self.reset()
 	openSet := priorityQueue{}
 	closedSet := make(map[*NavNode]bool)

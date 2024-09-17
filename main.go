@@ -29,7 +29,7 @@ type GeneralFrame = animators.GeneralFrame
 
 var NewGeneralFrame = animators.NewGeneralFrame
 
-// Interfaces
+// Types
 type Animator = types.Animator
 type Game = types.Game
 type Scene = types.Scene

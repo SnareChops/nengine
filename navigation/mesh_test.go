@@ -66,9 +66,9 @@ func TestNoPathFound(t *testing.T) {
 }
 
 func TestPathfindWithNodeMasks(t *testing.T) {
-	MASK_1 := 1 << 1
-	MASK_2 := 1 << 2
-	MASK_3 := 1 << 3
+	MASK_1 := uint64(1 << 1)
+	MASK_2 := uint64(1 << 2)
+	MASK_3 := uint64(1 << 3)
 	collider := bounds.NewBox(64, 320)
 	collider.SetPos2(128, 0)
 	mesh := new(navigation.NavMesh).Init(320, 320, 64, 64, 32, 32)
@@ -91,7 +91,7 @@ func TestPathfindWithNodeMasks(t *testing.T) {
 }
 
 func TestPathfindBetweenMaskedAreas(t *testing.T) {
-	MASK_1 := 1 << 1
+	MASK_1 := uint64(1 << 1)
 	box1 := bounds.NewBox(64, 64)
 	box2 := bounds.NewBox(64, 64)
 	box1.SetPos2(128, 64)
