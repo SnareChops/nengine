@@ -167,6 +167,7 @@ type CheckboxState = ui.CheckboxState
 type Checkbox = ui.Checkbox
 type IntBox = ui.IntBox
 type TextBox = ui.TextBox
+type PercentBar = ui.PercentBar
 
 const (
 	ButtonStateClicked       = ui.ButtonStateClicked
