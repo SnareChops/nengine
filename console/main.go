@@ -35,6 +35,9 @@ type console struct {
 	entryText   *fonts.Text
 	start       *fonts.Text
 	image       *ebiten.Image
+	hint        *ebiten.Image
+
+	cont ConsoleContinueFunc
 }
 
 var state = &console{}
@@ -45,7 +48,7 @@ func Init(key ebiten.Key) {
 	state.start = fonts.NewText(">", fontFace, dark)
 	state.entry = new(Entry).Init(state.Dx()-20, 20, light)
 	state.image = ebiten.NewImage(state.Size())
-	addResult(ConsoleResultInfo, "Nengine Console, `help` for more info")
+	addResult(NewConsoleResult(ResultInfo, "Nengine Console, `help` for more info", nil))
 	reposition()
 	render()
 }
@@ -75,19 +78,19 @@ func addCom(command string) {
 	addToOutput(text)
 }
 
-func addResult(status ConsoleResult, result string) {
+func addResult(result ConsoleResult) {
 	var clr color.Color
-	switch status {
-	case ConsoleResultInfo:
+	switch result.code {
+	case ResultInfo:
 		clr = info
-	case ConsoleResultWarn:
+	case ResultWarn:
 		clr = warn
-	case ConsoleResultError:
+	case ResultError:
 		clr = error
 	default:
 		clr = mid
 	}
-	text := fonts.NewText(result, fontFace, clr)
+	text := fonts.NewText(result.message, fontFace, clr)
 	text.Wrap(state.Dx() - 15)
 	text.SetPos2(10, 0)
 	addToOutput(text)
@@ -102,7 +105,46 @@ func addToOutput(text *fonts.Text) {
 	}
 }
 
+func setHint(message string) {
+	text := fonts.NewText(message, fontFace, info)
+	text.Wrap(state.Dx() - 20)
+	text.SetPos2(float64(state.Dx())/2-float64(text.Dx())/2, 10)
+	state.hint = ebiten.NewImage(state.Dx(), text.Dy()+20)
+	state.hint.Fill(background)
+	fonts.DrawText(state.hint, text, nil)
+}
+
+func setContinue(fn ConsoleContinueFunc) {
+	state.cont = fn
+}
+
 func Update(delta int) {
+	// If console has a hint: Clear if ESC or console key has been pressed
+	if state.hint != nil && (inpututil.IsKeyJustPressed(ebiten.KeyEscape) || inpututil.IsKeyJustPressed(state.key)) {
+		state.hint = nil
+	}
+	// If console has a continue function:
+	if state.cont != nil {
+		// If escape key or console key is pressed: Clear continue and hint
+		if inpututil.IsKeyJustPressed(ebiten.KeyEscape) || inpututil.IsKeyJustPressed(state.key) {
+			state.cont = nil
+		}
+		// If left mouse pressed:
+		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+			// Capture the input
+			input.InputCapture()
+			// Clear hint
+			state.hint = nil
+			// Run continue function
+			result := state.cont(ebiten.CursorPosition())
+			// Clear continue function pointer
+			state.cont = nil
+			// Handle the result of the continue function
+			handleResult(result)
+			state.visible = false
+		}
+	}
+
 	prev := state.visible
 	// If console key pressed: show/hide
 	if inpututil.IsKeyJustPressed(state.key) {
@@ -129,10 +171,10 @@ func Update(delta int) {
 		}
 		// Add the command to history
 		addToHistory(command)
-		// Attempt to run the command and capture the return text
-		status, result := RunCommand(command)
+		// Add command to
 		addCom(command)
-		addResult(status, result)
+		// Attempt to run the command and capture the return text
+		RunCommand(command)
 		// output buffer has changed so we need to reposition all of the text
 		reposition()
 	}
@@ -155,7 +197,7 @@ func reposition() {
 
 func render() {
 	state.image.Clear()
-	state.image.Fill(color.Black)
+	state.image.Fill(background)
 	fonts.DrawText(state.image, state.start, nil)
 	rendering.DrawSprite(state.image, state.entry, nil)
 	for _, out := range state.output {
@@ -164,6 +206,10 @@ func render() {
 }
 
 func Draw(screen *ebiten.Image) {
+	if state.hint != nil {
+		rendering.DrawAt(screen, state.hint, 200, 0)
+		return
+	}
 	if state.visible {
 		rendering.DrawAt(screen, state.image, 200, 0)
 	}

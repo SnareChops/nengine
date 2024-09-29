@@ -68,11 +68,14 @@ var Point = bounds.Point
 var NewBox = bounds.NewBox
 
 type ConsoleFunc = console.ConsoleFunc
+type ConsoleContinueFunc = console.ConsoleContinueFunc
 type ConsoleResult = console.ConsoleResult
 
-var ConsoleResultNormal = console.ConsoleResultNormal
-var ConsoleResultWarn = console.ConsoleResultWarn
-var ConsoleResultError = console.ConsoleResultError
+var NewConsoleResult = console.NewConsoleResult
+var ConsoleResultNormal = console.ResultNormal
+var ConsoleResultWarn = console.ResultWarn
+var ConsoleResultError = console.ResultError
+var ConsoleResultContinue = console.ResultContinue
 var ConsoleRegister = console.ConsoleRegister
 
 // Debug

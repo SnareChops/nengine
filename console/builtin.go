@@ -13,46 +13,86 @@ func init() {
 	ConsoleRegister("timers", Timers)
 }
 
-func Help(args []string) (ConsoleResult, string) {
+func Help(args []string) ConsoleResult {
 	var names []string
 	for key := range registered {
 		names = append(names, key)
 	}
-	return ConsoleResultNormal, "Available commands: " + strings.Join(names, ", ")
+	return NewConsoleResult(
+		ResultNormal,
+		"Available commands: "+strings.Join(names, ", "),
+		nil,
+	)
 }
 
-func Echo(args []string) (ConsoleResult, string) {
-	return ConsoleResultError, strings.Join(args, " ")
+func Echo(args []string) ConsoleResult {
+	return NewConsoleResult(
+		ResultError,
+		strings.Join(args, " "),
+		nil,
+	)
 }
 
-func Stats(args []string) (ConsoleResult, string) {
+func Stats(args []string) ConsoleResult {
 	if len(args) == 0 {
-		return ConsoleResultError, "Missing sub-command. Expected one of: show, hide"
+		return NewConsoleResult(
+			ResultError,
+			"Missing sub-command. Expected one of: show, hide",
+			nil,
+		)
 	}
 	switch args[0] {
 	case "show":
 		debug.EnableStats(true)
-		return ConsoleResultNormal, "Displaying debug stats"
+		return NewConsoleResult(
+			ResultNormal,
+			"Displaying debug stats",
+			nil,
+		)
 	case "hide":
 		debug.EnableStats(false)
-		return ConsoleResultNormal, "Removing debug stats"
+		return NewConsoleResult(
+			ResultNormal,
+			"Removing debug stats",
+			nil,
+		)
 	default:
-		return ConsoleResultError, "Invalid sub-command. Expected one of: show, hide"
+		return NewConsoleResult(
+			ResultError,
+			"Invalid sub-command. Expected one of: show, hide",
+			nil,
+		)
 	}
 }
 
-func Timers(args []string) (ConsoleResult, string) {
+func Timers(args []string) ConsoleResult {
 	if len(args) == 0 {
-		return ConsoleResultError, "Missing sub-command. Expected one of: show, hide"
+		return NewConsoleResult(
+			ResultError,
+			"Missing sub-command. Expected one of: show, hide",
+			nil,
+		)
 	}
 	switch args[0] {
 	case "show":
 		debug.EnableTimers(true)
-		return ConsoleResultNormal, "Displaying timers"
+		return NewConsoleResult(
+			ResultNormal,
+			"Displaying timers",
+			nil,
+		)
 	case "hide":
 		debug.EnableTimers(false)
-		return ConsoleResultNormal, "Removed timers"
+		return NewConsoleResult(
+			ResultNormal,
+			"Removed timers",
+			nil,
+		)
 	default:
-		return ConsoleResultError, "Invalid sub-command. Expected one of: show, hide"
+		return NewConsoleResult(
+			ResultError,
+			"Invalid sub-command. Expected one of: show, hide",
+			nil,
+		)
 	}
 }
