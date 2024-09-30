@@ -4,8 +4,10 @@ type Box struct {
 	*Position
 	w, h     int
 	ox, oy   float64
+	ax, ay   int
 	fx, fy   float64
 	rotation float64
+	anchored bool
 }
 
 func NewBox(w, h int) *Box {
@@ -23,8 +25,20 @@ func (self *Box) SetSize(w, h int) {
 func (self *Box) Resize(w, h int) {
 	ow, oh := self.Size()
 	self.w, self.h = w, h
-	self.ox = self.ox * (float64(w) / float64(ow))
-	self.oy = self.oy * (float64(h) / float64(oh))
+	if self.anchored {
+		self.SetAnchor(self.ax, self.ay)
+	} else {
+		if ow == 0 {
+			self.ox = 0
+		} else {
+			self.ox = self.ox * (float64(w) / float64(ow))
+		}
+		if oh == 0 {
+			self.oy = 0
+		} else {
+			self.oy = self.oy * (float64(h) / float64(oh))
+		}
+	}
 }
 
 func (self *Box) Offset() (float64, float64) {
@@ -32,6 +46,8 @@ func (self *Box) Offset() (float64, float64) {
 }
 
 func (self *Box) SetOffset(x, y float64) {
+	self.anchored = false
+	self.ax, self.ay = 0, 0
 	self.ox, self.oy = x, y
 }
 
@@ -58,21 +74,34 @@ func (self *Box) Flip(h, v bool) {
 // Valid options for x: LEFT CENTER RIGHT
 // Valid options for y: TOP CENTER BOTTOM
 func (self *Box) SetAnchor(x, y int) {
+	self.anchored = true
 	switch x {
 	case LEFT:
+		self.ax = LEFT
 		self.ox = 0
 	case CENTER:
+		self.ax = CENTER
 		self.ox = float64(self.Dx()) / 2
 	case RIGHT:
+		self.ax = RIGHT
 		self.ox = float64(self.Dx()) - 1
+		if self.ox < 0 {
+			self.ox = 0
+		}
 	}
 	switch y {
 	case TOP:
+		self.ay = TOP
 		self.oy = 0
 	case CENTER:
+		self.ay = CENTER
 		self.oy = float64(self.Dy()) / 2
 	case BOTTOM:
+		self.ay = BOTTOM
 		self.oy = float64(self.Dy()) - 1
+		if self.oy < 0 {
+			self.ox = 0
+		}
 	}
 }
 
