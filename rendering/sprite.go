@@ -32,6 +32,22 @@ func DrawSprite(dest *ebiten.Image, sprite DrawableSprite, camera types.Camera) 
 	}
 }
 
+func DrawSpriteWithShader(dest *ebiten.Image, sprite DrawableSprite, shader *ebiten.Shader, uniforms map[string]any, camera types.Camera) {
+	image := sprite.Image()
+	if image != nil {
+		var sx, sy float64 = 1, 1
+		if scaled, ok := sprite.(types.ScaledSprite); ok {
+			sx, sy = scaled.Scale()
+		}
+		op := sprite.DrawOptions(sx, sy, camera)
+		options := &ebiten.DrawRectShaderOptions{}
+		options.GeoM = op.GeoM
+		options.Uniforms = uniforms
+		options.Images = [4]*ebiten.Image{image}
+		dest.DrawRectShader(sprite.Dx(), sprite.Dy(), shader, options)
+	}
+}
+
 func shouldUseShader(sprite DrawableSprite) (*ebiten.Shader, map[string]any, bool) {
 	if s, ok := sprite.(types.ShaderSprite); ok {
 		if shader, uniforms := s.Shader(); shader != nil {

@@ -158,6 +158,7 @@ type World = rendering.World
 var DrawSprite = rendering.DrawSprite
 var StrokeRect = rendering.StrokeRect
 var GridDraw = rendering.GridDraw
+var DrawSpriteWithShader = rendering.DrawSpriteWithShader
 
 func DrawAt[T ~int | float32 | float64](dest, src *ebiten.Image, x, y T) {
 	rendering.DrawAt(dest, src, x, y)
