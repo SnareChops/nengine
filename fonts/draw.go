@@ -7,7 +7,7 @@ import (
 )
 
 func DrawText(screen *ebiten.Image, text *Text, camera types.Camera) {
-	x, y := int(text.X()), int(text.Y())
+	x, y := int(text.MinX()), int(text.MinY())
 	if camera != nil {
 		x, y = camera.WorldToScreenPos(text.Pos2())
 	}

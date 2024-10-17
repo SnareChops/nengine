@@ -43,4 +43,8 @@ func TestCenterAnchoringText(t *testing.T) {
 	x, y = text.Offset()
 	assert.Equal(t, 13., x)
 	assert.Equal(t, 0., y)
+
+	x, y = text.Min()
+	assert.Equal(t, -13., x)
+	assert.Equal(t, 0., y)
 }
