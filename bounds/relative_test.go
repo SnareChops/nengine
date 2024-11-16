@@ -28,3 +28,17 @@ func TestRelativeBoundsPosition(t *testing.T) {
 	assert.Equal(t, 7., x)
 	assert.Equal(t, 8., y)
 }
+
+func TestRelativeBoundsBoxInBox(t *testing.T) {
+	parent := new(bounds.Raw).Init(10, 12)
+	parent.SetAnchor(bounds.CENTER, bounds.BOTTOM)
+	parent.SetPos2(100, 100)
+
+	box := new(bounds.Relative).Init(parent, 5, 8)
+	box.SetAnchor(bounds.CENTER, bounds.BOTTOM)
+	box.SetPos2(0.5, -2)
+
+	x, y := box.Min()
+	assert.Equal(t, 0., x)
+	assert.Equal(t, 0., y)
+}

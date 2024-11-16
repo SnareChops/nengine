@@ -24,8 +24,8 @@ func (self *Relative) Init(parent types.Box, width, height int) *Relative {
 
 // Min returns the raw position of the top left corner of the bounds as (x, y float64)
 func (self *Relative) Min() (float64, float64) {
-	px, py := self.Parent.Pos2()
-	x, y := self.Box.Min()
+	px, py := self.Parent.Min()
+	x, y := self.Box.Pos2()
 	return px + x, py + y
 }
 
