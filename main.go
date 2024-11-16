@@ -202,6 +202,10 @@ var ChunkBounds = utils.ChunkBounds
 var DoesCollide = utils.DoesCollide
 var IsPosWithin = utils.IsPosWithin
 
+func RawCollide[T ~int | ~float64](x1, y1, w1, h1, x2, y2, w2, h2 T) bool {
+	return utils.RawCollide(x1, y1, w1, h1, x2, y2, w2, h2)
+}
+
 func IsWithin[T ~int | ~float64](box Box, x, y T) bool {
 	return utils.IsWithin(box, x, y)
 }

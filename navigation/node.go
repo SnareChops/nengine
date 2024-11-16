@@ -11,3 +11,10 @@ type NavNode struct {
 	index   int
 	mask    uint64
 }
+
+func (node *NavNode) Is(mask uint64) bool {
+	if mask == 0 {
+		return node.mask == 0
+	}
+	return node.mask&mask == mask
+}
