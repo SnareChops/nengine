@@ -157,6 +157,7 @@ type World = rendering.World
 
 var DrawSprite = rendering.DrawSprite
 var StrokeRect = rendering.StrokeRect
+var StrokeBox = rendering.StrokeBox
 var GridDraw = rendering.GridDraw
 var DrawSpriteWithShader = rendering.DrawSpriteWithShader
 

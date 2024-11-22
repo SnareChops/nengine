@@ -9,13 +9,13 @@ import (
 
 func TestRelativeBoundsAnchor(t *testing.T) {
 	parent := new(bounds.Raw).Init(10, 10)
-	result := new(bounds.Relative).Init(parent, 8, 8)
+	result := new(bounds.Relative).Init(parent, 7, 7)
 
 	result.SetAnchor(bounds.CENTER, bounds.CENTER)
 
 	x, y := result.Min()
-	assert.Equal(t, -4., x)
-	assert.Equal(t, -4., y)
+	assert.Equal(t, -3.5, x)
+	assert.Equal(t, -3.5, y)
 }
 
 func TestRelativeBoundsPosition(t *testing.T) {
@@ -27,4 +27,18 @@ func TestRelativeBoundsPosition(t *testing.T) {
 	x, y := result.Min()
 	assert.Equal(t, 7., x)
 	assert.Equal(t, 8., y)
+}
+
+func TestRelativeBoundsBoxInBox(t *testing.T) {
+	parent := new(bounds.Raw).Init(10, 12)
+	parent.SetAnchor(bounds.CENTER, bounds.BOTTOM)
+	parent.SetPos2(20, 20)
+
+	box := new(bounds.Relative).Init(parent, 5, 8)
+	box.SetAnchor(bounds.CENTER, bounds.BOTTOM)
+	box.SetPos2(-1, -2)
+
+	x, y := box.Min()
+	assert.Equal(t, 16.5, x)
+	assert.Equal(t, 11., y)
 }

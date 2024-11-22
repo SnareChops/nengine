@@ -15,3 +15,10 @@ func StrokeRect(dest *ebiten.Image, corner1, corner2 types.Position, width float
 	maxY := max(corner1.Y(), corner2.Y())
 	vector.StrokeRect(dest, float32(minX), float32(minY), float32(maxX-minX), float32(maxY-minY), width, color, false)
 }
+
+func StrokeBox(dest *ebiten.Image, box types.Box, strokeWidth float32, color color.Color, camera types.Camera) {
+	x, y := box.Min()
+	sx, sy := camera.WorldToScreenPos(x, y)
+
+	vector.StrokeRect(dest, float32(sx), float32(sy), float32(box.Dx()), float32(box.Dy()), strokeWidth, color, false)
+}
