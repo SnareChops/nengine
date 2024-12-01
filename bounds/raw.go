@@ -9,7 +9,7 @@ import (
 // positioned bounds
 type Raw struct {
 	*Box
-	options *ebiten.DrawImageOptions
+	options *types.DrawImageOptions
 }
 
 // Init sets the initial state of the RawBounds
@@ -29,7 +29,7 @@ func (self *Raw) InitFromPoints(a types.Position, b types.Position) *Raw {
 	return self
 }
 
-func (self *Raw) DrawOptions(sx, sy float64, camera types.Camera) *ebiten.DrawImageOptions {
+func (self *Raw) DrawOptions(sx, sy float64, camera types.Camera) *types.DrawImageOptions {
 	self.options.GeoM.Reset()
 	rotation := self.Rotation()
 	offx, offy := self.Offset()

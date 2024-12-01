@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/SnareChops/aseprite-loader/lib"
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/types"
 )
 
 type SheetSource struct {
@@ -19,7 +19,7 @@ func (s SheetSource) Alias() string {
 func (s SheetSource) Index() int {
 	return s.index
 }
-func (s SheetSource) Image() *ebiten.Image {
+func (s SheetSource) Image() types.Image {
 	return GetSheetCell(s.alias, s.index)
 }
 
@@ -29,7 +29,7 @@ type Sheet struct {
 	Height     int
 	CellWidth  int
 	CellHeight int
-	Cells      []*ebiten.Image
+	Cells      []types.Image
 }
 
 func (self Sheet) Sources() []SheetSource {
@@ -45,10 +45,10 @@ type Anim struct {
 	Tags        []lib.Tag
 	FrameWidth  int
 	FrameHeight int
-	Frames      []*ebiten.Image
+	Frames      []types.Image
 }
 
-var flat = map[string]*ebiten.Image{}
+var flat = map[string]types.Image{}
 var sheets = map[string]Sheet{}
 var anims = map[string]Anim{}
 
@@ -105,7 +105,7 @@ func PreloadAnim(alias, path string) {
 	}
 }
 
-func GetImage(alias string) *ebiten.Image {
+func GetImage(alias string) types.Image {
 	if image, ok := flat[alias]; ok {
 		return image
 	}
@@ -119,7 +119,7 @@ func GetSheet(alias string) Sheet {
 	panic("GetSheet: " + alias + " not found in cache. Did you forget to Preload?")
 }
 
-func GetSheetCell(alias string, index int) *ebiten.Image {
+func GetSheetCell(alias string, index int) types.Image {
 	sheet := GetSheet(alias)
 	if index < 0 || index >= len(sheet.Cells) {
 		panic(fmt.Sprintf("GetSheetCell:%d: %s out of range", index, alias))
@@ -127,7 +127,7 @@ func GetSheetCell(alias string, index int) *ebiten.Image {
 	return sheet.Cells[index]
 }
 
-func GetSheetRange(alias string, start, end int) []*ebiten.Image {
+func GetSheetRange(alias string, start, end int) []types.Image {
 	sheet := GetSheet(alias)
 	if start < 0 || end >= len(sheet.Cells) {
 		panic(fmt.Sprintf("GetSheetRange:%d-%d: %s out of range", start, end, alias))

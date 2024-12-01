@@ -7,7 +7,6 @@ import (
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type World struct {
@@ -53,7 +52,7 @@ func (self *World) RemoveSprite(sprite types.Sprite) {
 	}
 }
 
-func (self *World) Draw(screen *ebiten.Image) {
+func (self *World) Draw(screen types.Image) {
 	slices.SortStableFunc(self.sprites, func(a, b types.Sprite) int {
 		_, ay := a.Pos2()
 		_, by := b.Pos2()

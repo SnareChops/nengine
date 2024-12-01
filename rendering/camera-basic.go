@@ -1,8 +1,6 @@
 package rendering
 
 import (
-	"image"
-
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -65,10 +63,10 @@ func (self *BasicCamera) WorldSize() (int, int) {
 	return self.ww, self.wh
 }
 
-func (self *BasicCamera) View() image.Rectangle {
-	x1, y1 := self.Min()
-	x2, y2 := self.Max()
-	return image.Rect(int(x1), int(y1), int(x2), int(y2))
+func (self *BasicCamera) View() (x, y, w, h int) {
+	x, y = int(self.MinX()), int(self.MinY())
+	w, h = self.Size()
+	return
 }
 
 func (self *BasicCamera) CursorWorldPosition() (float64, float64) {

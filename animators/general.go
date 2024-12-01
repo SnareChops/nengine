@@ -1,7 +1,7 @@
 package animators
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/types"
 )
 
 type ga struct {
@@ -14,10 +14,10 @@ type ga struct {
 
 type GeneralFrame struct {
 	duration int
-	image    *ebiten.Image
+	image    types.Image
 }
 
-func NewGeneralFrame(duration int, image *ebiten.Image) GeneralFrame {
+func NewGeneralFrame(duration int, image types.Image) GeneralFrame {
 	return GeneralFrame{
 		duration: duration,
 		image:    image,
@@ -98,6 +98,6 @@ func (self *GeneralAnimator) next() {
 	self.cooldown = self.active.frames[self.frame].duration
 }
 
-func (self *GeneralAnimator) Image() *ebiten.Image {
+func (self *GeneralAnimator) Image() types.Image {
 	return self.active.frames[self.frame].image
 }

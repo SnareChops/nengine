@@ -1,7 +1,5 @@
 package types
 
-import "github.com/hajimehoshi/ebiten/v2"
-
 type Initable interface {
 	Init(Game)
 }
@@ -15,7 +13,7 @@ type Reloadable interface {
 }
 
 type Drawable interface {
-	Draw(screen *ebiten.Image)
+	Draw(screen Image)
 }
 
 type Destroyable interface {

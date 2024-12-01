@@ -6,7 +6,7 @@ import "github.com/hajimehoshi/ebiten/v2"
 // that can be drawn by the Renderer
 type Sprite interface {
 	Bounds
-	Image() *ebiten.Image
+	Image() Image
 }
 
 // UpdateableSprite represents a sprite that has an update function
@@ -28,5 +28,5 @@ type ColorScaleSprite interface {
 // ShaderSprite represents a sprite that should use a shader when drawing
 type ShaderSprite interface {
 	Sprite
-	Shader() (*ebiten.Shader, map[string]any)
+	Shader() (Shader, map[string]any)
 }

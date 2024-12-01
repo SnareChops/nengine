@@ -1,6 +1,10 @@
 package utils
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/SnareChops/nengine/image"
+	"github.com/SnareChops/nengine/types"
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 // ImageChunk represents a chunk of an image that
 // can be reassembled to the full image again
@@ -11,15 +15,15 @@ type ImageChunk struct {
 	Y      int
 	Width  int
 	Height int
-	Image  *ebiten.Image
+	Image  types.Image
 }
 
-func ChunkImage(img *ebiten.Image, size int) []*ImageChunk {
+func ChunkImage(img types.Image, size int) []*ImageChunk {
 	// Obtain the size of the image
 	width, height := img.Size()
 
 	var newImages []*ImageChunk
-	var subImg *ebiten.Image
+	var subImg types.Image
 
 	// Loop over the image by segments of 4000px
 	for y := 0; y < height; y += size {
@@ -39,7 +43,7 @@ func ChunkImage(img *ebiten.Image, size int) []*ImageChunk {
 				subHeight = size
 			}
 
-			subImg = ebiten.NewImage(subWidth, subHeight)
+			subImg = image.NewImage(subWidth, subHeight)
 
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(float64(-x), float64(-y))
@@ -61,13 +65,13 @@ func ChunkImage(img *ebiten.Image, size int) []*ImageChunk {
 	return newImages
 }
 
-func ScaledImage(width, height int, image *ebiten.Image) *ebiten.Image {
-	if image.Bounds().Dx() == width && image.Bounds().Dy() == height {
-		return image
+func ScaledImage(width, height int, img types.Image) types.Image {
+	if img.Dx() == width && img.Dy() == height {
+		return img
 	}
-	result := ebiten.NewImage(width, height)
+	result := image.NewImage(width, height)
 	options := &ebiten.DrawImageOptions{}
-	options.GeoM.Scale(ScaleFactor(image.Bounds().Dx(), image.Bounds().Dy(), width, height))
-	result.DrawImage(image, options)
+	options.GeoM.Scale(ScaleFactor(img.Dx(), img.Dy(), width, height))
+	result.DrawImage(img, options)
 	return result
 }

@@ -5,6 +5,7 @@ import (
 	"math"
 	"slices"
 
+	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -45,12 +46,12 @@ func PositionRight(object horizontalRelative, padding int) (float64, float64) {
 	return x + float64(object.Dx()+padding), y
 }
 
-func FitToNewImage(w, h int, image *ebiten.Image) *ebiten.Image {
-	out := ebiten.NewImage(w, h)
-	wf, hf := ScaleFactor(image.Bounds().Dx(), image.Bounds().Dy(), w, h)
+func FitToNewImage(w, h int, img types.Image) types.Image {
+	out := image.NewImage(w, h)
+	wf, hf := ScaleFactor(img.Dx(), img.Dy(), w, h)
 	options := &ebiten.DrawImageOptions{}
 	options.GeoM.Scale(wf, hf)
-	out.DrawImage(image, options)
+	out.DrawImage(img, options)
 	return out
 }
 

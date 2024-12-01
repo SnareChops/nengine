@@ -2,18 +2,17 @@ package bounds
 
 import (
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func Point(x, y float64) *Position {
-	return &Position{x, y, 0, &ebiten.DrawImageOptions{}}
+func Point[T ~int | ~float64](x, y T) *Position {
+	return &Position{float64(x), float64(y), 0, &types.DrawImageOptions{}}
 }
 
 type Position struct {
 	x       float64
 	y       float64
 	z       float64
-	options *ebiten.DrawImageOptions
+	options *types.DrawImageOptions
 }
 
 func (self *Position) Vec() types.Vector {
@@ -69,9 +68,9 @@ func (self *Position) GridAlign(h, v int) {
 	self.y = float64(int(self.y) / v * v)
 }
 
-func (self *Position) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
+func (self *Position) DrawOptions(camera types.Camera) *types.DrawImageOptions {
 	if self.options == nil {
-		self.options = &ebiten.DrawImageOptions{}
+		self.options = &types.DrawImageOptions{}
 	}
 	self.options.GeoM.Reset()
 	if camera == nil {

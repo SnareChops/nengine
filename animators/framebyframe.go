@@ -1,6 +1,8 @@
 package animators
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/SnareChops/nengine/types"
+)
 
 // AnimationFrame represents timings for a single animation frame
 type AnimationFrame struct {
@@ -20,7 +22,7 @@ func (self Animation) AddFrame(start, duration, index int) Animation {
 // FrameByFrameAnimator top level struct for managing animations
 // Tip: Use in combination with Bounds to create an animated sprite
 type FrameByFrameAnimator struct {
-	frames     []*ebiten.Image
+	frames     []types.Image
 	animations map[string]Animation
 	active     Animation
 	frame      int
@@ -29,7 +31,7 @@ type FrameByFrameAnimator struct {
 }
 
 // Init sets the initial state for the Animator
-func (self *FrameByFrameAnimator) Init(frames []*ebiten.Image) *FrameByFrameAnimator {
+func (self *FrameByFrameAnimator) Init(frames []types.Image) *FrameByFrameAnimator {
 	self.frames = frames
 	self.animations = map[string]Animation{}
 	return self
@@ -56,7 +58,7 @@ func (self *FrameByFrameAnimator) Start(name string, loop bool) {
 }
 
 // Image Returns the current active image for the animation
-func (self *FrameByFrameAnimator) Image() *ebiten.Image {
+func (self *FrameByFrameAnimator) Image() types.Image {
 	return self.frames[self.frame]
 }
 

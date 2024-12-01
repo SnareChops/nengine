@@ -2,7 +2,6 @@ package bounds
 
 import (
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // Relative represents a Bounds that is relative to another
@@ -11,14 +10,14 @@ import (
 type Relative struct {
 	types.Box
 	Parent  types.Box
-	options *ebiten.DrawImageOptions
+	options *types.DrawImageOptions
 }
 
 // Init the state of the RelativeBounds
 func (self *Relative) Init(parent types.Box, width, height int) *Relative {
 	self.Parent = parent
 	self.Box = NewBox(width, height)
-	self.options = &ebiten.DrawImageOptions{}
+	self.options = &types.DrawImageOptions{}
 	return self
 }
 
@@ -42,7 +41,7 @@ func (self *Relative) Max() (float64, float64) {
 	return px + x, py + y
 }
 
-func (self *Relative) DrawOptions(sx, sy float64, camera types.Camera) *ebiten.DrawImageOptions {
+func (self *Relative) DrawOptions(sx, sy float64, camera types.Camera) *types.DrawImageOptions {
 	self.options.GeoM.Reset()
 	rotation := self.Rotation()
 	offx, offy := self.Offset()

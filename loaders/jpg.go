@@ -4,10 +4,11 @@ import (
 	"image/jpeg"
 	"os"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/image"
+	"github.com/SnareChops/nengine/types"
 )
 
-func LoadJPEG(path string) (*ebiten.Image, error) {
+func LoadJPEG(path string) (types.Image, error) {
 	background, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -16,18 +17,18 @@ func LoadJPEG(path string) (*ebiten.Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ebiten.NewImageFromImage(img), nil
+	return image.NewImageFromImage(img), nil
 }
 
 func PreloadImageJpeg(alias, path string) {
 	if _, ok := flat[alias]; ok {
 		return
 	}
-	image, err := LoadJPEG(path)
+	img, err := LoadJPEG(path)
 	if err != nil {
 		panic("PreloadImageJpeg: " + path + "\n" + err.Error())
 	}
-	flat[alias] = ebiten.NewImageFromImage(image)
+	flat[alias] = img
 }
 
 func PreloadSheetJpeg(alias, path string) {
@@ -35,13 +36,13 @@ func PreloadSheetJpeg(alias, path string) {
 		return
 	}
 	width, height, err := detectSize(path)
-	image, err := LoadJPEG(path)
+	img, err := LoadJPEG(path)
 	if err != nil {
 		panic("PreloadSheetJpeg: " + path + "\n" + err.Error())
 	}
 	sheets[alias] = Sheet{
 		CellWidth:  int(width),
 		CellHeight: int(height),
-		Cells:      slice(image, int(width), int(height)),
+		Cells:      slice(img, int(width), int(height)),
 	}
 }

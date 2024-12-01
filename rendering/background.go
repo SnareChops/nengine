@@ -3,7 +3,6 @@ package rendering
 import (
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // Background represents an assortment of images to use for
@@ -20,8 +19,8 @@ type Background struct {
 }
 
 type backgroundPiece struct {
-	image   *ebiten.Image
-	options *ebiten.DrawImageOptions
+	image   types.Image
+	options *types.DrawImageOptions
 	x       float64
 	y       float64
 }
@@ -43,16 +42,16 @@ func (self *Background) ClearBackground() {
 }
 
 // AddBackgroundImage to the Background at the provided offset using world coordinates
-func (self *Background) AddBackgroundImage(image *ebiten.Image, offsetX, offsetY float64) {
+func (self *Background) AddBackgroundImage(image types.Image, offsetX, offsetY float64) {
 	self.pieces = append(self.pieces, backgroundPiece{
 		image:   image,
-		options: &ebiten.DrawImageOptions{},
+		options: &types.DrawImageOptions{},
 		x:       offsetX,
 		y:       offsetY,
 	})
 }
 
-func (self *Background) Draw(screen *ebiten.Image) {
+func (self *Background) Draw(screen types.Image) {
 	for _, piece := range self.pieces {
 		if piece.image != nil {
 			piece.options.GeoM.Reset()

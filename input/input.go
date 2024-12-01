@@ -71,7 +71,7 @@ func Update() {
 	}
 }
 
-func Draw(screen *ebiten.Image) {
+func Draw(screen types.Image) {
 	if state.cursorContent != nil {
 		rendering.DrawSprite(screen, state.cursorContent, nil)
 	}

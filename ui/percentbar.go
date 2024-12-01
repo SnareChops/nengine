@@ -5,15 +5,16 @@ import (
 	"math"
 
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/image"
+	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 )
 
 type PercentBar struct {
 	*bounds.Raw
 
-	image      *ebiten.Image
+	image      types.Image
 	value      float64
 	borderSize int
 	border     color.Color
@@ -22,7 +23,7 @@ type PercentBar struct {
 
 func (self *PercentBar) Init(w, h int, borderSize int, border, fill color.Color) *PercentBar {
 	self.Raw = new(bounds.Raw).Init(w, h)
-	self.image = ebiten.NewImage(w, h)
+	self.image = image.NewImage(w, h)
 
 	self.borderSize = borderSize
 
@@ -51,11 +52,11 @@ func (self *PercentBar) render() {
 	}
 
 	w := utils.LinearInterpolate(0., float64(self.Dx()), self.value)
-	vector.DrawFilledRect(self.image, 0, 0, float32(w), float32(self.Dy()), self.fill, false)
-	vector.StrokeRect(self.image, float32(offset), float32(offset), float32(self.Dx())-float32(math.Ceil(offset*2)), float32(self.Dy())-float32(math.Ceil(offset*2)), float32(self.borderSize), self.border, false)
+	vector.DrawFilledRect(self.image.Raw(), 0, 0, float32(w), float32(self.Dy()), self.fill, false)
+	vector.StrokeRect(self.image.Raw(), float32(offset), float32(offset), float32(self.Dx())-float32(math.Ceil(offset*2)), float32(self.Dy())-float32(math.Ceil(offset*2)), float32(self.borderSize), self.border, false)
 
 }
 
-func (self *PercentBar) Image() *ebiten.Image {
+func (self *PercentBar) Image() types.Image {
 	return self.image
 }

@@ -2,7 +2,6 @@ package rendering
 
 import (
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 	"golang.org/x/exp/slices"
 )
 
@@ -38,7 +37,7 @@ func (self *Renderer) RemoveRenderLayer(layer types.RenderLayer) {
 
 // Draw the result of the Renderer processing to the provided image
 // (usually the screen)
-func (self *Renderer) Draw(screen *ebiten.Image) {
+func (self *Renderer) Draw(screen types.Image) {
 	for _, layer := range self.layers {
 		layer.Draw(screen)
 	}

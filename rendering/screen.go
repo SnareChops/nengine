@@ -51,7 +51,7 @@ func (self *Screen) RemoveSprite(sprite types.Sprite) {
 	}
 }
 
-func (self *Screen) Draw(screen *ebiten.Image) {
+func (self *Screen) Draw(screen types.Image) {
 	slices.SortStableFunc(self.sprites, func(a, b types.Sprite) int {
 		_, _, az := a.Pos3()
 		_, _, bz := b.Pos3()

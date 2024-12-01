@@ -1,20 +1,20 @@
 package rendering
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/types"
 )
 
-func DrawAt[T ~int | float32 | float64](dest *ebiten.Image, src *ebiten.Image, x, y T) {
-	options := &ebiten.DrawImageOptions{}
+func DrawAt[T ~int | float32 | float64](dest types.Image, src types.Image, x, y T) {
+	options := &types.DrawImageOptions{}
 	options.GeoM.Translate(float64(x), float64(y))
 	dest.DrawImage(src, options)
 }
 
-func GridDraw(image *ebiten.Image, cell *ebiten.Image, index int) {
-	width := image.Bounds().Dx() / cell.Bounds().Dx()
+func GridDraw(image types.Image, cell types.Image, index int) {
+	width := image.Dx() / cell.Dx()
 	x := index % width
 	y := index / width
-	options := &ebiten.DrawImageOptions{}
-	options.GeoM.Translate(float64(x*cell.Bounds().Dx()), float64(y*cell.Bounds().Dy()))
+	options := &types.DrawImageOptions{}
+	options.GeoM.Translate(float64(x*cell.Dx()), float64(y*cell.Dy()))
 	image.DrawImage(cell, options)
 }

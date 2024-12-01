@@ -1,10 +1,8 @@
 package types
 
-import "github.com/hajimehoshi/ebiten/v2"
-
 type RenderLayer interface {
 	Order() int
-	Draw(screen *ebiten.Image)
+	Draw(screen Image)
 }
 
 type SpriteRenderLayer interface {

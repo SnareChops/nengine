@@ -1,18 +1,18 @@
 package animators
 
 import (
+	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type SlideAnimator struct {
 	slider   int
 	duration int
 	frame    int
-	frames   []*ebiten.Image
+	frames   []types.Image
 }
 
-func (self *SlideAnimator) Init(duration int, frames []*ebiten.Image) *SlideAnimator {
+func (self *SlideAnimator) Init(duration int, frames []types.Image) *SlideAnimator {
 	self.frames = frames
 	self.duration = duration
 	return self
@@ -30,6 +30,6 @@ func (self *SlideAnimator) Update(advance bool, delta int) bool {
 	return prev != self.frame
 }
 
-func (self *SlideAnimator) Image() *ebiten.Image {
+func (self *SlideAnimator) Image() types.Image {
 	return self.frames[self.frame]
 }

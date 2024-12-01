@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/SnareChops/aseprite-loader/lib"
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/image"
+	"github.com/SnareChops/nengine/types"
 )
 
 func PreloadImageAseprite(alias, path string) {
@@ -19,7 +20,7 @@ func PreloadImageAseprite(alias, path string) {
 	if len(frames) != 1 {
 		panic(errors.New("tried to load a flat image from a multi-frame file." + path))
 	}
-	flat[alias] = ebiten.NewImageFromImage(frames[0].Image)
+	flat[alias] = image.NewImageFromImage(frames[0].Image)
 }
 
 func PreloadSheetAseprite(alias, path string) {
@@ -37,9 +38,9 @@ func PreloadSheetAseprite(alias, path string) {
 	if err != nil {
 		panic(fmt.Errorf("PreloadSheetAseprite: %s\n%s", path, err))
 	}
-	cells := []*ebiten.Image{}
+	cells := []types.Image{}
 	for _, slice := range slices {
-		cells = append(cells, ebiten.NewImageFromImage(slice))
+		cells = append(cells, image.NewImageFromImage(slice))
 	}
 	sheets[alias] = Sheet{
 		CellWidth:  frames[0].GridWidth,
@@ -56,9 +57,9 @@ func PreloadAnimAseprite(alias, path string) {
 	if err != nil {
 		panic(fmt.Errorf("PreloadAnimAseprite: %s\n%s", path, err))
 	}
-	cells := []*ebiten.Image{}
+	cells := []types.Image{}
 	for _, frame := range frames {
-		cells = append(cells, ebiten.NewImageFromImage(frame.Image))
+		cells = append(cells, image.NewImageFromImage(frame.Image))
 	}
 	anims[alias] = Anim{
 		Duration:    frames[0].Duration,

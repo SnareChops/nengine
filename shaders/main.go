@@ -3,16 +3,17 @@ package shaders
 import (
 	_ "embed"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/image"
+	"github.com/SnareChops/nengine/types"
 )
 
 //go:embed fontShader.kage
 var fontShader []byte
-var FontShader *ebiten.Shader
+var FontShader types.Shader
 
 func init() {
 	var err error
-	FontShader, err = ebiten.NewShader(fontShader)
+	FontShader, err = image.NewShader(fontShader)
 	if err != nil {
 		panic(err)
 	}

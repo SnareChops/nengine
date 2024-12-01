@@ -1,9 +1,5 @@
 package types
 
-import (
-	"github.com/hajimehoshi/ebiten/v2"
-)
-
 type Box interface {
 	Position
 	Size() (int, int)
@@ -32,7 +28,7 @@ type Box interface {
 // Includes useful utilities for working with the bounds
 type Bounds interface {
 	Box
-	DrawOptions(sx, sy float64, camera Camera) *ebiten.DrawImageOptions
+	DrawOptions(sx, sy float64, camera Camera) *DrawImageOptions
 }
 
 type PhysicsBounds interface {

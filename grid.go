@@ -3,10 +3,10 @@ package nengine
 import (
 	"image/color"
 
+	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/loaders"
 	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 )
 
@@ -21,7 +21,7 @@ type SpriteGrid struct {
 	selectedColor color.Color
 	selectedWidth float32
 	selected      int
-	image         *ebiten.Image
+	image         types.Image
 }
 
 func (self *SpriteGrid) Init(gridWidth, gridHeight, cellWidth, cellHeight int) *SpriteGrid {
@@ -39,7 +39,7 @@ func (self *SpriteGrid) Init(gridWidth, gridHeight, cellWidth, cellHeight int) *
 	for y := 0; y < height; y += cellHeight {
 		self.lines = append(self.lines, NewLine(0, y, width, y))
 	}
-	self.image = ebiten.NewImage(self.Size())
+	self.image = image.NewImage(self.Size())
 	return self
 }
 
@@ -67,7 +67,7 @@ func (self *SpriteGrid) Resize(w, h int) {
 			content.Resize(self.cw, self.ch)
 		}
 	}
-	self.image = ebiten.NewImage(self.Size())
+	self.image = image.NewImage(self.Size())
 	self.render()
 }
 
@@ -110,7 +110,7 @@ func (self *SpriteGrid) SetAllContent(contents []types.Sprite) {
 	self.render()
 }
 
-func (self *SpriteGrid) SetRawContent(index int, image *ebiten.Image) {
+func (self *SpriteGrid) SetRawContent(index int, image types.Image) {
 	self.SetContent(index, new(SimpleSprite).Init(image))
 }
 
@@ -132,7 +132,7 @@ func (self *SpriteGrid) SetContentAt(x, y int, content types.Sprite) {
 	self.SetContent(self.IndexAt(x, y), content)
 }
 
-func (self *SpriteGrid) SetRawContentAt(x, y int, image *ebiten.Image) {
+func (self *SpriteGrid) SetRawContentAt(x, y int, image types.Image) {
 	self.SetContent(self.IndexAt(x, y), new(SimpleSprite).Init(image))
 }
 
@@ -193,10 +193,10 @@ func (self *SpriteGrid) render() {
 	}
 	if self.selected >= 0 {
 		x, y := self.IndexPos(self.selected)
-		vector.StrokeRect(self.image, float32(x), float32(y), float32(self.cw), float32(self.ch), self.selectedWidth, self.selectedColor, false)
+		vector.StrokeRect(self.image.Raw(), float32(x), float32(y), float32(self.cw), float32(self.ch), self.selectedWidth, self.selectedColor, false)
 	}
 }
 
-func (self *SpriteGrid) Image() *ebiten.Image {
+func (self *SpriteGrid) Image() types.Image {
 	return self.image
 }

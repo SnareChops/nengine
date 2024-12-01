@@ -2,7 +2,6 @@ package bounds
 
 import (
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // A slimmed down projectile bounds with the minimum amount
@@ -12,7 +11,7 @@ import (
 type Projectile struct {
 	*Box
 	velocity types.Vector
-	options  *ebiten.DrawImageOptions
+	options  *types.DrawImageOptions
 }
 
 func (self *Projectile) Init(width, height int) *Projectile {
@@ -33,9 +32,9 @@ func (self *Projectile) Update(delta int) {
 	self.SetPos2(x+self.velocity.X*float64(delta), y+self.velocity.Y*float64(delta))
 }
 
-func (self *Projectile) DrawOptions(camera types.Camera) *ebiten.DrawImageOptions {
+func (self *Projectile) DrawOptions(camera types.Camera) *types.DrawImageOptions {
 	if self.options == nil {
-		self.options = &ebiten.DrawImageOptions{}
+		self.options = &types.DrawImageOptions{}
 	}
 	self.options.GeoM.Reset()
 	if camera == nil {

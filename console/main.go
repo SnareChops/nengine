@@ -6,8 +6,10 @@ import (
 
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/fonts"
+	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/rendering"
+	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
@@ -31,11 +33,11 @@ type console struct {
 	history     []string
 	output      []*fonts.Text
 	entry       *Entry
-	cursorImage *ebiten.Image
+	cursorImage types.Image
 	entryText   *fonts.Text
 	start       *fonts.Text
-	image       *ebiten.Image
-	hint        *ebiten.Image
+	image       types.Image
+	hint        types.Image
 
 	cont ConsoleContinueFunc
 }
@@ -47,7 +49,7 @@ func Init(key ebiten.Key) {
 	state.Raw = new(bounds.Raw).Init(1920-400, 1080-200)
 	state.start = fonts.NewText(">", fontFace, dark)
 	state.entry = new(Entry).Init(state.Dx()-20, 20, light)
-	state.image = ebiten.NewImage(state.Size())
+	state.image = image.NewImage(state.Size())
 	addResult(NewConsoleResult(ResultInfo, "Nengine Console, `help` for more info", nil))
 	reposition()
 	render()
@@ -109,7 +111,7 @@ func setHint(message string) {
 	text := fonts.NewText(message, fontFace, info)
 	text.Wrap(state.Dx() - 20)
 	text.SetPos2(float64(state.Dx())/2-float64(text.Dx())/2, 10)
-	state.hint = ebiten.NewImage(state.Dx(), text.Dy()+20)
+	state.hint = image.NewImage(state.Dx(), text.Dy()+20)
 	state.hint.Fill(background)
 	fonts.DrawText(state.hint, text, nil)
 }
@@ -205,7 +207,7 @@ func render() {
 	}
 }
 
-func Draw(screen *ebiten.Image) {
+func Draw(screen types.Image) {
 	if state.hint != nil {
 		rendering.DrawAt(screen, state.hint, 200, 0)
 		return

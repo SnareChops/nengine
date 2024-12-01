@@ -3,13 +3,12 @@ package nengine
 import (
 	"github.com/SnareChops/nengine/loaders"
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type SpriteSource interface {
 	Alias() string
 	Index() int
-	Image() *ebiten.Image
+	Image() types.Image
 }
 
 type SpriteSourceGrid struct {

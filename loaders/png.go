@@ -2,16 +2,16 @@ package loaders
 
 import (
 	"errors"
-	"image"
 	"image/png"
 	"os"
 	"regexp"
 	"strconv"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	nimage "github.com/SnareChops/nengine/image"
+	"github.com/SnareChops/nengine/types"
 )
 
-func LoadPNG(path string) (*ebiten.Image, error) {
+func LoadPNG(path string) (types.Image, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -20,7 +20,7 @@ func LoadPNG(path string) (*ebiten.Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ebiten.NewImageFromImage(img), nil
+	return nimage.NewImageFromImage(img), nil
 }
 
 func PreloadImagePng(alias, path string) {
@@ -31,7 +31,7 @@ func PreloadImagePng(alias, path string) {
 	if err != nil {
 		panic("PreloadImagePng: " + path + "\n" + err.Error())
 	}
-	flat[alias] = ebiten.NewImageFromImage(image)
+	flat[alias] = image
 }
 
 func PreloadSheetPng(alias, path string) {
@@ -74,13 +74,13 @@ func detectSize(path string) (width, height int64, err error) {
 	return
 }
 
-func slice(img *ebiten.Image, cw, ch int) (images []*ebiten.Image) {
-	cols := img.Bounds().Dx() / cw
-	rows := img.Bounds().Dy() / ch
+func slice(img types.Image, cw, ch int) (images []types.Image) {
+	cols := img.Dx() / cw
+	rows := img.Dy() / ch
 	for row := range rows {
 		for col := range cols {
 			x, y := col*cw, row*ch
-			images = append(images, img.SubImage(image.Rect(x, y, x+cw, y+ch)).(*ebiten.Image))
+			images = append(images, img.SubImage(x, y, cw, ch))
 		}
 	}
 	return

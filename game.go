@@ -7,6 +7,7 @@ import (
 
 	"github.com/SnareChops/nengine/console"
 	"github.com/SnareChops/nengine/debug"
+	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -111,17 +112,18 @@ func (self *BasicGame) Update() error {
 }
 
 func (self *BasicGame) Draw(screen *ebiten.Image) {
+	s := image.Wrap(screen)
 	self.draw.Start()
 	if self.Scene != nil {
-		self.Scene.Draw(screen)
+		self.Scene.Draw(s)
 	}
 	// Draw input layer
-	input.Draw(screen)
+	input.Draw(s)
 	// Draw console layer
-	console.Draw(screen)
+	console.Draw(s)
 	// Draw debug info
 	self.draw.End()
-	debug.Draw(screen)
+	debug.Draw(s)
 }
 
 func (self *BasicGame) Layout(w, h int) (int, int) {

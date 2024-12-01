@@ -6,7 +6,9 @@ import (
 
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/fonts"
+	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/input"
+	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
@@ -18,16 +20,16 @@ type Entry struct {
 	cooldown  int
 	repeating bool
 	text      *fonts.Text
-	cursor    *ebiten.Image
-	image     *ebiten.Image
+	cursor    types.Image
+	image     types.Image
 }
 
 func (self *Entry) Init(w, h int, color color.Color) *Entry {
 	self.Raw = new(bounds.Raw).Init(w, h)
 	self.text = fonts.NewText(self.value, fontFace, color)
-	self.cursor = ebiten.NewImage(3, 20)
+	self.cursor = image.NewImage(3, 20)
 	self.cursor.Fill(color)
-	self.image = ebiten.NewImage(self.Size())
+	self.image = image.NewImage(self.Size())
 	self.render()
 	return self
 }
@@ -92,6 +94,6 @@ func (self *Entry) render() {
 	// rendering.DrawAt(self.image, self.cursor, 0, 0)
 }
 
-func (self *Entry) Image() *ebiten.Image {
+func (self *Entry) Image() types.Image {
 	return self.image
 }

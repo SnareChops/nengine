@@ -1,12 +1,12 @@
 package animators
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/SnareChops/nengine/types"
 )
 
 type SimpleFrame struct {
 	Duration int
-	Image    *ebiten.Image
+	Image    types.Image
 }
 
 type SimpleAnimator struct {
@@ -69,6 +69,6 @@ func (self *SimpleAnimator) next() {
 	self.cooldown = self.frames[self.index].Duration
 }
 
-func (self *SimpleAnimator) Image() *ebiten.Image {
+func (self *SimpleAnimator) Image() types.Image {
 	return self.frames[self.index].Image
 }

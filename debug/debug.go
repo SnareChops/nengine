@@ -5,7 +5,6 @@ import (
 	"unsafe"
 
 	"github.com/SnareChops/nengine/types"
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text"
 )
 
@@ -34,12 +33,12 @@ func Update() {
 }
 
 // Draw the debug information to the provided image (usually the screen)
-func Draw(screen *ebiten.Image) {
+func Draw(screen types.Image) {
 	s := ""
 	for _, stat := range stats {
 		if stat.value != nil {
 			s += stat.label + ": " + stat.value() + "\n"
 		}
 	}
-	text.Draw(screen, s, debugFont, 10, 70, color.White)
+	text.Draw(screen.Raw(), s, debugFont, 10, 70, color.White)
 }

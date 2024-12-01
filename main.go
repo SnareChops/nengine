@@ -7,6 +7,7 @@ import (
 	"github.com/SnareChops/nengine/debug"
 	"github.com/SnareChops/nengine/emitters"
 	"github.com/SnareChops/nengine/fonts"
+	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/input"
 	"github.com/SnareChops/nengine/loaders"
 	"github.com/SnareChops/nengine/navigation"
@@ -14,7 +15,6 @@ import (
 	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/ui"
 	"github.com/SnareChops/nengine/utils"
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 // Animators
@@ -64,8 +64,11 @@ const (
 	RIGHT  = bounds.RIGHT
 )
 
-var Point = bounds.Point
 var NewBox = bounds.NewBox
+
+func Point[T ~int | ~float64](x, y T) *bounds.Position {
+	return bounds.Point(x, y)
+}
 
 type ConsoleFunc = console.ConsoleFunc
 type ConsoleContinueFunc = console.ConsoleContinueFunc
@@ -107,6 +110,16 @@ var GetStringWidth = fonts.GetStringWidth
 var GetStringHeight = fonts.GetStringHeight
 var GetStringSize = fonts.GetStringSize
 var DrawText = fonts.DrawText
+
+// Image
+type Image = types.Image
+type Shader = types.Shader
+type DrawImageOptions = types.DrawImageOptions
+type DrawRectShaderOptions = types.DrawRectShaderOptions
+
+var NewImage = image.NewImage
+var NewImageFromImage = image.NewImageFromImage
+var NewShader = image.NewShader
 
 // Input
 var InputCapture = input.InputCapture
@@ -161,7 +174,7 @@ var StrokeBox = rendering.StrokeBox
 var GridDraw = rendering.GridDraw
 var DrawSpriteWithShader = rendering.DrawSpriteWithShader
 
-func DrawAt[T ~int | float32 | float64](dest, src *ebiten.Image, x, y T) {
+func DrawAt[T ~int | float32 | float64](dest, src types.Image, x, y T) {
 	rendering.DrawAt(dest, src, x, y)
 }
 
