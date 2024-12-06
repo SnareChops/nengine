@@ -28,16 +28,17 @@ var (
 
 type console struct {
 	*bounds.Raw
-	visible     bool
-	key         ebiten.Key
-	history     []string
-	output      []*fonts.Text
-	entry       *Entry
-	cursorImage types.Image
-	entryText   *fonts.Text
-	start       *fonts.Text
-	image       types.Image
-	hint        types.Image
+	visible      bool
+	key          ebiten.Key
+	history      []string
+	historyIndex int
+	output       []*fonts.Text
+	entry        *Entry
+	cursorImage  types.Image
+	entryText    *fonts.Text
+	start        *fonts.Text
+	image        types.Image
+	hint         types.Image
 
 	cont ConsoleContinueFunc
 }
@@ -148,9 +149,28 @@ func Update(delta int) {
 	}
 
 	prev := state.visible
+	forceUpdate := false
 	// If console key pressed: show/hide
 	if inpututil.IsKeyJustPressed(state.key) {
 		state.visible = !state.visible
+	}
+	if inpututil.IsKeyJustPressed(ebiten.KeyArrowUp) && state.historyIndex < len(state.history) {
+		state.historyIndex += 1
+		state.entry.SetValue(state.history[len(state.history)-state.historyIndex])
+		forceUpdate = true
+	}
+	if inpututil.IsKeyJustPressed(ebiten.KeyArrowDown) {
+		state.historyIndex -= 1
+
+		if state.historyIndex > 0 {
+			state.entry.SetValue(state.history[len(state.history)-state.historyIndex])
+			forceUpdate = true
+		}
+		if state.historyIndex <= 0 {
+			state.historyIndex = 0
+			state.entry.SetValue("")
+			forceUpdate = true
+		}
 	}
 	// If console was changed this frame: always capture all input
 	if prev != state.visible {
@@ -171,6 +191,7 @@ func Update(delta int) {
 			Clear()
 			return
 		}
+		state.historyIndex = 0
 		// Add the command to history
 		addToHistory(command)
 		// Add command to
@@ -180,7 +201,7 @@ func Update(delta int) {
 		// output buffer has changed so we need to reposition all of the text
 		reposition()
 	}
-	if updated {
+	if updated || forceUpdate {
 		// If entry has been updated, redraw the console
 		render()
 	}
