@@ -34,9 +34,9 @@ type console struct {
 	historyIndex int
 	output       []*fonts.Text
 	entry        *Entry
-	cursorImage  types.Image
 	entryText    *fonts.Text
 	start        *fonts.Text
+	cursor       types.Image
 	image        types.Image
 	hint         types.Image
 
@@ -51,6 +51,8 @@ func Init(key ebiten.Key) {
 	state.start = fonts.NewText(">", fontFace, dark)
 	state.entry = new(Entry).Init(state.Dx()-20, 20, light)
 	state.image = image.NewImage(state.Size())
+	state.cursor = image.NewImage(3, 20)
+	state.cursor.Fill(light)
 	addResult(NewConsoleResult(ResultInfo, "Nengine Console, `help` for more info", nil))
 	reposition()
 	render()
@@ -235,5 +237,6 @@ func Draw(screen types.Image) {
 	}
 	if state.visible {
 		rendering.DrawAt(screen, state.image, 200, 0)
+		rendering.DrawAt(screen, state.cursor, 220+state.entry.getCursorPosition(), int(state.entry.MinY()))
 	}
 }
