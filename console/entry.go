@@ -8,7 +8,6 @@ import (
 	"github.com/SnareChops/nengine/fonts"
 	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/input"
-	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -16,13 +15,14 @@ import (
 
 type Entry struct {
 	*bounds.Raw
-	value     string
-	index     int
-	cooldown  int
-	repeating bool
-	text      *fonts.Text
-	cursor    types.Image
-	image     types.Image
+	value       string
+	index       int
+	cooldown    int
+	repeating   bool
+	text        *fonts.Text
+	cursor      types.Image
+	cursorIndex int
+	image       types.Image
 }
 
 func (self *Entry) Init(w, h int, color color.Color) *Entry {
@@ -39,6 +39,7 @@ func (self *Entry) SetValue(value string) {
 	self.value = value
 	self.text.SetValue(value)
 	self.index = len(value) - 1
+	self.cursorIndex = len(self.value)
 
 	self.render()
 }
@@ -48,9 +49,10 @@ func (self *Entry) Update(delta int) (bool, string) {
 	if ebiten.IsKeyPressed(ebiten.KeyBackspace) {
 		self.cooldown -= delta
 		if self.cooldown <= 0 && len(self.value) > 0 {
-			self.value = self.value[:len(self.value)-1]
+			self.value = self.value[:self.cursorIndex-1] + self.value[self.cursorIndex:]
+			self.cursorIndex -= 1
 			if self.repeating {
-				self.cooldown = 100
+				self.cooldown = 75
 			} else {
 				self.cooldown = 500
 				self.repeating = true
@@ -71,8 +73,21 @@ func (self *Entry) Update(delta int) (bool, string) {
 		value := self.value
 		self.value = ""
 		self.text.SetValue(self.value)
+		self.cursorIndex = 0
 		self.render()
 		return true, strings.TrimSpace(value)
+	}
+	//If left arrow is pressed
+	if inpututil.IsKeyJustPressed(ebiten.KeyArrowLeft) {
+		if self.cursorIndex > 0 {
+			self.cursorIndex -= 1
+		}
+	}
+	//If right arrow is pressed
+	if inpututil.IsKeyJustPressed(ebiten.KeyArrowRight) {
+		if self.cursorIndex < len(self.value) {
+			self.cursorIndex += 1
+		}
 	}
 	// Handle keypresses
 	keys := inpututil.AppendJustPressedKeys([]ebiten.Key{})
@@ -86,21 +101,31 @@ func (self *Entry) Update(delta int) (bool, string) {
 			letter = input.KeyToUpper(key, letter)
 			letter = strings.ToUpper(letter)
 		}
-		self.value += letter
+		self.value = self.value[:self.cursorIndex] + letter + self.value[self.cursorIndex:]
 	}
 	// Re-render if value has changed
 	if prev != self.value {
 		self.text.SetValue(self.value)
+		self.cursorIndex += 1
+
 		self.render()
 		return true, ""
 	}
 	return false, ""
 }
 
+func (self *Entry) getCursorPosition() int {
+	index := self.cursorIndex
+
+	substr := self.value[index:]
+	var substrText *fonts.Text = fonts.NewText(substr, fontFace, color.Black)
+
+	return self.text.Dx() - substrText.Dx()
+}
+
 func (self *Entry) render() {
 	self.image.Clear()
 	fonts.DrawText(self.image, self.text, nil)
-	rendering.DrawAt(self.image, self.cursor, self.text.Dx(), 0)
 }
 
 func (self *Entry) Image() types.Image {
