@@ -118,9 +118,9 @@ func (self *Entry) getCursorPosition() int {
 	index := self.cursorIndex
 
 	substr := self.value[index:]
-	var substrText *fonts.Text = fonts.NewText(substr, fontFace, color.Black)
+	substrText := fonts.GetStringWidth(substr, fontFace)
 
-	return self.text.Dx() - substrText.Dx()
+	return self.text.Dx() - substrText
 }
 
 func (self *Entry) render() {
