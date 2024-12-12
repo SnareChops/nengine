@@ -8,6 +8,7 @@ import (
 	"github.com/SnareChops/nengine/fonts"
 	"github.com/SnareChops/nengine/image"
 	"github.com/SnareChops/nengine/input"
+	"github.com/SnareChops/nengine/rendering"
 	"github.com/SnareChops/nengine/types"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -99,7 +100,7 @@ func (self *Entry) Update(delta int) (bool, string) {
 func (self *Entry) render() {
 	self.image.Clear()
 	fonts.DrawText(self.image, self.text, nil)
-	// rendering.DrawAt(self.image, self.cursor, 0, 0)
+	rendering.DrawAt(self.image, self.cursor, self.text.Dx(), 0)
 }
 
 func (self *Entry) Image() types.Image {
