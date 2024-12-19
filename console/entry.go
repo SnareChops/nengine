@@ -34,6 +34,14 @@ func (self *Entry) Init(w, h int, color color.Color) *Entry {
 	return self
 }
 
+func (self *Entry) SetValue(value string) {
+	self.value = value
+	self.text.SetValue(value)
+	self.index = len(value) - 1
+
+	self.render()
+}
+
 func (self *Entry) Update(delta int) (bool, string) {
 	prev := self.value
 	if ebiten.IsKeyPressed(ebiten.KeyBackspace) {
