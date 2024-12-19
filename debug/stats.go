@@ -7,6 +7,7 @@ import (
 )
 
 var stats = []stat{}
+var enableStats bool
 
 type stat struct {
 	label string
@@ -15,6 +16,7 @@ type stat struct {
 
 func EnableStats(enabled bool) {
 	// Enable default stats and early exit
+	enableStats = enabled
 	if enabled {
 		DebugStat("TPS", func() string {
 			return fmt.Sprintf("%0.2f", ebiten.ActualTPS())

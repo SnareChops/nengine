@@ -10,12 +10,12 @@ import (
 
 type img ebiten.Image
 
-func NewImage(w, h int) types.Image {
+var NewImage func(w, h int) types.Image = func(w, h int) types.Image {
 	i := ebiten.NewImage(w, h)
 	return (*img)(i)
 }
 
-func NewImageFromImage(src image.Image) types.Image {
+var NewImageFromImage func(image.Image) types.Image = func(src image.Image) types.Image {
 	return (*img)(ebiten.NewImageFromImage(src))
 }
 

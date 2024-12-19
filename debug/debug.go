@@ -34,11 +34,26 @@ func Update() {
 
 // Draw the debug information to the provided image (usually the screen)
 func Draw(screen types.Image) {
-	s := ""
-	for _, stat := range stats {
-		if stat.value != nil {
-			s += stat.label + ": " + stat.value() + "\n"
+	y := 70
+	h := debugFont.Metrics().Height.Ceil()
+	if enableStats {
+		for _, stat := range stats {
+			if stat.value != nil {
+				text.Draw(screen.Raw(), stat.label+": "+stat.value(), debugFont, 10, y, color.White)
+				y += h
+			}
 		}
 	}
-	text.Draw(screen.Raw(), s, debugFont, 10, 70, color.White)
+	if enableTimers {
+		for _, timer := range timers {
+			text.Draw(screen.Raw(), timer.name+": "+timer.Value(), debugFont, 10, y, color.White)
+			y += h
+		}
+	}
+	if enableTimers {
+		for _, timer := range FrameTimers {
+			text.Draw(screen.Raw(), timer.name+": "+timer.Value(), debugFont, 10, y, color.White)
+			y += h
+		}
+	}
 }

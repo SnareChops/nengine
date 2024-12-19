@@ -6,20 +6,6 @@ import (
 
 var FrameTimers = []*FrameTimer{}
 
-func enableFrameTimers() {
-	for _, timer := range FrameTimers {
-		timer.enabled = true
-		DebugStat(timer.name, timer.Value)
-	}
-}
-
-func disableFrameTimers() {
-	for _, timer := range FrameTimers {
-		timer.enabled = false
-		RemoveStat(timer.name)
-	}
-}
-
 type FrameTimer struct {
 	*DebugTimer
 	accumulator int64
@@ -34,14 +20,14 @@ func NewFrameTimer(name string, auto bool) *FrameTimer {
 }
 
 func (self *FrameTimer) End() {
-	if self.enabled {
+	if enableTimers {
 		delta := int64(time.Since(self.start))
 		self.accumulator += delta
 	}
 }
 
 func (self *FrameTimer) EndFrame() {
-	if self.enabled {
+	if enableTimers {
 		self.buffer[self.pointer] = self.accumulator
 		self.pointer = (self.pointer + 1) % len(self.buffer)
 		if self.accumulator > self.peak {
