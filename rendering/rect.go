@@ -21,3 +21,18 @@ func StrokeBox(dest types.Image, box types.Box, strokeWidth float32, color color
 
 	vector.StrokeRect(dest.Raw(), float32(sx), float32(sy), float32(box.Dx()), float32(box.Dy()), strokeWidth, color, false)
 }
+
+func StrokeLine(dest types.Image, start, end types.Position, strokeWidth float32, color color.Color, camera types.Camera) {
+	minX := min(start.X(), end.X())
+	minY := min(start.Y(), end.Y())
+	maxX := max(start.X(), end.X())
+	maxY := max(start.Y(), end.Y())
+	if camera != nil {
+		minX, minY := camera.WorldToScreenPos(minX, minY)
+		maxX, maxY := camera.WorldToScreenPos(maxX, maxY)
+		vector.StrokeLine(dest.Raw(), float32(minX), float32(minY), float32(maxX), float32(maxY), strokeWidth, color, true)
+		return
+	}
+
+	vector.StrokeLine(dest.Raw(), float32(minX), float32(minY), float32(maxX), float32(maxY), strokeWidth, color, true)
+}
