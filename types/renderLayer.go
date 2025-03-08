@@ -1,7 +1,6 @@
 package types
 
 type RenderLayer interface {
-	Order() int
 	Draw(screen Image)
 }
 

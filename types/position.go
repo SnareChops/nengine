@@ -2,6 +2,7 @@ package types
 
 type Position interface {
 	Vec() Vector
+	Add(x, y float64) Position
 	Pos() Position
 	Pos2() (x, y float64)
 	SetPos2(x, y float64)

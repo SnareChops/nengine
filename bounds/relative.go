@@ -24,9 +24,16 @@ func (self *Relative) Init(parent types.Box, width, height int) *Relative {
 // Min returns the raw position of the top left corner of the bounds as (x, y float64)
 func (self *Relative) Min() (float64, float64) {
 	px, py := self.Parent.Pos2()
-	x, y := self.Box.Pos2()
-	ox, oy := self.Offset()
-	return px + x - ox, py + y - oy
+	x, y := self.Box.Min()
+	return px + x, py + y
+}
+
+func (self *Relative) MinX() float64 {
+	return self.Parent.X() + self.Box.X() - self.OffsetX()
+}
+
+func (self *Relative) MinY() float64 {
+	return self.Parent.X() + self.Box.Y() - self.OffsetY()
 }
 
 func (self *Relative) Mid() (float64, float64) {
@@ -35,10 +42,26 @@ func (self *Relative) Mid() (float64, float64) {
 	return px + x, py + y
 }
 
+func (self *Relative) MidX() float64 {
+	return self.Parent.X() + self.Box.MidX()
+}
+
+func (self *Relative) MidY() float64 {
+	return self.Parent.Y() + self.Box.MidY()
+}
+
 func (self *Relative) Max() (float64, float64) {
 	px, py := self.Parent.Pos2()
 	x, y := self.Box.Max()
 	return px + x, py + y
+}
+
+func (self *Relative) MaxX() float64 {
+	return self.Parent.X() + self.Box.MaxX()
+}
+
+func (self *Relative) MaxY() float64 {
+	return self.Parent.Y() + self.Box.MaxY()
 }
 
 func (self *Relative) DrawOptions(sx, sy float64, camera types.Camera) *types.DrawImageOptions {

@@ -21,18 +21,16 @@ type PercentBar struct {
 	fill       color.Color
 }
 
-func (self *PercentBar) Init(w, h int, borderSize int, border, fill color.Color) *PercentBar {
-	self.Raw = new(bounds.Raw).Init(w, h)
-	self.image = image.NewImage(w, h)
-
-	self.borderSize = borderSize
-
-	self.border = border
-	self.fill = fill
-
-	self.render()
-
-	return self
+func NewPercentBar(w, h, borderSize int, border, fill color.Color) types.PercentBar {
+	percent := &PercentBar{
+		Raw:        new(bounds.Raw).Init(w, h),
+		image:      image.NewImage(w, h),
+		borderSize: borderSize,
+		border:     border,
+		fill:       fill,
+	}
+	percent.render()
+	return percent
 }
 
 func (self *PercentBar) SetValue(value float64) {

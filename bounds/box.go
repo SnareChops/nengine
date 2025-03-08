@@ -1,5 +1,7 @@
 package bounds
 
+import "github.com/SnareChops/nengine/types"
+
 type Box struct {
 	*Position
 	w, h     int
@@ -12,6 +14,20 @@ type Box struct {
 
 func NewBox(w, h int) *Box {
 	return &Box{Position: new(Position), w: w, h: h, fx: 1, fy: 1}
+}
+
+func NewBoxFromPoints(a, b types.Position) *Box {
+	return NewBoxFromRawPoints(a.X(), a.Y(), b.X(), b.Y())
+}
+
+func NewBoxFromRawPoints[T int | float64](x1, y1, x2, y2 T) *Box {
+	mx := min(x1, x2)
+	my := min(y1, y2)
+	Mx := max(x1, x2)
+	My := max(y1, y2)
+	box := NewBox(int(Mx-mx), int(My-my))
+	box.SetPos2(float64(mx), float64(my))
+	return box
 }
 
 func (self *Box) Size() (int, int) {
@@ -43,6 +59,14 @@ func (self *Box) Resize(w, h int) {
 
 func (self *Box) Offset() (float64, float64) {
 	return self.ox, self.oy
+}
+
+func (self *Box) OffsetX() float64 {
+	return self.ox
+}
+
+func (self *Box) OffsetY() float64 {
+	return self.oy
 }
 
 func (self *Box) SetOffset(x, y float64) {
@@ -119,18 +143,6 @@ func (self *Box) Min() (x, y float64) {
 	return
 }
 
-func (self *Box) Mid() (x, y float64) {
-	x = (float64(self.w) / 2) + self.x - self.ox
-	y = (float64(self.h) / 2) + self.y - self.oy
-	return
-}
-
-func (self *Box) Max() (x, y float64) {
-	x = self.x - self.ox + float64(self.w) - 1
-	y = self.y - self.oy + float64(self.h) - 1
-	return
-}
-
 func (self *Box) MinX() float64 {
 	return self.x - self.ox
 }
@@ -139,12 +151,24 @@ func (self *Box) MinY() float64 {
 	return self.y - self.oy
 }
 
+func (self *Box) Mid() (x, y float64) {
+	x = (float64(self.w) / 2) + self.x - self.ox
+	y = (float64(self.h) / 2) + self.y - self.oy
+	return
+}
+
 func (self *Box) MidX() float64 {
 	return (float64(self.w) / 2) + self.x - self.ox
 }
 
 func (self *Box) MidY() float64 {
 	return (float64(self.h) / 2) + self.y - self.oy
+}
+
+func (self *Box) Max() (x, y float64) {
+	x = self.x - self.ox + float64(self.w) - 1
+	y = self.y - self.oy + float64(self.h) - 1
+	return
 }
 
 func (self *Box) MaxX() float64 {

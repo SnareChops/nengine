@@ -25,8 +25,10 @@ type ColorScaleSprite interface {
 	Color() ebiten.ColorScale
 }
 
+type Uniforms map[string]any
+
 // ShaderSprite represents a sprite that should use a shader when drawing
 type ShaderSprite interface {
 	Sprite
-	Shader() (Shader, map[string]any)
+	Shader() (Shader, Uniforms)
 }

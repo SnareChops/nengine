@@ -13,6 +13,9 @@ type DrawableSprite interface {
 }
 
 func DrawSprite(dest types.Image, sprite DrawableSprite, camera types.Camera) {
+	if sprite == nil {
+		return
+	}
 	image := sprite.Image()
 	if image != nil {
 		var sx, sy float64 = 1, 1
@@ -33,6 +36,9 @@ func DrawSprite(dest types.Image, sprite DrawableSprite, camera types.Camera) {
 }
 
 func DrawSpriteWithShader(dest types.Image, sprite DrawableSprite, shader types.Shader, uniforms map[string]any, camera types.Camera) {
+	if sprite == nil {
+		return
+	}
 	image := sprite.Image()
 	if image != nil {
 		var sx, sy float64 = 1, 1

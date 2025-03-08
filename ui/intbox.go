@@ -5,6 +5,7 @@ import (
 
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/input"
+	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -19,9 +20,8 @@ type IntBox struct {
 	focused   bool
 }
 
-func (self *IntBox) Init(w, h int) *IntBox {
-	self.Raw = new(bounds.Raw).Init(w, h)
-	return self
+func NewIntBox(w, h int) types.IntBox {
+	return &IntBox{Raw: new(bounds.Raw).Init(w, h)}
 }
 
 func (self *IntBox) Content() int {
@@ -78,5 +78,4 @@ func (self *IntBox) Update(x, y, delta int) {
 			self.focused = true
 		}
 	}
-
 }

@@ -19,6 +19,12 @@ func (self *Position) Vec() types.Vector {
 	return types.Vector{self.x, self.y}
 }
 
+func (self *Position) Add(x, y float64) types.Position {
+	self.x += x
+	self.y += y
+	return self
+}
+
 func (self *Position) Pos() types.Position {
 	return self
 }

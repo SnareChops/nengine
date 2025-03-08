@@ -40,7 +40,7 @@ func (self *GeneralAnimator) Init(idle []GeneralFrame) *GeneralAnimator {
 	return self
 }
 
-func (self *GeneralAnimator) Add(name string, loop bool, repeat int, frames []GeneralFrame) {
+func (self *GeneralAnimator) AddAnimation(name string, loop bool, repeat int, frames []GeneralFrame) {
 	self.animations[name] = ga{
 		name:   name,
 		loop:   loop,
