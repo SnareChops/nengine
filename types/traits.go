@@ -4,6 +4,10 @@ type Initable interface {
 	Init(Game)
 }
 
+type FrameStartable interface {
+	FrameStart()
+}
+
 type Loadable interface {
 	Load(chan Scene, Game) Scene
 }

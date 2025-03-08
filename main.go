@@ -1,6 +1,8 @@
 package nengine
 
 import (
+	"image/color"
+
 	"github.com/SnareChops/nengine/animators"
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/console"
@@ -42,6 +44,12 @@ type SpriteRenderLayer = types.SpriteRenderLayer
 type Camera = types.Camera
 type Vector = types.Vector
 type Box = types.Box
+type Uniforms = types.Uniforms
+type Button = types.Button
+type Checkbox = types.Checkbox
+type IntBox = types.IntBox
+type PercentBar = types.PercentBar
+type TextBox = types.TextBox
 
 var NewVector = types.NewVector
 
@@ -65,6 +73,7 @@ const (
 )
 
 var NewBox = bounds.NewBox
+var NewBoxFromPoints = bounds.NewBoxFromPoints
 
 func Point[T ~int | ~float64](x, y T) *bounds.Position {
 	return bounds.Point(x, y)
@@ -168,6 +177,7 @@ type Renderer = rendering.Renderer
 type Screen = rendering.Screen
 type World = rendering.World
 
+var NewRenderer = rendering.NewRenderer
 var DrawSprite = rendering.DrawSprite
 var StrokeRect = rendering.StrokeRect
 var StrokeBox = rendering.StrokeBox
@@ -175,28 +185,33 @@ var StrokeBox = rendering.StrokeBox
 var GridDraw = rendering.GridDraw
 var DrawSpriteWithShader = rendering.DrawSpriteWithShader
 
+func StrokeRectRaw[T int | float64](dest types.Image, x1, y1, x2, y2 T, strokeWidth float32, color color.Color, camera types.Camera) {
+	rendering.StrokeRectRaw(dest, x1, y1, x2, y2, strokeWidth, color, camera)
+}
+
 func DrawAt[T ~int | float32 | float64](dest, src types.Image, x, y T) {
 	rendering.DrawAt(dest, src, x, y)
 }
 
 // UI
-type ButtonState = ui.ButtonState
-type Button = ui.Button
-type CheckboxState = ui.CheckboxState
-type Checkbox = ui.Checkbox
-type IntBox = ui.IntBox
-type TextBox = ui.TextBox
-type PercentBar = ui.PercentBar
+type ButtonState = types.ButtonState
+type CheckboxState = types.CheckboxState
+
+var NewButton = ui.NewButton
+var NewCheckbox = ui.NewCheckbox
+var NewIntBox = ui.NewIntBox
+var NewPercentBar = ui.NewPercentBar
+var NewTextBox = ui.NewTextBox
 
 const (
-	ButtonStateClicked       = ui.ButtonStateClicked
-	ButtonStateHovered       = ui.ButtonStateHovered
-	ButtonStateJustClicked   = ui.ButtonStateJustClicked
-	ButtonStateJustHovered   = ui.ButtonStateJustHovered
-	ButtonStateDisabled      = ui.ButtonStateDisabled
-	CheckboxStateChecked     = ui.CheckboxStateChecked
-	CheckboxStateJustChanged = ui.CheckboxStateJustChanged
-	CheckboxStateHovered     = ui.CheckboxStateHovered
+	ButtonStateClicked       = types.ButtonStateClicked
+	ButtonStateHovered       = types.ButtonStateHovered
+	ButtonStateJustClicked   = types.ButtonStateJustClicked
+	ButtonStateJustHovered   = types.ButtonStateJustHovered
+	ButtonStateDisabled      = types.ButtonStateDisabled
+	CheckboxStateChecked     = types.CheckboxStateChecked
+	CheckboxStateJustChanged = types.CheckboxStateJustChanged
+	CheckboxStateHovered     = types.CheckboxStateHovered
 )
 
 // Utils

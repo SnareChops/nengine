@@ -42,3 +42,25 @@ func TestRelativeBoundsBoxInBox(t *testing.T) {
 	assert.Equal(t, 16.5, x)
 	assert.Equal(t, 11., y)
 }
+
+func TestRelativeMin(t *testing.T) {
+	parent := new(bounds.Raw).Init(10, 12)
+	parent.SetPos2(20, 20)
+
+	box := new(bounds.Relative).Init(parent, 2, 4)
+	box.SetPos2(-5, -3)
+
+	x, y := box.Min()
+	assert.Equal(t, 15., x)
+	assert.Equal(t, 17., y)
+	assert.Equal(t, 15., box.MinX())
+	assert.Equal(t, 17., box.MinY())
+
+	// With offsets
+	parent.SetAnchor(bounds.LEFT, bounds.TOP)
+	box.SetAnchor(bounds.RIGHT, bounds.BOTTOM)
+
+	x, y = box.Min()
+	assert.Equal(t, 14., x)
+	assert.Equal(t, 14., y)
+}

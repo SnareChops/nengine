@@ -3,44 +3,35 @@ package ui
 import (
 	"github.com/SnareChops/nengine/bit"
 	"github.com/SnareChops/nengine/bounds"
+	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
-)
-
-type ButtonState int
-
-const (
-	ButtonStateHovered ButtonState = 1 << iota
-	ButtonStateClicked
-	ButtonStateJustClicked
-	ButtonStateJustHovered
-	ButtonStateDisabled
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Button struct {
 	*bounds.Raw
-	state ButtonState
+	state types.ButtonState
 }
 
-func (self *Button) Init(w, h int) *Button {
-	self.Raw = new(bounds.Raw).Init(w, h)
-	return self
+func NewButton(w, h int) types.Button {
+	return &Button{Raw: new(bounds.Raw).Init(w, h)}
 }
 
-func (self *Button) Is(state ButtonState) bool {
+func (self *Button) Is(state types.ButtonState) bool {
 	return bit.IsSet(self.state, state)
 }
 
-func (self *Button) ButtonState() ButtonState {
+func (self *Button) ButtonState() types.ButtonState {
 	return self.state
 }
 
 func (self *Button) Disable() {
-	self.state |= ButtonStateDisabled
+	self.state |= types.ButtonStateDisabled
 }
 
 func (self *Button) Enable() {
-	self.state &= ^ButtonStateDisabled
+	self.state &= ^types.ButtonStateDisabled
 }
 
 // Update updates the button. Requires the cursor x, y position
@@ -51,18 +42,18 @@ func (self *Button) Enable() {
 func (self *Button) Update(x, y int) bool {
 	prev := self.state
 	self.state = 0
-	if bit.IsSet(prev, ButtonStateDisabled) {
-		self.state |= ButtonStateDisabled
+	if bit.IsSet(prev, types.ButtonStateDisabled) {
+		self.state |= types.ButtonStateDisabled
 	}
 	if utils.IsWithin(self, x, y) {
-		self.state |= ButtonStateHovered
-		if !bit.IsSet(prev, ButtonStateHovered) {
-			self.state |= ButtonStateJustHovered
+		self.state |= types.ButtonStateHovered
+		if !bit.IsSet(prev, types.ButtonStateHovered) {
+			self.state |= types.ButtonStateJustHovered
 		}
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-			self.state |= ButtonStateClicked
-			if !bit.IsSet(prev, ButtonStateClicked) {
-				self.state |= ButtonStateJustClicked
+			self.state |= types.ButtonStateClicked
+			if !bit.IsSet(prev, types.ButtonStateClicked) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+				self.state |= types.ButtonStateJustClicked
 			}
 		}
 	}
