@@ -6,6 +6,8 @@ type Box interface {
 	SetSize(w, h int)
 	Resize(w, h int)
 	Offset() (float64, float64)
+	OffsetX() float64
+	OffsetY() float64
 	SetOffset(x, y float64)
 	SetAnchor(h, v int)
 	Rotation() float64
@@ -14,12 +16,12 @@ type Box interface {
 	Dx() int
 	Dy() int
 	Min() (float64, float64)
-	Mid() (float64, float64)
-	Max() (float64, float64)
 	MinX() float64
 	MinY() float64
+	Mid() (float64, float64)
 	MidX() float64
 	MidY() float64
+	Max() (float64, float64)
 	MaxX() float64
 	MaxY() float64
 }

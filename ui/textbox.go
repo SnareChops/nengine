@@ -5,6 +5,7 @@ import (
 
 	"github.com/SnareChops/nengine/bounds"
 	"github.com/SnareChops/nengine/input"
+	"github.com/SnareChops/nengine/types"
 	"github.com/SnareChops/nengine/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -19,9 +20,8 @@ type TextBox struct {
 	focused   bool
 }
 
-func (self *TextBox) Init(w, h int) *TextBox {
-	self.Raw = new(bounds.Raw).Init(w, h)
-	return self
+func NewTextBox(w, h int) types.TextBox {
+	return &TextBox{Raw: new(bounds.Raw).Init(w, h)}
 }
 
 func (self *TextBox) SetContent(content string) {

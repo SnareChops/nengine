@@ -18,3 +18,7 @@ func (node *NavNode) Is(mask uint64) bool {
 	}
 	return node.mask&mask == mask
 }
+
+func (node *NavNode) Mask() uint64 {
+	return node.mask
+}

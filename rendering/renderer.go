@@ -5,30 +5,39 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+type orderedLayer struct {
+	order int
+	layer types.RenderLayer
+}
+
 // Renderer implements the Renderer interface
 type Renderer struct {
-	layers []types.RenderLayer
+	layers []orderedLayer
 }
 
-// Init sets the starting state for the Renderer
-func (self *Renderer) Init() *Renderer {
-	self.layers = []types.RenderLayer{}
-	return self
-}
-
-func (self *Renderer) AddRenderLayer(layer types.RenderLayer) {
-	if slices.Contains(self.layers, layer) {
-		return
+// Creates a new Renderer
+func NewRenderer() *Renderer {
+	return &Renderer{
+		layers: []orderedLayer{},
 	}
-	self.layers = append(self.layers, layer)
-	slices.SortStableFunc(self.layers, func(a, b types.RenderLayer) int {
-		return a.Order() - b.Order()
+}
+
+func (self *Renderer) AddRenderLayer(order int, layer types.RenderLayer) {
+	// Avoid duplicates
+	for _, l := range self.layers {
+		if l.layer == layer {
+			return
+		}
+	}
+	self.layers = append(self.layers, orderedLayer{order, layer})
+	slices.SortStableFunc(self.layers, func(a, b orderedLayer) int {
+		return a.order - b.order
 	})
 }
 
 func (self *Renderer) RemoveRenderLayer(layer types.RenderLayer) {
 	for i, l := range self.layers {
-		if l == layer {
+		if l.layer == layer {
 			self.layers = append(self.layers[:i], self.layers[i+1:]...)
 			return
 		}
@@ -38,7 +47,7 @@ func (self *Renderer) RemoveRenderLayer(layer types.RenderLayer) {
 // Draw the result of the Renderer processing to the provided image
 // (usually the screen)
 func (self *Renderer) Draw(screen types.Image) {
-	for _, layer := range self.layers {
-		layer.Draw(screen)
+	for _, l := range self.layers {
+		l.layer.Draw(screen)
 	}
 }

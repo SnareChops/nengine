@@ -29,6 +29,10 @@ func (self *NavMesh) Grid() [][]*NavNode {
 	return self.grid
 }
 
+func (self *NavMesh) Alignment() (int, int, int, int) {
+	return self.hspacing, self.vspacing, self.hoffset, self.voffset
+}
+
 func (self *NavMesh) NextNavGroup() int {
 	self.group += 1
 	if self.group >= self.navGroups {
@@ -81,6 +85,7 @@ func (self *NavMesh) ClosestNode(pos types.Position, masks ...uint64) *NavNode {
 		for i := range 2 * iteration {
 			for j := range 2 * iteration {
 				if !matchesMasks(self.grid[i+x][j+y], masks) {
+					println("Inside Mask")
 					continue
 				}
 				gridPos := self.grid[i+x][j+y].Position

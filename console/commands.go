@@ -25,6 +25,10 @@ func ConsoleRegister(name string, fn ConsoleFunc) {
 	registered[name] = fn
 }
 
+func ConsoleUnregister(name string) {
+	delete(registered, name)
+}
+
 func RunCommand(value string) {
 	split := parseArguments(value)
 	name := split[0]

@@ -28,7 +28,7 @@ func TestGeneralAnimator(t *testing.T) {
 	frame3 := animators.NewGeneralFrame(10, i3)
 	frame4 := animators.NewGeneralFrame(10, i4)
 
-	anim.Add("test", false, 0, []animators.GeneralFrame{frame3, frame4})
+	anim.AddAnimation("test", false, 0, []animators.GeneralFrame{frame3, frame4})
 	anim.Play("test")
 	assert.Equal(t, i3, anim.Image())
 	anim.Update(10)
